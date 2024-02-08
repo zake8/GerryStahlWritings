@@ -24,3 +24,5 @@ response = query_engine.query(
     "What were the two main things the author worked on before college?"
 )
 print(str(response))
+
+### https://docs.mistral.ai/guides/basic-RAG/
