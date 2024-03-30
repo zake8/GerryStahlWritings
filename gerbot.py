@@ -2,6 +2,7 @@
 
 ### GerBot project intendes to make http://gerrystahl.net/pub/index.html even more accessable; Generative AI "chat" about the gerrystahl.net writings
 ### Code by Zake Stahl
+### March 2024
 ### Based on public/shared APIs and FOSS samples
 ### Built on Linux, Python, Apache, WSGI, Flask, LangChain, Ollama, more
 
@@ -12,11 +13,11 @@ import logging
 from langchain_community.llms import Ollama # from langchain.llms import Ollama # LangChainDeprecationWarning: Importing LLMs from langchain is deprecated. Importing from langchain will no longer be supported as of langchain==0.2.0. Please import from langchain-community instead
 from langchain_community.document_loaders import TextLoader
 from langchain_community.document_loaders import JSONLoader
-from langchain.document_loaders import WebBaseLoader
-from langchain.document_loaders import OnlinePDFLoader
+from langchain_community.document_loaders import WebBaseLoader
+from langchain_community.document_loaders import OnlinePDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.embeddings import OllamaEmbeddings
-from langchain.vectorstores import Chroma
+from langchain_community.embeddings import OllamaEmbeddings
+from langchain_community.vectorstores import Chroma
 from langchain.chains import RetrievalQA
 
 app = Flask(__name__)
@@ -65,13 +66,13 @@ def init_fullragchat_history():
     global fullragchat_history
     reset_fullragchat_history()
     fullragchat_history.clear()
-    fullragchat_history.append({'user':'chatbot', 'message':'hi'}) 
-    fullragchat_history.append({'user':'chatbot', 'message':'lets chat about topic documents to be determined'}) 
-    fullragchat_history.append({'user':'chatbot', 'message':'enter a question and click query'}) 
+    fullragchat_history.append({'user':'GerBot', 'message':'Hi!'}) 
+    fullragchat_history.append({'user':'GerBot', 'message':"Lets chat about Gerry Stahl's writting."}) 
+    fullragchat_history.append({'user':'GerBot', 'message':'Enter a question, and click query.'}) 
 
 def pending_fullragchat_history():
     global fullragchat_history
-    fullragchat_history.append({'user':'-reset--', 'message':'pending - please wait for model inferences - small moving graphic on browser tab should indicate working'}) 
+    fullragchat_history.append({'user':'-reset', 'message':'pending - please wait for model inferences - small moving graphic on browser tab should indicate working'}) 
 
 def unpending_fullragchat_history():
     global fullragchat_history
@@ -128,7 +129,7 @@ def fullragchat_pending():
     fullragchat_embed_model = request.form['embed_model']
     fullragchat_skin = request.form['skin']
     fullragchat_music = request.form['music']
-    fullragchat_history.append({'user':'--user--', 'message':query}) 
+    fullragchat_history.append({'user':'---user', 'message':query}) 
     logging.info(f'===> user: {query}')
     pending_fullragchat_history()
     return render_template('fullragchat_pending.html', 
@@ -241,8 +242,8 @@ def fullragchat_reply():
         fullragchat_rag_source, 
         fullragchat_embed_model,
     )
-    fullragchat_history.append({'user':'chatbot', 'message':answer})
-    logging.info(f'===> chatbot: {answer}')
+    fullragchat_history.append({'user':'GerBot', 'message':answer})
+    logging.info(f'===> GerBot: {answer}')
     return render_template('fullragchat.html', 
         fullragchat_history=fullragchat_history, 
         fullragchat_model=fullragchat_model, 

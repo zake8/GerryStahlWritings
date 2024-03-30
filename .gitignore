@@ -1,0 +1,4 @@
+# .gitignore
+.env
+gerbot.log
+__pycache__/

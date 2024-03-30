@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<!-- pending has refresh line here -->
+	<!-- first java script! -->
+	<script>
+		window.onload = function() {
+			spot.scrollIntoView();  // Scroll to the element
+		};
+	</script>
+</head>
+<h1>
+
+<!-- page will wait for query -->
+
+{% for message in fullragchat_history %}
+	<font color="purple">{{ message.user }}:</font> {{ message.message }}<br>
+{% endfor %}
+<br>
+<a id="spot"></a>
+<form action="/fullragchat_pending" method="post">
+
+<lable for="query"></lable>
+<textarea rows="8" cols="120" name="query">
+</textarea>
+
+<input type="submit" value="query"><br>
+
+</h1>
+
+<input type="text" name="model" value="{{fullragchat_model}}">
+<lable for="model"><strong>LLM model</strong></lable>
+ - <font color="purple">fake_llm, orca-mini, phi</font>
+<br>
+
+<input type="text" name="temp" value="{{fullragchat_temp}}">
+<lable for="temp"><strong>LLM temperature</strong></lable>
+ - <font color="purple">0.00, more deterministic, to 1.00, less deterministic</font>
+<br>
+
+<input type="text" name="rag_source" value="{{fullragchat_rag_source}}">
+<lable for="rag_source"><strong>rag_source</strong></lable>
+ - <font color="purple">path filename for websites, pdfs, or text files (only supporting single item)</font>
+<br>
+
+<input type="text" name="embed_model" value="{{fullragchat_embed_model}}">
+<lable for="model"><strong>embeding model</strong></lable>
+ - <font color="purple">nomic-embed-text</font>
+ <br>
+
+<input type="text" name="loop_context" value="not yet implemented">
+<lable for="model"><strong>loop_context</strong></lable>
+ <br>
+
+<input type="text" name="stop_words" value="{{fullragchat_stop_words}}">
+<lable for="stop_words"><strong>stop_words</strong></lable>
+ - <font color="purple">words, to stop, processing</font>
+<br>
+
+<input type="text" name="skin" value="{{fullragchat_skin}}">
+<lable for="skin"><strong>skin</strong></lable>
+ <br>
+
+<input type="text" name="music" value="{{fullragchat_music}}">
+<lable for="music"><strong>music</strong></lable>
+ <br>
+
+</form>
+
+<a href="/reset_history">reset</a><br>
+
+</html>
