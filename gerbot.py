@@ -8,7 +8,7 @@
 ### Code by Zake Stahl
 ### March 2024
 ### Based on public/shared APIs and FOSS samples
-### Built on Linux, Python, Apache, WSGI, Flask, LangChain, Ollama, more
+### Built on Linux, Python, Apache, WSGI, Flask, LangChain, Ollama, Mistral, more
 
 import logging
 logging.basicConfig(
@@ -49,109 +49,121 @@ def root():
     webserver_hostname = socket.gethostname()
     return render_template('staging.html', webserver_hostname=webserver_hostname)
 
-@app.route("/reset_history")
-def reset_fullragchat_history():
-    global fullragchat_history
-    global fullragchat_model
-    global fullragchat_temp
-    global fullragchat_stop_words
-    global fullragchat_rag_source
-    global fullragchat_embed_model
-    global fullragchat_skin 
-    global fullragchat_music
-    fullragchat_history.clear()
-    fullragchat_history.append({'user':'-reset--', 'message':'reset'})
-    return render_template('fullragchat.html', 
-        fullragchat_history=fullragchat_history, 
-        fullragchat_model=fullragchat_model, 
-        fullragchat_temp=fullragchat_temp, 
-        fullragchat_stop_words=fullragchat_stop_words, 
-        fullragchat_rag_source=fullragchat_rag_source, 
-        fullragchat_embed_model=fullragchat_embed_model,
-        fullragchat_skin=fullragchat_skin,
-        fullragchat_music=fullragchat_music,
+def mistral_qachat(mkey, query, model):
+    # simple chat from https://docs.mistral.ai/platform/client/
+    client = MistralClient(api_key=mkey)
+    messages = [ ChatMessage(role="user", content=query) ]
+    chat_response = client.chat(
+            model=model,
+            messages=messages,
     )
+    answer = chat_response.choices[0].message.content
 
-def init_fullragchat_history():
-    global fullragchat_history
-    reset_fullragchat_history()
-    fullragchat_history.clear()
-    fullragchat_history.append({'user':'GerBot', 'message':'Hi!'}) 
-    fullragchat_history.append({'user':'GerBot', 'message':"Lets chat about Gerry Stahl's writting."}) 
-    fullragchat_history.append({'user':'GerBot', 'message':'Enter a question, and click query.'}) 
-
-def pending_fullragchat_history():
-    global fullragchat_history
-    fullragchat_history.append({'user':'-reset', 'message':'pending - please wait for model inferences - small moving graphic on browser tab should indicate working'}) 
-
-def unpending_fullragchat_history():
-    global fullragchat_history
-    if fullragchat_history: fullragchat_history.pop()
-
-@app.route("/fullragchat_init")
-def fullragchat_init():
-    global fullragchat_history
-    global fullragchat_model
-    global fullragchat_temp
-    global fullragchat_stop_words
-    global fullragchat_rag_source
-    global fullragchat_embed_model
-    global fullragchat_skin 
-    global fullragchat_music
-    ### set initial values
-    fullragchat_history = []
-    fullragchat_model = "open-mixtral-8x7b"
-    fullragchat_temp = "0.25"
-    fullragchat_stop_words = ""
-    fullragchat_rag_source = ""
-    fullragchat_embed_model = "mistral-embed"
-    fullragchat_skin = "not yet implemented"
-    fullragchat_music = "not yet implemented"
-    init_fullragchat_history()
-    return render_template('fullragchat.html', 
-        fullragchat_history=fullragchat_history,
-        fullragchat_model=fullragchat_model,
-        fullragchat_temp=fullragchat_temp,
-        fullragchat_stop_words=fullragchat_stop_words, 
-        fullragchat_rag_source=fullragchat_rag_source, 
-        fullragchat_embed_model=fullragchat_embed_model,
-        fullragchat_skin=fullragchat_skin,
-        fullragchat_music=fullragchat_music,
+def ollama_qachat(model, fullragchat_temp, stop_words_list, query):
+    ### instanciate model
+    ollama = Ollama(
+        model=model, 
+        temperature=float(fullragchat_temp), 
+        stop=stop_words_list, 
+        verbose=True,
     )
+    ### invoke model
+    answer = ollama(query)
+    # answer = ollama.invoke(query) # is this prefered? how does the above know what to do?
+    return answer
 
-@app.route("/fullragchat_pending", methods=['POST'])
-def fullragchat_pending():
-    # fullragchat.html submits here
-    global fullragchat_history
-    global query
-    global fullragchat_model
-    global fullragchat_temp
-    global fullragchat_stop_words
-    global fullragchat_rag_source
-    global fullragchat_embed_model
-    global fullragchat_skin 
-    global fullragchat_music
-    query = request.form['query']
-    fullragchat_model = request.form['model']
-    fullragchat_temp = request.form['temp']
-    fullragchat_stop_words = request.form['stop_words']
-    fullragchat_rag_source = request.form['rag_source']
-    fullragchat_embed_model = request.form['embed_model']
-    fullragchat_skin = request.form['skin']
-    fullragchat_music = request.form['music']
-    fullragchat_history.append({'user':'---User', 'message':query}) 
-    logging.info(f'===> user: {query}')
-    pending_fullragchat_history()
-    return render_template('fullragchat_pending.html', 
-        fullragchat_history=fullragchat_history, 
-        fullragchat_model=fullragchat_model,
-        fullragchat_temp=fullragchat_temp, 
-        fullragchat_stop_words=fullragchat_stop_words, 
-        fullragchat_rag_source=fullragchat_rag_source, 
-        fullragchat_embed_model=fullragchat_embed_model,
-        fullragchat_skin=fullragchat_skin,
-        fullragchat_music=fullragchat_music,
+def mistral_rag(fullragchat_rag_source, fullragchat_embed_model, mkey, model, fullragchat_temp, query):
+    extension = fullragchat_rag_source[-3:]
+    # https://python.langchain.com/docs/modules/data_connection/document_loaders/json
+    if extension == "txt":
+        loader = TextLoader(fullragchat_rag_source) # ex: /path/filename
+    elif (extension == "tml") or (extension == "htm"): #html
+        loader = WebBaseLoader(fullragchat_rag_source) # ex: https://url/file.html
+    elif extension == "pdf":
+        loader = OnlinePDFLoader(fullragchat_rag_source) # ex: https://url/file.pdf
+    elif extension == "son": #json
+        loader = JSONLoader(file_path=fullragchat_rag_source,
+            jq_schema='',
+            text_content=False
+        )
+    else:
+        answer = "Unable to make loader for " + fullragchat_rag_source
+        return answer
+    # from https://docs.mistral.ai/guides/basic-RAG/
+    docs = loader.load()
+    # Split text into chunks
+    text_splitter = RecursiveCharacterTextSplitter()
+    documents = text_splitter.split_documents(docs)
+    # Define the embedding model
+    embeddings = MistralAIEmbeddings(
+                model=fullragchat_embed_model, 
+                mistral_api_key=mkey
     )
+    # Create the vector store 
+    vector = FAISS.from_documents(documents, embeddings)
+    # Define a retriever interface
+    retriever = vector.as_retriever()
+    # Define LLM
+    large_lang_model = ChatMistralAI(
+                model_name=model, 
+                mistral_api_key=mkey, 
+                temperature=float(fullragchat_temp), 
+    )
+    # Define prompt template
+    prompt = ChatPromptTemplate.from_template("""
+        Answer the following question based only on the provided context:
+        <context>
+        {context}
+        </context>
+        Question: {input}
+    """)
+    # Create a retrieval chain to answer questions
+    document_chain = create_stuff_documents_chain(large_lang_model, prompt)
+    retrieval_chain = create_retrieval_chain(retriever, document_chain)
+    input_query = {}
+    input_query['input'] = query
+    # invoke chain
+    response_dic = retrieval_chain.invoke(input_query)
+    answer = response_dic['answer'] # parse return from LLM with input, context, and, answer into just answer
+    return answer
+
+def ollama_rag(model, fullragchat_temp, stop_words_list, fullragchat_rag_source, fullragchat_embed_model, query):
+    ### instanciate model
+    ollama = Ollama(
+        model=model, 
+        temperature=float(fullragchat_temp), 
+        stop=stop_words_list, 
+        verbose=True,
+    )
+    extension = fullragchat_rag_source[-3:]
+    if extension == "txt":
+        loader = TextLoader(fullragchat_rag_source) # ex: /path/filename
+    elif (extension == "tml") or (extension == "htm"): #html
+        loader = WebBaseLoader(fullragchat_rag_source) # ex: https://url/file.html
+    elif extension == "pdf":
+        loader = OnlinePDFLoader(fullragchat_rag_source) # ex: https://url/file.pdf
+    elif extension == "son": #json
+        loader = JSONLoader(file_path=fullragchat_rag_source,
+            jq_schema='',
+            text_content=False
+        )
+        # https://python.langchain.com/docs/modules/data_connection/document_loaders/json
+    else:
+        answer = "Unable to make loader for " + fullragchat_rag_source
+        return answer
+    data = loader.load()
+    text_splitter=RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=20)
+    all_splits = text_splitter.split_documents(data)
+    oembed = OllamaEmbeddings(model=fullragchat_embed_model)
+    vectorstore = Chroma.from_documents(documents=all_splits, embedding=oembed)
+    docs = vectorstore.similarity_search(query)
+    vector_store_hits = len(docs)
+    ### create chain w/ model
+    qachain=RetrievalQA.from_chain_type(ollama, retriever=vectorstore.as_retriever())
+    ### invoke chain
+    results = qachain.invoke({"query": query})
+    answer = results['result'] 
+    return answer
 
 def fake_llm(query):
     rand = random.randint(1, 9)
@@ -186,110 +198,147 @@ def chat_query_return(
     if model == "fake_llm":
         answer = fake_llm(query)
     elif (model == "orca-mini") or (model == "phi") or (model == "tinyllama"): # or Ollama served llama2-uncensored or mistral or mixtral 
-        ### Instanciate LLM
-        ollama = Ollama(
-            model=model, 
-            temperature=float(fullragchat_temp), 
-            stop=stop_words_list, 
-            verbose=True,
-        )
-        if fullragchat_rag_source: # have a rag doc to process
-            extension = fullragchat_rag_source[-3:]
-            if extension == "txt":
-                loader = TextLoader(fullragchat_rag_source) # ex: /path/filename
-            elif (extension == "tml") or (extension == "htm"): #html
-                loader = WebBaseLoader(fullragchat_rag_source) # ex: https://url/file.html
-            elif extension == "pdf":
-                loader = OnlinePDFLoader(fullragchat_rag_source) # ex: https://url/file.pdf
-            elif extension == "son": #json
-                loader = JSONLoader(file_path=fullragchat_rag_source,
-                    jq_schema='',
-                    text_content=False
-                )
-                # https://python.langchain.com/docs/modules/data_connection/document_loaders/json
-            else:
-                answer = "Unable to make loader for " + fullragchat_rag_source
-                return answer
-            data = loader.load()
-            text_splitter=RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=20)
-            all_splits = text_splitter.split_documents(data)
-            oembed = OllamaEmbeddings(model=fullragchat_embed_model)
-            vectorstore = Chroma.from_documents(documents=all_splits, embedding=oembed)
-            docs = vectorstore.similarity_search(query)
-            vector_store_hits = len(docs)
-            qachain=RetrievalQA.from_chain_type(ollama, retriever=vectorstore.as_retriever())
-            ### invoke model
-            results = qachain.invoke({"query": query})
-            answer = results['result'] 
-        else: # simple chat
-            ### invoke model
-            context = ""
-            # answer = ollama.invoke(query) # is this prefered? how does the above know what to do?
-            answer = ollama(query)
+        if fullragchat_rag_source:
+            answer = ollama_rag(
+                model=model, 
+                fullragchat_temp=fullragchat_temp, 
+                stop_words_list=stop_words_list, 
+                fullragchat_rag_source=fullragchat_rag_source, 
+                fullragchat_embed_model=fullragchat_embed_model, 
+                query=query
+            )
+        else:
+            context = "" # how to pass / control chat history context?
+            answer = ollama_qachat(
+                model=model, 
+                fullragchat_temp=fullragchat_temp, 
+                stop_words_list=stop_words_list, 
+                query=query, 
+            )
     elif (model == "open-mixtral-8x7b") or (model == "mistral-large-latest") or (model == "open-mistral-7b"):
         mkey = os.getenv('Mistral_API_key')
-        if fullragchat_rag_source: # have a rag doc to process
-            if extension == "txt":
-                loader = TextLoader(fullragchat_rag_source) # ex: /path/filename
-            elif (extension == "tml") or (extension == "htm"): #html
-                loader = WebBaseLoader(fullragchat_rag_source) # ex: https://url/file.html
-            elif extension == "pdf":
-                loader = OnlinePDFLoader(fullragchat_rag_source) # ex: https://url/file.pdf
-            elif extension == "son": #json
-                loader = JSONLoader(file_path=fullragchat_rag_source,
-                    jq_schema='',
-                    text_content=False
-                )
-                # https://python.langchain.com/docs/modules/data_connection/document_loaders/json
-            else:
-                answer = "Unable to make loader for " + fullragchat_rag_source
-                return answer
-            # from https://docs.mistral.ai/guides/basic-RAG/
-            docs = loader.load()
-            # Split text into chunks
-            text_splitter = RecursiveCharacterTextSplitter()
-            documents = text_splitter.split_documents(docs)
-            # Define the embedding model
-            embeddings = MistralAIEmbeddings(
-                        model=fullragchat_embed_model, 
-                        mistral_api_key=mkey
+        if fullragchat_rag_source:
+            answer = mistral_rag(
+                fullragchat_rag_source=fullragchat_rag_source, 
+                fullragchat_embed_model=fullragchat_embed_model, 
+                mkey=mkey, 
+                model=model, 
+                fullragchat_temp=fullragchat_temp, 
+                query=query, 
             )
-            # Create the vector store 
-            vector = FAISS.from_documents(documents, embeddings)
-            # Define a retriever interface
-            retriever = vector.as_retriever()
-            # Define LLM
-            model = ChatMistralAI(
-                        model_name=model, 
-                        mistral_api_key=mkey, 
-                        temperature=float(fullragchat_temp), 
+        else:
+            answer = mistral_qachat(
+                mkey=mkey, 
+                query=query, 
+                model=model, 
             )
-            # Define prompt template
-            prompt = ChatPromptTemplate.from_template("""
-                Answer the following question based only on the provided context:
-                <context>
-                {context}
-                </context>
-                Question: {input}
-            """)
-            # Create a retrieval chain to answer questions
-            document_chain = create_stuff_documents_chain(model, prompt)
-            retrieval_chain = create_retrieval_chain(retriever, document_chain)
-            input_query = {}
-            input_query['input'] = query
-            response_dic = retrieval_chain.invoke(input_query)
-            answer = response_dic['answer'] # parse return from LLM with input, context, and, answer into just answer
-        else: # simple chat; https://docs.mistral.ai/platform/client/
-            client = MistralClient(api_key=mkey)
-            messages = [ ChatMessage(role="user", content=query) ]
-            chat_response = client.chat(
-                    model=model,
-                    messages=messages,
-            )
-            answer = chat_response.choices[0].message.content
     else:
         answer = "No LLM named " + model
     return answer
+
+@app.route("/reset_history")
+def reset_fullragchat_history():
+    global fullragchat_history
+    global fullragchat_model
+    global fullragchat_temp
+    global fullragchat_stop_words
+    global fullragchat_rag_source
+    global fullragchat_embed_model
+    global fullragchat_skin 
+    global fullragchat_music
+    fullragchat_history.clear()
+    fullragchat_history.append({'user':'-reset--', 'message':'reset'})
+    return render_template('fullragchat.html', 
+        fullragchat_history=fullragchat_history, 
+        fullragchat_model=fullragchat_model, 
+        fullragchat_temp=fullragchat_temp, 
+        fullragchat_stop_words=fullragchat_stop_words, 
+        fullragchat_rag_source=fullragchat_rag_source, 
+        fullragchat_embed_model=fullragchat_embed_model,
+        fullragchat_skin=fullragchat_skin,
+        fullragchat_music=fullragchat_music,
+    )
+
+def init_fullragchat_history():
+    global fullragchat_history
+    reset_fullragchat_history()
+    fullragchat_history.clear()
+    fullragchat_history.append({'user':'GerBot', 'message':'Hi!'}) 
+    fullragchat_history.append({'user':'GerBot', 'message':"Lets chat about Gerry Stahl's writting."}) 
+    fullragchat_history.append({'user':'GerBot', 'message':'Enter a question, and click query.'}) 
+
+@app.route("/fullragchat_init")
+def fullragchat_init():
+    global fullragchat_history
+    global fullragchat_model
+    global fullragchat_temp
+    global fullragchat_stop_words
+    global fullragchat_rag_source
+    global fullragchat_embed_model
+    global fullragchat_skin 
+    global fullragchat_music
+    ### set initial values
+    fullragchat_history = []
+    fullragchat_model = "open-mixtral-8x7b"
+    fullragchat_temp = "0.25"
+    fullragchat_stop_words = ""
+    fullragchat_rag_source = ""
+    fullragchat_embed_model = "mistral-embed"
+    fullragchat_skin = "not yet implemented"
+    fullragchat_music = "not yet implemented"
+    init_fullragchat_history()
+    return render_template('fullragchat.html', 
+        fullragchat_history=fullragchat_history,
+        fullragchat_model=fullragchat_model,
+        fullragchat_temp=fullragchat_temp,
+        fullragchat_stop_words=fullragchat_stop_words, 
+        fullragchat_rag_source=fullragchat_rag_source, 
+        fullragchat_embed_model=fullragchat_embed_model,
+        fullragchat_skin=fullragchat_skin,
+        fullragchat_music=fullragchat_music,
+    )
+
+def pending_fullragchat_history():
+    global fullragchat_history
+    fullragchat_history.append({'user':'-reset', 'message':'pending - please wait for model inferences - small moving graphic on browser tab should indicate working'}) 
+
+def unpending_fullragchat_history():
+    global fullragchat_history
+    if fullragchat_history: fullragchat_history.pop()
+
+@app.route("/fullragchat_pending", methods=['POST'])
+def fullragchat_pending():
+    # fullragchat.html submits here
+    global fullragchat_history
+    global query
+    global fullragchat_model
+    global fullragchat_temp
+    global fullragchat_stop_words
+    global fullragchat_rag_source
+    global fullragchat_embed_model
+    global fullragchat_skin 
+    global fullragchat_music
+    query = request.form['query']
+    fullragchat_model = request.form['model']
+    fullragchat_temp = request.form['temp']
+    fullragchat_stop_words = request.form['stop_words']
+    fullragchat_rag_source = request.form['rag_source']
+    fullragchat_embed_model = request.form['embed_model']
+    fullragchat_skin = request.form['skin']
+    fullragchat_music = request.form['music']
+    fullragchat_history.append({'user':'---User', 'message':query}) 
+    logging.info(f'===> user: {query}')
+    pending_fullragchat_history()
+    return render_template('fullragchat_pending.html', 
+        fullragchat_history=fullragchat_history, 
+        fullragchat_model=fullragchat_model,
+        fullragchat_temp=fullragchat_temp, 
+        fullragchat_stop_words=fullragchat_stop_words, 
+        fullragchat_rag_source=fullragchat_rag_source, 
+        fullragchat_embed_model=fullragchat_embed_model,
+        fullragchat_skin=fullragchat_skin,
+        fullragchat_music=fullragchat_music,
+    )
 
 @app.route("/fullragchat_reply")
 def fullragchat_reply():
