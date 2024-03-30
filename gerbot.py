@@ -10,15 +10,25 @@ from flask import Flask, redirect, url_for, render_template, request
 import socket
 import random
 import logging
-from langchain_community.llms import Ollama # from langchain.llms import Ollama # LangChainDeprecationWarning: Importing LLMs from langchain is deprecated. Importing from langchain will no longer be supported as of langchain==0.2.0. Please import from langchain-community instead
-from langchain_community.document_loaders import TextLoader
-from langchain_community.document_loaders import JSONLoader
-from langchain_community.document_loaders import WebBaseLoader
-from langchain_community.document_loaders import OnlinePDFLoader
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain_community.embeddings import OllamaEmbeddings
-from langchain_community.vectorstores import Chroma
+import os
 from langchain.chains import RetrievalQA
+from langchain.chains import create_retrieval_chain
+from langchain.chains.combine_documents import create_stuff_documents_chain
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_community.document_loaders import JSONLoader
+from langchain_community.document_loaders import OnlinePDFLoader
+from langchain_community.document_loaders import TextLoader
+from langchain_community.document_loaders import WebBaseLoader
+from langchain_community.embeddings import OllamaEmbeddings
+from langchain_community.llms import Ollama
+from langchain_community.vectorstores import Chroma
+from langchain_community.vectorstores import FAISS
+from langchain_core.prompts import ChatPromptTemplate
+# from langchain_mistralai.chat_models import ChatMistralAI
+# from langchain_mistralai.embeddings import MistralAIEmbeddings
+# from mistralai.client import MistralClient
+# from mistralai.models.chat_completion import ChatMessage
+
 
 app = Flask(__name__)
 
@@ -77,7 +87,6 @@ def pending_fullragchat_history():
 def unpending_fullragchat_history():
     global fullragchat_history
     fullragchat_history.pop()
-    pass
 
 @app.route("/fullragchat_init")
 def fullragchat_init():
@@ -129,7 +138,7 @@ def fullragchat_pending():
     fullragchat_embed_model = request.form['embed_model']
     fullragchat_skin = request.form['skin']
     fullragchat_music = request.form['music']
-    fullragchat_history.append({'user':'---user', 'message':query}) 
+    fullragchat_history.append({'user':'---User', 'message':query}) 
     logging.info(f'===> user: {query}')
     pending_fullragchat_history()
     return render_template('fullragchat_pending.html', 
@@ -175,7 +184,7 @@ def chat_query_return(
     if stop_words_list == ['']: stop_words_list = None
     if model == "fake_llm":
         answer = fake_llm(query)
-    elif (model == "orca-mini") or (model == "phi"):
+    elif (model == "orca-mini") or (model == "phi") or (model == "tinyllama"): # or Ollama served llama2-uncensored or mistral or mixtral 
         ### Instanciate LLM
         ollama = Ollama(
             model=model, 
@@ -216,6 +225,53 @@ def chat_query_return(
             context = ""
             answer = ollama(query)
             # answer = ollama.invoke(query) # is this prefered? how does the above know what to do?
+    elif (model == "open-mixtral-8x7b") or (model == "mistral-large-latest") or (model == "open-mistral-7b"):
+        mkey = os.getenv('Mistral_API_key')
+        if fullragchat_rag_source: # have a rag doc to process
+            # from https://docs.mistral.ai/guides/basic-RAG/
+            loader = TextLoader(fullragchat_rag_source)
+            docs = loader.load()
+            # Split text into chunks
+            text_splitter = RecursiveCharacterTextSplitter()
+            documents = text_splitter.split_documents(docs)
+            # Define the embedding model
+            embeddings = MistralAIEmbeddings(
+                        model=fullragchat_embed_model, 
+                        mistral_api_key=mkey
+            )
+            # Create the vector store 
+            vector = FAISS.from_documents(documents, embeddings)
+            # Define a retriever interface
+            retriever = vector.as_retriever()
+            # Define LLM
+            model = ChatMistralAI(
+                        model_name=model, 
+                        mistral_api_key=mkey, 
+                        temperature=float(fullragchat_temp), 
+            )
+            # Define prompt template
+            prompt = ChatPromptTemplate.from_template("""
+                Answer the following question based only on the provided context:
+                <context>
+                {context}
+                </context>
+                Question: {input}
+            """)
+            # Create a retrieval chain to answer questions
+            document_chain = create_stuff_documents_chain(model, prompt)
+            retrieval_chain = create_retrieval_chain(retriever, document_chain)
+            input_query = {}
+            input_query['input'] = query
+            response_dic = retrieval_chain.invoke(input_query)
+            answer = response_dic['answer'] # parse return from LLM with input, context, and, answer into just answer
+        else: # simple chat; https://docs.mistral.ai/platform/client/
+            client = MistralClient(api_key=mkey)
+            messages = [ ChatMessage(role="user", content=query) ]
+            chat_response = client.chat(
+                    model=model,
+                    messages=messages,
+            )
+            answer = chat_response.choices[0].message.content
     else:
         answer = "No LLM named " + model
     return answer
