@@ -2,3 +2,5 @@
 .env
 gerbot.log
 __pycache__/
+Pipfile
+Pipfile.lock

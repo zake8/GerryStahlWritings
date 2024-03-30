@@ -1,15 +1,30 @@
 #!/usr/bin/env python
 
+# TODO:
+# implement context, conversation history forward !!!
+# implement saving vector DB
+
 ### GerBot project intendes to make http://gerrystahl.net/pub/index.html even more accessable; Generative AI "chat" about the gerrystahl.net writings
 ### Code by Zake Stahl
 ### March 2024
 ### Based on public/shared APIs and FOSS samples
 ### Built on Linux, Python, Apache, WSGI, Flask, LangChain, Ollama, more
 
+import logging
+logging.basicConfig(
+    filename='gerbot.log', 
+    level=logging.INFO, 
+    filemode='a', 
+    format='%(asctime)s -%(levelname)s - %(message)s')
+
 from flask import Flask, redirect, url_for, render_template, request
+app = Flask(__name__)
+
+from dotenv import load_dotenv
+load_dotenv('./.env')
+
 import socket
 import random
-import logging
 import os
 from langchain.chains import RetrievalQA
 from langchain.chains import create_retrieval_chain
@@ -24,30 +39,15 @@ from langchain_community.llms import Ollama
 from langchain_community.vectorstores import Chroma
 from langchain_community.vectorstores import FAISS
 from langchain_core.prompts import ChatPromptTemplate
-# from langchain_mistralai.chat_models import ChatMistralAI
-# from langchain_mistralai.embeddings import MistralAIEmbeddings
-# from mistralai.client import MistralClient
-# from mistralai.models.chat_completion import ChatMessage
-
-
-app = Flask(__name__)
-
-logging.basicConfig(
-    filename='gerbot.log', 
-    level=logging.INFO, 
-    filemode='a', 
-    format='%(asctime)s -%(levelname)s - %(message)s')
+from langchain_mistralai.chat_models import ChatMistralAI
+from langchain_mistralai.embeddings import MistralAIEmbeddings
+from mistralai.client import MistralClient
+from mistralai.models.chat_completion import ChatMessage
 
 @app.route("/")
-def home():
+def root():
     webserver_hostname = socket.gethostname()
     return render_template('staging.html', webserver_hostname=webserver_hostname)
-
-fullragchat_history = []
-
-# TODO:
-# implement context, conversation history forward !!!
-# implement saving vector DB
 
 @app.route("/reset_history")
 def reset_fullragchat_history():
@@ -86,7 +86,7 @@ def pending_fullragchat_history():
 
 def unpending_fullragchat_history():
     global fullragchat_history
-    fullragchat_history.pop()
+    if fullragchat_history: fullragchat_history.pop()
 
 @app.route("/fullragchat_init")
 def fullragchat_init():
@@ -99,11 +99,12 @@ def fullragchat_init():
     global fullragchat_skin 
     global fullragchat_music
     ### set initial values
-    fullragchat_model = "fake_llm"
-    fullragchat_temp = "0.7"
+    fullragchat_history = []
+    fullragchat_model = "open-mixtral-8x7b"
+    fullragchat_temp = "0.25"
     fullragchat_stop_words = ""
     fullragchat_rag_source = ""
-    fullragchat_embed_model = "nomic-embed-text"
+    fullragchat_embed_model = "mistral-embed"
     fullragchat_skin = "not yet implemented"
     fullragchat_music = "not yet implemented"
     init_fullragchat_history()
@@ -223,13 +224,27 @@ def chat_query_return(
         else: # simple chat
             ### invoke model
             context = ""
-            answer = ollama(query)
             # answer = ollama.invoke(query) # is this prefered? how does the above know what to do?
+            answer = ollama(query)
     elif (model == "open-mixtral-8x7b") or (model == "mistral-large-latest") or (model == "open-mistral-7b"):
         mkey = os.getenv('Mistral_API_key')
         if fullragchat_rag_source: # have a rag doc to process
+            if extension == "txt":
+                loader = TextLoader(fullragchat_rag_source) # ex: /path/filename
+            elif (extension == "tml") or (extension == "htm"): #html
+                loader = WebBaseLoader(fullragchat_rag_source) # ex: https://url/file.html
+            elif extension == "pdf":
+                loader = OnlinePDFLoader(fullragchat_rag_source) # ex: https://url/file.pdf
+            elif extension == "son": #json
+                loader = JSONLoader(file_path=fullragchat_rag_source,
+                    jq_schema='',
+                    text_content=False
+                )
+                # https://python.langchain.com/docs/modules/data_connection/document_loaders/json
+            else:
+                answer = "Unable to make loader for " + fullragchat_rag_source
+                return answer
             # from https://docs.mistral.ai/guides/basic-RAG/
-            loader = TextLoader(fullragchat_rag_source)
             docs = loader.load()
             # Split text into chunks
             text_splitter = RecursiveCharacterTextSplitter()
