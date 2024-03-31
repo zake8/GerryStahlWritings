@@ -3,6 +3,12 @@
 # TODO:
 # implement context, conversation history forward !!!
 # implement saving vector DB
+# save down pdfs; pdf into txt chapters w/ book and chapter summeries
+# what are max token in sizes per model? 
+# agent-style answering:
+        # query
+        # based on query and context (chat history), what to pull for RAG within the token size? Reference these summeries.
+        # based on query and context and RAG, answer
 
 ### GerBot project intendes to make http://gerrystahl.net/pub/index.html even more accessable; Generative AI "chat" about the gerrystahl.net writings
 ### Code by Zake Stahl
@@ -31,7 +37,8 @@ from langchain.chains import create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders import JSONLoader
-from langchain_community.document_loaders import OnlinePDFLoader
+from langchain_community.document_loaders import UnstructuredPDFLoader
+# from langchain_community.document_loaders import OnlinePDFLoader
 from langchain_community.document_loaders import TextLoader
 from langchain_community.document_loaders import WebBaseLoader
 from langchain_community.embeddings import OllamaEmbeddings
@@ -58,6 +65,7 @@ def mistral_qachat(mkey, query, model):
             messages=messages,
     )
     answer = chat_response.choices[0].message.content
+    return answer
 
 def ollama_qachat(model, fullragchat_temp, stop_words_list, query):
     ### instanciate model
@@ -80,10 +88,14 @@ def mistral_rag(fullragchat_rag_source, fullragchat_embed_model, mkey, model, fu
     elif (extension == "tml") or (extension == "htm"): #html
         loader = WebBaseLoader(fullragchat_rag_source) # ex: https://url/file.html
     elif extension == "pdf":
-        loader = OnlinePDFLoader(fullragchat_rag_source) # ex: https://url/file.pdf
+        # throws: ImportError: cannot import name 'open_filename' from 'pdfminer.utils'
+        # loader = UnstructuredPDFLoader(fullragchat_rag_source)
+        # loader = OnlinePDFLoader(fullragchat_rag_source) # ex: https://url/file.pdf
+        answer = "Need to make a loader for pdf... " + fullragchat_rag_source
+        return answer
     elif extension == "son": #json
         loader = JSONLoader(file_path=fullragchat_rag_source,
-            jq_schema='',
+            jq_schema='.',
             text_content=False
         )
     else:
