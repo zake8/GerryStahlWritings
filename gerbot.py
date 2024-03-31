@@ -37,7 +37,7 @@ from langchain.chains import create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders import JSONLoader
-from langchain_community.document_loaders import UnstructuredPDFLoader
+# from langchain_community.document_loaders import UnstructuredPDFLoader
 # from langchain_community.document_loaders import OnlinePDFLoader
 from langchain_community.document_loaders import TextLoader
 from langchain_community.document_loaders import WebBaseLoader
@@ -55,6 +55,18 @@ from mistralai.models.chat_completion import ChatMessage
 def root():
     webserver_hostname = socket.gethostname()
     return render_template('staging.html', webserver_hostname=webserver_hostname)
+
+# not used
+def mistral_convochat(mkey, query, model):
+    client = MistralClient(api_key=mkey)
+    # how to send in context?
+    messages = [ ChatMessage(role="user", content=query) ]
+    chat_response = client.chat(
+            model=model,
+            messages=messages,
+    )
+    answer = chat_response.choices[0].message.content
+    return answer
 
 def mistral_qachat(mkey, query, model):
     # simple chat from https://docs.mistral.ai/platform/client/
