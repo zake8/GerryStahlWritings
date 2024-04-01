@@ -72,6 +72,18 @@ def mistral_convochat(model, mkey, fullragchat_temp, query):
     answer = chain.predict(input=query)
     return answer
 
+def ollama_convochat(model, fullragchat_temp, stop_words_list, query):
+    ollama = Ollama(
+        model=model, 
+        temperature=float(fullragchat_temp), 
+        stop=stop_words_list, 
+        verbose=True,
+    )
+    global memory
+    chain = ConversationChain(llm=ollama, memory=memory) # ConversationBufferWindowMemory leveraged by ConversationChain
+    answer = chain.predict(input=query)
+    return answer
+
 def mistral_qachat(model, mkey, fullragchat_temp, query):
     # simple chat from https://docs.mistral.ai/platform/client/
     client = MistralClient(api_key=mkey)
@@ -237,13 +249,20 @@ def chat_query_return(
                 query=query
             )
         else:
-            context = "" # how to pass / control chat history context?
-            answer = ollama_qachat(
-                model=model, 
-                fullragchat_temp=fullragchat_temp, 
-                stop_words_list=stop_words_list, 
-                query=query, 
-            )
+            if fullragchat_loop_context == 'True':
+                answer = ollama_convochat(
+                    model=model, 
+                    fullragchat_temp=fullragchat_temp, 
+                    stop_words_list=stop_words_list, 
+                    query=query, 
+                )
+            else:
+                answer = ollama_qachat(
+                    model=model, 
+                    fullragchat_temp=fullragchat_temp, 
+                    stop_words_list=stop_words_list, 
+                    query=query, 
+                )
     elif (model == "open-mixtral-8x7b") or (model == "mistral-large-latest") or (model == "open-mistral-7b"):
         mkey = os.getenv('Mistral_API_key')
         if fullragchat_rag_source:
@@ -256,13 +275,20 @@ def chat_query_return(
                 query=query, 
             )
         else:
-            # answer = mistral_qachat(
-            answer = mistral_convochat(
-                mkey=mkey, 
-                query=query, 
-                model=model, 
-                fullragchat_temp=fullragchat_temp, 
-            )
+            if fullragchat_loop_context == 'True':
+                answer = mistral_convochat(
+                    mkey=mkey, 
+                    query=query, 
+                    model=model, 
+                    fullragchat_temp=fullragchat_temp, 
+                )
+            else:
+                answer = mistral_qachat(
+                    mkey=mkey, 
+                    query=query, 
+                    model=model, 
+                    fullragchat_temp=fullragchat_temp, 
+                )
     else:
         answer = "No LLM named " + model
     return answer
@@ -308,13 +334,15 @@ def fullragchat_init():
     global fullragchat_embed_model
     global fullragchat_skin 
     global fullragchat_music
+    global fullragchat_loop_context
     ### set initial values
     fullragchat_history = []
     fullragchat_model = "open-mixtral-8x7b"
     fullragchat_temp = "0.25"
-    fullragchat_stop_words = ""
     fullragchat_rag_source = ""
     fullragchat_embed_model = "mistral-embed"
+    fullragchat_loop_context = "True"
+    fullragchat_stop_words = ""
     fullragchat_skin = "not yet implemented"
     fullragchat_music = "not yet implemented"
     init_fullragchat_history()
@@ -327,6 +355,7 @@ def fullragchat_init():
         fullragchat_embed_model=fullragchat_embed_model,
         fullragchat_skin=fullragchat_skin,
         fullragchat_music=fullragchat_music,
+        fullragchat_loop_context=fullragchat_loop_context, 
     )
 
 def pending_fullragchat_history():
@@ -349,6 +378,7 @@ def fullragchat_pending():
     global fullragchat_embed_model
     global fullragchat_skin 
     global fullragchat_music
+    global fullragchat_loop_context
     query = request.form['query']
     fullragchat_model = request.form['model']
     fullragchat_temp = request.form['temp']
@@ -357,6 +387,7 @@ def fullragchat_pending():
     fullragchat_embed_model = request.form['embed_model']
     fullragchat_skin = request.form['skin']
     fullragchat_music = request.form['music']
+    fullragchat_loop_context = request.form['loop_context']
     fullragchat_history.append({'user':'---User', 'message':query}) 
     logging.info(f'===> user: {query}')
     pending_fullragchat_history()
@@ -369,6 +400,7 @@ def fullragchat_pending():
         fullragchat_embed_model=fullragchat_embed_model,
         fullragchat_skin=fullragchat_skin,
         fullragchat_music=fullragchat_music,
+        fullragchat_loop_context=fullragchat_loop_context, 
     )
 
 @app.route("/fullragchat_reply")
@@ -383,6 +415,7 @@ def fullragchat_reply():
     global fullragchat_embed_model
     global fullragchat_skin 
     global fullragchat_music
+    global fullragchat_loop_context
     global memory
     unpending_fullragchat_history()
     logging.info(f'===> model info: model={fullragchat_model}, temp={fullragchat_temp}, stop={fullragchat_stop_words}, rag={fullragchat_rag_source}, embed={fullragchat_embed_model}')
@@ -406,6 +439,7 @@ def fullragchat_reply():
         fullragchat_embed_model=fullragchat_embed_model,
         fullragchat_skin=fullragchat_skin,
         fullragchat_music=fullragchat_music,
+        fullragchat_loop_context=fullragchat_loop_context, 
         )
 
 if __name__ == "__main__":

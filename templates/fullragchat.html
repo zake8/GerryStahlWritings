@@ -31,7 +31,7 @@
 
 		<input type="text" name="temp" value="{{fullragchat_temp}}">
 		<lable for="temp"><strong>LLM temperature</strong></lable> - 
-		<font color="purple">0.00, more deterministic, to 1.00, less deterministic</font>
+		<font color="purple">0.00, more deterministic, to 1.00, more creative</font>
 		<br>
 
 		<input type="text" name="rag_source" value="{{fullragchat_rag_source}}">
@@ -43,8 +43,9 @@
 		<lable for="model"><strong>embeding model</strong></lable> - <font color="purple">local on ollama: nomic-embed-text; api call: mistral-embed</font>
 		<br>
 
-		<input type="text" name="loop_context" value="not yet implemented">
+		<input type="text" name="loop_context" value="{{fullragchat_loop_context}}">
 		<lable for="model"><strong>loop_context</strong></lable>
+		<font color="purple"> - set to True to use memory for conversational chat</font>
 		<br>
 
 		<input type="text" name="stop_words" value="{{fullragchat_stop_words}}">
