@@ -29,11 +29,15 @@ app = Flask(__name__)
 from dotenv import load_dotenv
 load_dotenv('./.env')
 
+from langchain.memory import ConversationBufferWindowMemory
+memory = ConversationBufferWindowMemory(k=14)
+
 import socket
 import random
 import os
 from langchain.chains import RetrievalQA
 from langchain.chains import create_retrieval_chain
+from langchain.chains import ConversationChain
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders import JSONLoader
