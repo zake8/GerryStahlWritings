@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # TODO:
-# implement context, conversation history forward !!!
+# implement context, conversation history forward, into RAG chat !!!
 # implement saving vector DB
 # save down pdfs; pdf into txt chapters w/ book and chapter summeries
 # what are max token in sizes per model? 
@@ -10,7 +10,8 @@
         # based on query and context (chat history), what to pull for RAG within the token size? Reference these summeries.
         # based on query and context and RAG, answer
 
-### GerBot project intendes to make http://gerrystahl.net/pub/index.html even more accessable; Generative AI "chat" about the gerrystahl.net writings
+### GerBot project is an LLM RAG chat intended to make http://gerrystahl.net/pub/index.html even more accessable
+### Generative AI "chat" about the gerrystahl.net writings
 ### Code by Zake Stahl
 ### March 2024
 ### Based on public/shared APIs and FOSS samples
