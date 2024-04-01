@@ -29,6 +29,7 @@ app = Flask(__name__)
 from dotenv import load_dotenv
 load_dotenv('./.env')
 
+# ConversationBufferWindowMemory setup
 from langchain.memory import ConversationBufferWindowMemory
 memory = ConversationBufferWindowMemory(k=14)
 
@@ -60,25 +61,25 @@ def root():
     webserver_hostname = socket.gethostname()
     return render_template('staging.html', webserver_hostname=webserver_hostname)
 
-# not used
-def mistral_convochat(mkey, query, model):
-    client = MistralClient(api_key=mkey)
-    # how to send in context?
-    messages = [ ChatMessage(role="user", content=query) ]
-    chat_response = client.chat(
-            model=model,
-            messages=messages,
+def mistral_convochat(model, mkey, fullragchat_temp, query):
+    large_lang_model = ChatMistralAI(
+        model_name=model, 
+        mistral_api_key=mkey, 
+        temperature=float(fullragchat_temp), 
     )
-    answer = chat_response.choices[0].message.content
+    global memory
+    chain = ConversationChain(llm=large_lang_model, memory=memory) # ConversationBufferWindowMemory leveraged by ConversationChain
+    answer = chain.predict(input=query)
     return answer
 
-def mistral_qachat(mkey, query, model):
+def mistral_qachat(model, mkey, fullragchat_temp, query):
     # simple chat from https://docs.mistral.ai/platform/client/
     client = MistralClient(api_key=mkey)
     messages = [ ChatMessage(role="user", content=query) ]
     chat_response = client.chat(
             model=model,
             messages=messages,
+            temperature=float(fullragchat_temp), 
     )
     answer = chat_response.choices[0].message.content
     return answer
@@ -255,10 +256,12 @@ def chat_query_return(
                 query=query, 
             )
         else:
-            answer = mistral_qachat(
+            # answer = mistral_qachat(
+            answer = mistral_convochat(
                 mkey=mkey, 
                 query=query, 
                 model=model, 
+                fullragchat_temp=fullragchat_temp, 
             )
     else:
         answer = "No LLM named " + model
@@ -380,6 +383,7 @@ def fullragchat_reply():
     global fullragchat_embed_model
     global fullragchat_skin 
     global fullragchat_music
+    global memory
     unpending_fullragchat_history()
     logging.info(f'===> model info: model={fullragchat_model}, temp={fullragchat_temp}, stop={fullragchat_stop_words}, rag={fullragchat_rag_source}, embed={fullragchat_embed_model}')
     answer = chat_query_return(
@@ -391,6 +395,7 @@ def fullragchat_reply():
         fullragchat_embed_model,
     )
     fullragchat_history.append({'user':'GerBot', 'message':answer})
+    memory.save_context({"input": query}, {"output": answer}) # ConversationBufferWindowMemory save of query and answer
     logging.info(f'===> GerBot: {answer}')
     return render_template('fullragchat.html', 
         fullragchat_history=fullragchat_history, 
