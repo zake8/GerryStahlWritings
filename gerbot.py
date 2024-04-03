@@ -123,7 +123,8 @@ def ollama_qachat(model, fullragchat_temp, stop_words_list, query):
     # answer = ollama.invoke(query) # is this prefered? how does the above know what to do?
     return answer
 
-def get_rag_text(fullragchat_rag_source, query):
+def get_rag_text(query):
+    global fullragchat_rag_source
     extension = fullragchat_rag_source[-3:]
     # https://python.langchain.com/docs/modules/data_connection/document_loaders/json
     if extension == "txt":
@@ -151,12 +152,12 @@ def get_rag_text(fullragchat_rag_source, query):
     return rag_text
 
 def mistral_convo_rag(fullragchat_rag_source, fullragchat_embed_model, mkey, model, fullragchat_temp, query):
-    documents = get_rag_text(fullragchat_rag_source, query)
+    documents = get_rag_text(query)
     answer = f'mistral_convo_rag not yet implemented.'
     return answer
 
 def mistral_rag(fullragchat_rag_source, fullragchat_embed_model, mkey, model, fullragchat_temp, query):
-    documents = get_rag_text(fullragchat_rag_source, query)
+    documents = get_rag_text(query)
     # Define the embedding model
     embeddings = MistralAIEmbeddings(
                 model=fullragchat_embed_model, 
@@ -190,15 +191,24 @@ def mistral_rag(fullragchat_rag_source, fullragchat_embed_model, mkey, model, fu
     answer = response_dic['answer'] # parse return from LLM with input, context, and, answer into just answer
     return answer
 
-def ollama_convo_rag(model, fullragchat_temp, stop_words_list, fullragchat_rag_source, fullragchat_embed_model, query):
-    all_splits = get_rag_text(fullragchat_rag_source, query)
+def ollama_embed_search(query):
+    global fullragchat_embed_model
     oembed = OllamaEmbeddings(model=fullragchat_embed_model)
+    all_splits = get_rag_text(query)
     vectorstore = Chroma.from_documents(documents=all_splits, embedding=oembed)
     docs = vectorstore.similarity_search(query)
     vector_store_hits = len(docs)
+    context_text = f'<rag_context>\n'
+    for line in docs:
+        context_text += f'{line}\n'
+    context_text += f'</rag_context>\n'
+    return context_text
+
+def ollama_convo_rag(model, fullragchat_temp, stop_words_list, fullragchat_rag_source, fullragchat_embed_model, query):
+    context_runnable = RunnableLambda(ollama_embed_search)
     history_runnable = RunnableLambda(convo_mem_function)
     setup_and_retrieval = RunnableParallel({
-#        "context":  docs, 
+        "context":  context_runnable(), 
         "question": RunnablePassthrough(),
         "history":  history_runnable})
     template = """
@@ -233,7 +243,7 @@ def ollama_rag(model, fullragchat_temp, stop_words_list, fullragchat_rag_source,
         stop=stop_words_list, 
         verbose=True,
     )
-    all_splits = get_rag_text(fullragchat_rag_source, query)
+    all_splits = get_rag_text(query)
     oembed = OllamaEmbeddings(model=fullragchat_embed_model)
     vectorstore = Chroma.from_documents(documents=all_splits, embedding=oembed)
     docs = vectorstore.similarity_search(query)
