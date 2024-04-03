@@ -2,14 +2,14 @@
 
 # TODO:
 # implement saving vector DB
-# save down pdfs; pdf into txt chapters w/ book and chapter summeries
+# save down pdfs; pdf into txt chapters w/ book and chapter summaries
 # what are max token in sizes per model? 
 # agent-style answering:
         # query
-        # based on query and context (chat history), what to pull for RAG within the token size? Reference these summeries.
+        # based on query and context (chat history), what to pull for RAG within the token size? Reference these summaries.
         # based on query and context and RAG, answer
 
-### GerBot project is an LLM RAG chat intended to make http://gerrystahl.net/pub/index.html even more accessable
+### GerBot project is an LLM RAG chat intended to make http://gerrystahl.net/pub/index.html even more accessible
 ### Generative AI "chat" about the gerrystahl.net writings
 ### Code by Zake Stahl
 ### https://github.com/zake8/GerryStahlWritings
@@ -115,7 +115,7 @@ def ollama_qachat(model, fullragchat_temp, stop_words_list, query):
         verbose=True )
     ### invoke model
     answer = ollama(query)
-    # answer = ollama.invoke(query) # is this prefered? how does the above know what to do?
+    # answer = ollama.invoke(query) # is this preferred? how does the above know what to do?
     return answer
 
 def get_rag_text(query):
@@ -149,11 +149,14 @@ def get_rag_text(query):
 
 def mistral_convo_rag(fullragchat_rag_source, fullragchat_embed_model, mkey, model, fullragchat_temp, query):
     documents = get_rag_text(query)
+    logging.info(f'++++++ documents ++++++++++\n{documents}\n')
     embeddings = MistralAIEmbeddings(
                 model=fullragchat_embed_model, 
                 mistral_api_key=mkey)
     vector = FAISS.from_documents(documents, embeddings)
     retriever = vector.as_retriever()
+    testing_retriever = retriever.invoke(query)
+    logging.info(f'++++++ retriever ++++++++++\n{testing_retriever}\n')
     # this sequence seems to use query value so the above, if not in a langchain pipe as a runnable would read vector.as_retriever(query)
     history_runnable = RunnableLambda(convo_mem_function)
     setup_and_retrieval = RunnableParallel({
@@ -161,10 +164,10 @@ def mistral_convo_rag(fullragchat_rag_source, fullragchat_embed_model, mkey, mod
         "question": RunnablePassthrough(),
         "history": history_runnable })
     template = """
-        You are the RAG conversational chatbot "GerBot". (RAG is Retreival Augmented GenerativeAI.)
-        Your function is to assist users with exploring, searching, quering, and "chatting with" 
+        You are the RAG conversational chatbot "GerBot". (RAG is Retrieval Augmented GenerativeAI.)
+        Your function is to assist users with exploring, searching, querying, and "chatting with" 
         Gerry Stahl's published works, all available here, http://gerrystahl.net/pub/index.html.
-        Answer the question based primarily on this relevent retreived context: 
+        Answer the question based primarily on this relevant retrieved context: 
         {context}
         
         Reference chat history for conversationality: 
@@ -243,10 +246,10 @@ def ollama_convo_rag(model, fullragchat_temp, stop_words_list, fullragchat_rag_s
         "question": RunnablePassthrough(),
         "history":  history_runnable})
     template = """
-        You are the RAG conversational chatbot "GerBot". (RAG is Retreival Augmented GenerativeAI.)
-        Your function is to assist users with exploring, searching, quering, and "chatting with" 
+        You are the RAG conversational chatbot "GerBot". (RAG is Retrieval Augmented GenerativeAI.)
+        Your function is to assist users with exploring, searching, querying, and "chatting with" 
         Gerry Stahl's published works, all available here, http://gerrystahl.net/pub/index.html.
-        Answer the question based primarily on this relevent retreived context: 
+        Answer the question based primarily on this relevant retrieved context: 
         {context}
         
         Reference chat history for conversationality: 
@@ -428,7 +431,7 @@ def init_fullragchat_history():
     reset_fullragchat_history()
     fullragchat_history.clear()
     fullragchat_history.append({'user':'GerBot', 'message':'Hi!'}) 
-    fullragchat_history.append({'user':'GerBot', 'message':"Lets chat about Gerry Stahl's writting."}) 
+    fullragchat_history.append({'user':'GerBot', 'message':"Lets chat about Gerry Stahl's writing."}) 
     fullragchat_history.append({'user':'GerBot', 'message':'Enter a question, and click query.'}) 
 
 @app.route("/fullragchat_init")

@@ -1,0 +1,18 @@
+#!/usr/bin/env python
+
+rag = (
+	'path_filename': 'docs/TheThings-PeterWatts.txt',
+	'summary_index': '
+	')
+
+rag = (
+	'path_filename': 'docs/no_rag.txt'
+	'summary_index': '
+	')
+
+rag = (
+	'path_filename': 'docs/rag_text.txt'
+	'summary_index': '
+	test
+	')
+
