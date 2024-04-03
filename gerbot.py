@@ -70,12 +70,10 @@ def root():
 def convo_mem_function(query):
     # ignoring query and generating text history from convo_mem dict
     history = f'<chat_history>\n'
-    for line_in_convo_mem in convo_mem:
-        history += f'{line_in_convo_mem}\n'
+    for line in fullragchat_history:
+        history += f'{line}\n'
     history += f'</chat_history>\n'
     return history
-
-
 
 def mistral_convochat(model, mkey, fullragchat_temp, query):
     large_lang_model = ChatMistralAI(
@@ -125,7 +123,7 @@ def ollama_qachat(model, fullragchat_temp, stop_words_list, query):
     # answer = ollama.invoke(query) # is this prefered? how does the above know what to do?
     return answer
 
-def get_rag_text(fullragchat_rag_source, query)
+def get_rag_text(fullragchat_rag_source, query):
     rag_text = 'get_rag_text not yet implemented'
     return rag_text
 
@@ -228,9 +226,9 @@ def ollama_convo_rag(model, fullragchat_temp, stop_words_list, fullragchat_rag_s
     vector_store_hits = len(docs)
     history_runnable = RunnableLambda(convo_mem_function)
     setup_and_retrieval = RunnableParallel({
-        "context": docs, 
+#        "context":  docs, 
         "question": RunnablePassthrough(),
-        "history": history_runnable })
+        "history":  history_runnable})
     template = """
         Answer the question based primarily on this following authoritative context: 
         {context}
