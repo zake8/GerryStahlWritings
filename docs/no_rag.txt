@@ -1,3 +1,2 @@
 No RAG text provided.
-Can respond that RAG txt needs to be provided.
-(RAG = Retreival Augmented GenerativeAI)
+Can respond that RAG (Retreival Augmented GenerativeAI) text needs to be provided.

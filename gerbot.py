@@ -159,7 +159,9 @@ def mistral_convo_rag(fullragchat_rag_source, fullragchat_embed_model, mkey, mod
         "question": RunnablePassthrough(),
         "history": history_runnable })
     template = """
-        You are the RAG conversational chatbot "GerBot". (RAG is Retreival Augmented GenerativeAI)
+        You are the RAG conversational chatbot "GerBot". (RAG is Retreival Augmented GenerativeAI.)
+        Your function is to assist users with exploring, searching, quering, and "chatting with" 
+        Gerry Stahl's published works, all available here, http://gerrystahl.net/pub/index.html.
         Answer the question based primarily on this relevent retreived context: 
         {context}
         
@@ -236,7 +238,9 @@ def ollama_convo_rag(model, fullragchat_temp, stop_words_list, fullragchat_rag_s
         "question": RunnablePassthrough(),
         "history":  history_runnable})
     template = """
-        You are the RAG conversational chatbot "GerBot". (RAG is Retreival Augmented GenerativeAI)
+        You are the RAG conversational chatbot "GerBot". (RAG is Retreival Augmented GenerativeAI.)
+        Your function is to assist users with exploring, searching, quering, and "chatting with" 
+        Gerry Stahl's published works, all available here, http://gerrystahl.net/pub/index.html.
         Answer the question based primarily on this relevent retreived context: 
         {context}
         
@@ -312,14 +316,14 @@ def chat_query_return(
     if stop_words_list == ['']: stop_words_list = None
     if model == "fake_llm":
         answer = fake_llm(query)
-    elif (model == "orca-mini") or 
+    elif ( (model == "orca-mini") or 
             (model == "phi") or 
             (model == "tinyllama") or
             (model == "llama2") or 
             (model == "llama2-uncensored") or 
             (model == "mistral") or 
             (model == "mixtral") or 
-            (model == "command-r")
+            (model == "command-r") ):
         if fullragchat_rag_source:
             if fullragchat_loop_context == 'True':
                 answer = ollama_convo_rag(
@@ -337,8 +341,7 @@ def chat_query_return(
                     stop_words_list=stop_words_list, 
                     fullragchat_rag_source=fullragchat_rag_source, 
                     fullragchat_embed_model=fullragchat_embed_model, 
-                    query=query
-                )
+                    query=query )
         else:
             if fullragchat_loop_context == 'True':
                 answer = ollama_convochat(
@@ -354,7 +357,9 @@ def chat_query_return(
                     stop_words_list=stop_words_list, 
                     query=query, 
                 )
-    elif (model == "open-mixtral-8x7b") or (model == "mistral-large-latest") or (model == "open-mistral-7b"):
+    elif ( (model == "open-mixtral-8x7b") or 
+            (model == "mistral-large-latest") or 
+            (model == "open-mistral-7b") ):
         mkey = os.getenv('Mistral_API_key')
         if fullragchat_rag_source:
             if fullragchat_loop_context == 'True':
@@ -364,8 +369,7 @@ def chat_query_return(
                     mkey=mkey, 
                     model=model, 
                     fullragchat_temp=fullragchat_temp, 
-                    query=query, 
-                )
+                    query=query )
             else:
                 answer = mistral_rag(
                     fullragchat_rag_source=fullragchat_rag_source, 
@@ -373,23 +377,20 @@ def chat_query_return(
                     mkey=mkey, 
                     model=model, 
                     fullragchat_temp=fullragchat_temp, 
-                    query=query, 
-                )
+                    query=query )
         else:
             if fullragchat_loop_context == 'True':
                 answer = mistral_convochat(
                     mkey=mkey, 
                     query=query, 
                     model=model, 
-                    fullragchat_temp=fullragchat_temp, 
-                )
+                    fullragchat_temp=fullragchat_temp )
             else:
                 answer = mistral_qachat(
                     mkey=mkey, 
                     query=query, 
                     model=model, 
-                    fullragchat_temp=fullragchat_temp, 
-                )
+                    fullragchat_temp=fullragchat_temp )
     else:
         answer = "No LLM named " + model
     return answer
