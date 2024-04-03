@@ -125,11 +125,19 @@ def ollama_qachat(model, fullragchat_temp, stop_words_list, query):
     # answer = ollama.invoke(query) # is this prefered? how does the above know what to do?
     return answer
 
+def get_rag_text(fullragchat_rag_source, query)
+    rag_text = 'get_rag_text not yet implemented'
+    return rag_text
+
 def mistral_convo_rag(fullragchat_rag_source, fullragchat_embed_model, mkey, model, fullragchat_temp, query):
+    documents = get_rag_text(fullragchat_rag_source, query)
     answer = f'mistral_convo_rag not yet implemented.'
     return answer
 
 def mistral_rag(fullragchat_rag_source, fullragchat_embed_model, mkey, model, fullragchat_temp, query):
+    documents = get_rag_text(fullragchat_rag_source, query)
+
+    ##### Start move to function
     extension = fullragchat_rag_source[-3:]
     # https://python.langchain.com/docs/modules/data_connection/document_loaders/json
     if extension == "txt":
@@ -155,6 +163,8 @@ def mistral_rag(fullragchat_rag_source, fullragchat_embed_model, mkey, model, fu
     # Split text into chunks
     text_splitter = RecursiveCharacterTextSplitter()
     documents = text_splitter.split_documents(docs)
+    ##### End function
+
     # Define the embedding model
     embeddings = MistralAIEmbeddings(
                 model=fullragchat_embed_model, 
@@ -189,7 +199,60 @@ def mistral_rag(fullragchat_rag_source, fullragchat_embed_model, mkey, model, fu
     return answer
 
 def ollama_convo_rag(model, fullragchat_temp, stop_words_list, fullragchat_rag_source, fullragchat_embed_model, query):
-    answer = f'ollama_convo_rag not yet implemented.'
+    all_splits = get_rag_text(fullragchat_rag_source, query)
+
+    ##### Start move to function
+    extension = fullragchat_rag_source[-3:]
+    if extension == "txt":
+        loader = TextLoader(fullragchat_rag_source) # ex: /path/filename
+    elif (extension == "tml") or (extension == "htm"): #html
+        loader = WebBaseLoader(fullragchat_rag_source) # ex: https://url/file.html
+    elif extension == "pdf":
+        loader = OnlinePDFLoader(fullragchat_rag_source) # ex: https://url/file.pdf
+    elif extension == "son": #json
+        loader = JSONLoader(file_path=fullragchat_rag_source,
+            jq_schema='',
+            text_content=False)
+        # https://python.langchain.com/docs/modules/data_connection/document_loaders/json
+    else:
+        answer = "Unable to make loader for " + fullragchat_rag_source
+        return answer
+    data = loader.load()
+    text_splitter=RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=20)
+    all_splits = text_splitter.split_documents(data)
+    ##### End function
+    
+    oembed = OllamaEmbeddings(model=fullragchat_embed_model)
+    vectorstore = Chroma.from_documents(documents=all_splits, embedding=oembed)
+    docs = vectorstore.similarity_search(query)
+    vector_store_hits = len(docs)
+    history_runnable = RunnableLambda(convo_mem_function)
+    setup_and_retrieval = RunnableParallel({
+        "context": docs, 
+        "question": RunnablePassthrough(),
+        "history": history_runnable })
+    template = """
+        Answer the question based primarily on this following authoritative context: 
+        {context}
+        
+        Reference chat history for conversationality: 
+        {history}
+        
+        Question: 
+        {question}
+        
+        Answer:
+    """
+    prompt = ChatPromptTemplate.from_template(template)
+    ollama = Ollama(
+        model=model, 
+        temperature=float(fullragchat_temp), 
+        stop=stop_words_list, 
+        verbose=True,
+    )
+    output_parser = StrOutputParser()
+    chain = ( setup_and_retrieval | prompt | ollama | output_parser )
+    answer = chain.invoke(query)
     return answer
 
 def ollama_rag(model, fullragchat_temp, stop_words_list, fullragchat_rag_source, fullragchat_embed_model, query):
@@ -200,6 +263,9 @@ def ollama_rag(model, fullragchat_temp, stop_words_list, fullragchat_rag_source,
         stop=stop_words_list, 
         verbose=True,
     )
+    all_splits = get_rag_text(fullragchat_rag_source, query)
+
+##### FUNC
     extension = fullragchat_rag_source[-3:]
     if extension == "txt":
         loader = TextLoader(fullragchat_rag_source) # ex: /path/filename
@@ -219,6 +285,8 @@ def ollama_rag(model, fullragchat_temp, stop_words_list, fullragchat_rag_source,
     data = loader.load()
     text_splitter=RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=20)
     all_splits = text_splitter.split_documents(data)
+##### FUNC END
+
     oembed = OllamaEmbeddings(model=fullragchat_embed_model)
     vectorstore = Chroma.from_documents(documents=all_splits, embedding=oembed)
     docs = vectorstore.similarity_search(query)
