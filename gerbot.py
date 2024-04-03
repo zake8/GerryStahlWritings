@@ -124,18 +124,6 @@ def ollama_qachat(model, fullragchat_temp, stop_words_list, query):
     return answer
 
 def get_rag_text(fullragchat_rag_source, query):
-    rag_text = 'get_rag_text not yet implemented'
-    return rag_text
-
-def mistral_convo_rag(fullragchat_rag_source, fullragchat_embed_model, mkey, model, fullragchat_temp, query):
-    documents = get_rag_text(fullragchat_rag_source, query)
-    answer = f'mistral_convo_rag not yet implemented.'
-    return answer
-
-def mistral_rag(fullragchat_rag_source, fullragchat_embed_model, mkey, model, fullragchat_temp, query):
-    documents = get_rag_text(fullragchat_rag_source, query)
-
-    ##### Start move to function
     extension = fullragchat_rag_source[-3:]
     # https://python.langchain.com/docs/modules/data_connection/document_loaders/json
     if extension == "txt":
@@ -151,18 +139,24 @@ def mistral_rag(fullragchat_rag_source, fullragchat_embed_model, mkey, model, fu
     elif extension == "son": #json
         loader = JSONLoader(file_path=fullragchat_rag_source,
             jq_schema='.',
-            text_content=False
-        )
+            text_content=False)
     else:
         answer = "Unable to make loader for " + fullragchat_rag_source
         return answer
     # from https://docs.mistral.ai/guides/basic-RAG/
     docs = loader.load()
     # Split text into chunks
-    text_splitter = RecursiveCharacterTextSplitter()
-    documents = text_splitter.split_documents(docs)
-    ##### End function
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=20)
+    rag_text = text_splitter.split_documents(docs)
+    return rag_text
 
+def mistral_convo_rag(fullragchat_rag_source, fullragchat_embed_model, mkey, model, fullragchat_temp, query):
+    documents = get_rag_text(fullragchat_rag_source, query)
+    answer = f'mistral_convo_rag not yet implemented.'
+    return answer
+
+def mistral_rag(fullragchat_rag_source, fullragchat_embed_model, mkey, model, fullragchat_temp, query):
+    documents = get_rag_text(fullragchat_rag_source, query)
     # Define the embedding model
     embeddings = MistralAIEmbeddings(
                 model=fullragchat_embed_model, 
@@ -198,28 +192,6 @@ def mistral_rag(fullragchat_rag_source, fullragchat_embed_model, mkey, model, fu
 
 def ollama_convo_rag(model, fullragchat_temp, stop_words_list, fullragchat_rag_source, fullragchat_embed_model, query):
     all_splits = get_rag_text(fullragchat_rag_source, query)
-
-    ##### Start move to function
-    extension = fullragchat_rag_source[-3:]
-    if extension == "txt":
-        loader = TextLoader(fullragchat_rag_source) # ex: /path/filename
-    elif (extension == "tml") or (extension == "htm"): #html
-        loader = WebBaseLoader(fullragchat_rag_source) # ex: https://url/file.html
-    elif extension == "pdf":
-        loader = OnlinePDFLoader(fullragchat_rag_source) # ex: https://url/file.pdf
-    elif extension == "son": #json
-        loader = JSONLoader(file_path=fullragchat_rag_source,
-            jq_schema='',
-            text_content=False)
-        # https://python.langchain.com/docs/modules/data_connection/document_loaders/json
-    else:
-        answer = "Unable to make loader for " + fullragchat_rag_source
-        return answer
-    data = loader.load()
-    text_splitter=RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=20)
-    all_splits = text_splitter.split_documents(data)
-    ##### End function
-    
     oembed = OllamaEmbeddings(model=fullragchat_embed_model)
     vectorstore = Chroma.from_documents(documents=all_splits, embedding=oembed)
     docs = vectorstore.similarity_search(query)
@@ -262,29 +234,6 @@ def ollama_rag(model, fullragchat_temp, stop_words_list, fullragchat_rag_source,
         verbose=True,
     )
     all_splits = get_rag_text(fullragchat_rag_source, query)
-
-##### FUNC
-    extension = fullragchat_rag_source[-3:]
-    if extension == "txt":
-        loader = TextLoader(fullragchat_rag_source) # ex: /path/filename
-    elif (extension == "tml") or (extension == "htm"): #html
-        loader = WebBaseLoader(fullragchat_rag_source) # ex: https://url/file.html
-    elif extension == "pdf":
-        loader = OnlinePDFLoader(fullragchat_rag_source) # ex: https://url/file.pdf
-    elif extension == "son": #json
-        loader = JSONLoader(file_path=fullragchat_rag_source,
-            jq_schema='',
-            text_content=False
-        )
-        # https://python.langchain.com/docs/modules/data_connection/document_loaders/json
-    else:
-        answer = "Unable to make loader for " + fullragchat_rag_source
-        return answer
-    data = loader.load()
-    text_splitter=RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=20)
-    all_splits = text_splitter.split_documents(data)
-##### FUNC END
-
     oembed = OllamaEmbeddings(model=fullragchat_embed_model)
     vectorstore = Chroma.from_documents(documents=all_splits, embedding=oembed)
     docs = vectorstore.similarity_search(query)
