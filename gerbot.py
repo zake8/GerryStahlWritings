@@ -13,7 +13,8 @@
 ### GerBot project is an LLM RAG chat intended to make http://gerrystahl.net/pub/index.html even more accessable
 ### Generative AI "chat" about the gerrystahl.net writings
 ### Code by Zake Stahl
-### March 2024
+### https://github.com/zake8/GerryStahlWritings
+### March, April 2024
 ### Based on public/shared APIs and FOSS samples
 ### Built on Linux, Python, Apache, WSGI, Flask, LangChain, Ollama, Mistral, more
 
