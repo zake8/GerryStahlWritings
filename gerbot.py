@@ -38,21 +38,25 @@ memory = ConversationBufferWindowMemory(k=14)
 import socket
 import random
 import os
+# from langchain_community.document_loaders import OnlinePDFLoader
+# from langchain_community.document_loaders import UnstructuredPDFLoader
+from langchain.chains import ConversationChain
 from langchain.chains import RetrievalQA
 from langchain.chains import create_retrieval_chain
-from langchain.chains import ConversationChain
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders import JSONLoader
-# from langchain_community.document_loaders import UnstructuredPDFLoader
-# from langchain_community.document_loaders import OnlinePDFLoader
 from langchain_community.document_loaders import TextLoader
 from langchain_community.document_loaders import WebBaseLoader
 from langchain_community.embeddings import OllamaEmbeddings
 from langchain_community.llms import Ollama
 from langchain_community.vectorstores import Chroma
 from langchain_community.vectorstores import FAISS
+from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.runnables import RunnableLambda
+from langchain_core.runnables import RunnableParallel
+from langchain_core.runnables import RunnablePassthrough
 from langchain_mistralai.chat_models import ChatMistralAI
 from langchain_mistralai.embeddings import MistralAIEmbeddings
 from mistralai.client import MistralClient
@@ -62,6 +66,16 @@ from mistralai.models.chat_completion import ChatMessage
 def root():
     webserver_hostname = socket.gethostname()
     return render_template('staging.html', webserver_hostname=webserver_hostname)
+
+def convo_mem_function(query):
+    # ignoring query and generating text history from convo_mem dict
+    history = f'<chat_history>\n'
+    for line_in_convo_mem in convo_mem:
+        history += f'{line_in_convo_mem}\n'
+    history += f'</chat_history>\n'
+    return history
+
+
 
 def mistral_convochat(model, mkey, fullragchat_temp, query):
     large_lang_model = ChatMistralAI(
@@ -109,6 +123,10 @@ def ollama_qachat(model, fullragchat_temp, stop_words_list, query):
     ### invoke model
     answer = ollama(query)
     # answer = ollama.invoke(query) # is this prefered? how does the above know what to do?
+    return answer
+
+def mistral_convo_rag(fullragchat_rag_source, fullragchat_embed_model, mkey, model, fullragchat_temp, query):
+    answer = f'mistral_convo_rag not yet implemented.'
     return answer
 
 def mistral_rag(fullragchat_rag_source, fullragchat_embed_model, mkey, model, fullragchat_temp, query):
@@ -168,6 +186,10 @@ def mistral_rag(fullragchat_rag_source, fullragchat_embed_model, mkey, model, fu
     # invoke chain
     response_dic = retrieval_chain.invoke(input_query)
     answer = response_dic['answer'] # parse return from LLM with input, context, and, answer into just answer
+    return answer
+
+def ollama_convo_rag(model, fullragchat_temp, stop_words_list, fullragchat_rag_source, fullragchat_embed_model, query):
+    answer = f'ollama_convo_rag not yet implemented.'
     return answer
 
 def ollama_rag(model, fullragchat_temp, stop_words_list, fullragchat_rag_source, fullragchat_embed_model, query):
@@ -242,14 +264,24 @@ def chat_query_return(
         answer = fake_llm(query)
     elif (model == "orca-mini") or (model == "phi") or (model == "tinyllama"): # or Ollama served llama2-uncensored or mistral or mixtral 
         if fullragchat_rag_source:
-            answer = ollama_rag(
-                model=model, 
-                fullragchat_temp=fullragchat_temp, 
-                stop_words_list=stop_words_list, 
-                fullragchat_rag_source=fullragchat_rag_source, 
-                fullragchat_embed_model=fullragchat_embed_model, 
-                query=query
-            )
+            if fullragchat_loop_context == 'True':
+                answer = ollama_convo_rag(
+                    model=model, 
+                    fullragchat_temp=fullragchat_temp, 
+                    stop_words_list=stop_words_list, 
+                    fullragchat_rag_source=fullragchat_rag_source, 
+                    fullragchat_embed_model=fullragchat_embed_model, 
+                    query=query
+                )
+            else:
+                answer = ollama_rag(
+                    model=model, 
+                    fullragchat_temp=fullragchat_temp, 
+                    stop_words_list=stop_words_list, 
+                    fullragchat_rag_source=fullragchat_rag_source, 
+                    fullragchat_embed_model=fullragchat_embed_model, 
+                    query=query
+                )
         else:
             if fullragchat_loop_context == 'True':
                 answer = ollama_convochat(
@@ -268,14 +300,24 @@ def chat_query_return(
     elif (model == "open-mixtral-8x7b") or (model == "mistral-large-latest") or (model == "open-mistral-7b"):
         mkey = os.getenv('Mistral_API_key')
         if fullragchat_rag_source:
-            answer = mistral_rag(
-                fullragchat_rag_source=fullragchat_rag_source, 
-                fullragchat_embed_model=fullragchat_embed_model, 
-                mkey=mkey, 
-                model=model, 
-                fullragchat_temp=fullragchat_temp, 
-                query=query, 
-            )
+            if fullragchat_loop_context == 'True':
+                answer = mistral_convo_rag(
+                    fullragchat_rag_source=fullragchat_rag_source, 
+                    fullragchat_embed_model=fullragchat_embed_model, 
+                    mkey=mkey, 
+                    model=model, 
+                    fullragchat_temp=fullragchat_temp, 
+                    query=query, 
+                )
+            else:
+                answer = mistral_rag(
+                    fullragchat_rag_source=fullragchat_rag_source, 
+                    fullragchat_embed_model=fullragchat_embed_model, 
+                    mkey=mkey, 
+                    model=model, 
+                    fullragchat_temp=fullragchat_temp, 
+                    query=query, 
+                )
         else:
             if fullragchat_loop_context == 'True':
                 answer = mistral_convochat(
