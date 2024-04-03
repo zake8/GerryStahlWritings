@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 # TODO:
-# implement context, conversation history forward, into RAG chat !!!
 # implement saving vector DB
 # save down pdfs; pdf into txt chapters w/ book and chapter summeries
 # what are max token in sizes per model? 
@@ -153,7 +152,35 @@ def get_rag_text(query):
 
 def mistral_convo_rag(fullragchat_rag_source, fullragchat_embed_model, mkey, model, fullragchat_temp, query):
     documents = get_rag_text(query)
-    answer = f'mistral_convo_rag not yet implemented.'
+    embeddings = MistralAIEmbeddings(
+                model=fullragchat_embed_model, 
+                mistral_api_key=mkey)
+    vector = FAISS.from_documents(documents, embeddings)
+    retriever = vector.as_retriever()
+    history_runnable = RunnableLambda(convo_mem_function)
+    setup_and_retrieval = RunnableParallel({
+        "context": retriever, 
+        "question": RunnablePassthrough(),
+        "history": history_runnable })
+    template = """
+        Answer the question based primarily on this authoritative context: 
+        {context}
+        
+        Reference chat history for conversationality: 
+        {history}
+        
+        Question: 
+        {question}
+        
+    """
+    prompt = ChatPromptTemplate.from_template(template)
+    large_lang_model = ChatMistralAI(
+                model_name=model, 
+                mistral_api_key=mkey, 
+                temperature=float(fullragchat_temp) )
+    output_parser = StrOutputParser()
+    chain = ( setup_and_retrieval | prompt | large_lang_model | output_parser )
+    answer = chain.invoke(query)
     return answer
 
 def mistral_rag(fullragchat_rag_source, fullragchat_embed_model, mkey, model, fullragchat_temp, query):
@@ -208,11 +235,11 @@ def ollama_convo_rag(model, fullragchat_temp, stop_words_list, fullragchat_rag_s
     context_runnable = RunnableLambda(ollama_embed_search)
     history_runnable = RunnableLambda(convo_mem_function)
     setup_and_retrieval = RunnableParallel({
-        "context":  context_runnable(), 
+        "context":  context_runnable, 
         "question": RunnablePassthrough(),
         "history":  history_runnable})
     template = """
-        Answer the question based primarily on this following authoritative context: 
+        Answer the question based primarily on this authoritative context: 
         {context}
         
         Reference chat history for conversationality: 
