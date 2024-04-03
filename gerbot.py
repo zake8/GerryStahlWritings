@@ -119,6 +119,7 @@ def ollama_qachat(model, fullragchat_temp, stop_words_list, query):
     return answer
 
 def get_rag_text(query):
+    # function ignores passed query value
     global fullragchat_rag_source
     extension = fullragchat_rag_source[-3:]
     # https://python.langchain.com/docs/modules/data_connection/document_loaders/json
@@ -153,6 +154,7 @@ def mistral_convo_rag(fullragchat_rag_source, fullragchat_embed_model, mkey, mod
                 mistral_api_key=mkey)
     vector = FAISS.from_documents(documents, embeddings)
     retriever = vector.as_retriever()
+    # this sequence doesn't use query value, sends all text
     history_runnable = RunnableLambda(convo_mem_function)
     setup_and_retrieval = RunnableParallel({
         "context": retriever, 
@@ -223,6 +225,8 @@ def ollama_embed_search(query):
     all_splits = get_rag_text(query)
     vectorstore = Chroma.from_documents(documents=all_splits, embedding=oembed)
     docs = vectorstore.similarity_search(query)
+    # this sequence uses the query to return a few text strings of similar semantics
+    # also Chroma sends out Anonymized telemetry https://docs.trychroma.com/telemetry
     vector_store_hits = len(docs)
     context_text = f'<rag_context>\n'
     for line in docs:
