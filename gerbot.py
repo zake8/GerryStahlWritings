@@ -78,8 +78,7 @@ def mistral_convochat(model, mkey, fullragchat_temp, query):
     large_lang_model = ChatMistralAI(
         model_name=model, 
         mistral_api_key=mkey, 
-        temperature=float(fullragchat_temp), 
-    )
+        temperature=float(fullragchat_temp) )
     global memory
     chain = ConversationChain(llm=large_lang_model, memory=memory) # ConversationBufferWindowMemory leveraged by ConversationChain
     answer = chain.predict(input=query)
@@ -90,8 +89,7 @@ def ollama_convochat(model, fullragchat_temp, stop_words_list, query):
         model=model, 
         temperature=float(fullragchat_temp), 
         stop=stop_words_list, 
-        verbose=True,
-    )
+        verbose=True )
     global memory
     chain = ConversationChain(llm=ollama, memory=memory) # ConversationBufferWindowMemory leveraged by ConversationChain
     answer = chain.predict(input=query)
@@ -104,8 +102,7 @@ def mistral_qachat(model, mkey, fullragchat_temp, query):
     chat_response = client.chat(
             model=model,
             messages=messages,
-            temperature=float(fullragchat_temp), 
-    )
+            temperature=float(fullragchat_temp) )
     answer = chat_response.choices[0].message.content
     return answer
 
@@ -115,8 +112,7 @@ def ollama_qachat(model, fullragchat_temp, stop_words_list, query):
         model=model, 
         temperature=float(fullragchat_temp), 
         stop=stop_words_list, 
-        verbose=True,
-    )
+        verbose=True )
     ### invoke model
     answer = ollama(query)
     # answer = ollama.invoke(query) # is this prefered? how does the above know what to do?
@@ -163,7 +159,8 @@ def mistral_convo_rag(fullragchat_rag_source, fullragchat_embed_model, mkey, mod
         "question": RunnablePassthrough(),
         "history": history_runnable })
     template = """
-        Answer the question based primarily on this authoritative context: 
+        You are the RAG conversational chatbot "GerBot". (RAG is Retreival Augmented GenerativeAI)
+        Answer the question based primarily on this relevent retreived context: 
         {context}
         
         Reference chat history for conversationality: 
@@ -239,7 +236,8 @@ def ollama_convo_rag(model, fullragchat_temp, stop_words_list, fullragchat_rag_s
         "question": RunnablePassthrough(),
         "history":  history_runnable})
     template = """
-        Answer the question based primarily on this authoritative context: 
+        You are the RAG conversational chatbot "GerBot". (RAG is Retreival Augmented GenerativeAI)
+        Answer the question based primarily on this relevent retreived context: 
         {context}
         
         Reference chat history for conversationality: 
@@ -314,7 +312,14 @@ def chat_query_return(
     if stop_words_list == ['']: stop_words_list = None
     if model == "fake_llm":
         answer = fake_llm(query)
-    elif (model == "orca-mini") or (model == "phi") or (model == "tinyllama"): # or Ollama served llama2-uncensored or mistral or mixtral 
+    elif (model == "orca-mini") or 
+            (model == "phi") or 
+            (model == "tinyllama") or
+            (model == "llama2") or 
+            (model == "llama2-uncensored") or 
+            (model == "mistral") or 
+            (model == "mixtral") or 
+            (model == "command-r")
         if fullragchat_rag_source:
             if fullragchat_loop_context == 'True':
                 answer = ollama_convo_rag(
