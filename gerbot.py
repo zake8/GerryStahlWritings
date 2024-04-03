@@ -154,7 +154,7 @@ def mistral_convo_rag(fullragchat_rag_source, fullragchat_embed_model, mkey, mod
                 mistral_api_key=mkey)
     vector = FAISS.from_documents(documents, embeddings)
     retriever = vector.as_retriever()
-    # this sequence doesn't use query value, sends all text
+    # this sequence seems to use query value so the above, if not in a langchain pipe as a runnable would read vector.as_retriever(query)
     history_runnable = RunnableLambda(convo_mem_function)
     setup_and_retrieval = RunnableParallel({
         "context": retriever, 
@@ -227,6 +227,7 @@ def ollama_embed_search(query):
     docs = vectorstore.similarity_search(query)
     # this sequence uses the query to return a few text strings of similar semantics
     # also Chroma sends out Anonymized telemetry https://docs.trychroma.com/telemetry
+    # replace with FAISS code!
     vector_store_hits = len(docs)
     context_text = f'<rag_context>\n'
     for line in docs:
