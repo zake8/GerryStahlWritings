@@ -67,7 +67,7 @@ def root():
     return render_template('staging.html', webserver_hostname=webserver_hostname)
 
 def convo_mem_function(query):
-    # ignoring query and generating text history from convo_mem dict
+    # ignoring query and generating text history from fullragchat_history dict
     history = f'<chat_history>\n'
     for line in fullragchat_history:
         history += f'{line}\n'
@@ -147,16 +147,60 @@ def get_rag_text(query):
     rag_text = text_splitter.split_documents(docs)
     return rag_text
 
+def rag_text_function(query, rag_source_clues):
+    # function ignores passed query value
+    loader = TextLoader(rag_source_clues)
+    context = loader.load()
+    return context
+
+def choose_rag(rag_source_clues, mkey, model, fullragchat_temp, query):
+    rag_text_runnable = RunnableLambda(rag_text_function)
+    history_runnable = RunnableLambda(convo_mem_function)
+    setup_and_retrieval = RunnableParallel({
+        "context": rag_text_runnable(rag_source_clues=rag_source_clues), 
+        "question": RunnablePassthrough(),
+        "history": history_runnable })
+    template = """
+        Return a single path_filename.
+        You are the RAG conversational chatbot "GerBot". (RAG is Retrieval Augmented GenerativeAI.)
+        Your function is to assist users with exploring, searching, querying, and "chatting with" 
+        Gerry Stahl's published works, all available here, http://gerrystahl.net/pub/index.html.
+        (Each user question gets two LLM inferences, 
+        first to choose next RAG document, 
+        then second to generate an answer from question query against vectorized RAG document;
+        this inference is the first of the two, to choose path_filename RAG document.)
+        
+        Question from user: 
+        {question}
+        
+        Lightly reference chat history help understand what information area user is looking to explore: 
+        {history}
+        
+        Provided context details path_filenames for various content/information areas: 
+        {context}
+        
+        Single path_filename from choices detailed in context:
+    """
+    prompt = ChatPromptTemplate.from_template(template)
+    large_lang_model = ChatMistralAI(
+                model_name=model, 
+                mistral_api_key=mkey, 
+                temperature=float(fullragchat_temp) )
+    output_parser = StrOutputParser()
+    chain = ( setup_and_retrieval | prompt | large_lang_model | output_parser )
+    fullragchat_rag_source = chain.invoke(query)
+    return fullragchat_rag_source
+
 def mistral_convo_rag(fullragchat_rag_source, fullragchat_embed_model, mkey, model, fullragchat_temp, query):
     documents = get_rag_text(query)
-    logging.info(f'++++++ documents ++++++++++\n{documents}\n')
+    # logging.info(f'++++++ documents ++++++++++\n{documents}\n')
     embeddings = MistralAIEmbeddings(
                 model=fullragchat_embed_model, 
                 mistral_api_key=mkey)
     vector = FAISS.from_documents(documents, embeddings)
     retriever = vector.as_retriever()
-    testing_retriever = retriever.invoke(query)
-    logging.info(f'++++++ retriever ++++++++++\n{testing_retriever}\n')
+    # testing_retriever = retriever.invoke(query)
+    # logging.info(f'++++++ retriever ++++++++++\n{testing_retriever}\n')
     # this sequence seems to use query value so the above, if not in a langchain pipe as a runnable would read vector.as_retriever(query)
     history_runnable = RunnableLambda(convo_mem_function)
     setup_and_retrieval = RunnableParallel({
@@ -176,6 +220,7 @@ def mistral_convo_rag(fullragchat_rag_source, fullragchat_embed_model, mkey, mod
         Question: 
         {question}
         
+        Answer:
     """
     prompt = ChatPromptTemplate.from_template(template)
     large_lang_model = ChatMistralAI(
@@ -211,6 +256,7 @@ def mistral_rag(fullragchat_rag_source, fullragchat_embed_model, mkey, model, fu
         {context}
         </context>
         Question: {input}
+        Answer:
     """)
     # Create a retrieval chain to answer questions
     document_chain = create_stuff_documents_chain(large_lang_model, prompt)
@@ -371,13 +417,31 @@ def chat_query_return(
         mkey = os.getenv('Mistral_API_key')
         if fullragchat_rag_source:
             if fullragchat_loop_context == 'True':
-                answer = mistral_convo_rag(
-                    fullragchat_rag_source=fullragchat_rag_source, 
-                    fullragchat_embed_model=fullragchat_embed_model, 
-                    mkey=mkey, 
-                    model=model, 
-                    fullragchat_temp=fullragchat_temp, 
-                    query=query )
+                if fullragchat_rag_source != 'auto': # fullragchat_rag_source specified in UI
+                    answer = mistral_convo_rag(
+                        fullragchat_rag_source=fullragchat_rag_source, 
+                        fullragchat_embed_model=fullragchat_embed_model, 
+                        mkey=mkey, 
+                        model=model, 
+                        fullragchat_temp=fullragchat_temp, 
+                        query=query )
+                else: # fullragchat_rag_source set to 'auto'!
+                    # figure out which staged rag doc to use
+                    rag_source_clues = 'docs/rag_summary_link_to_rags.txt' # doc helps llm choose rag file
+                    fullragchat_rag_source = choose_rag(
+                        rag_source_clues=rag_source_clues, 
+                        mkey=mkey, 
+                        model=model, 
+                        fullragchat_temp=fullragchat_temp, 
+                        query=query )
+                    # use above selected fullragchat_rag_source
+                    answer = mistral_convo_rag(
+                        fullragchat_rag_source=fullragchat_rag_source, 
+                        fullragchat_embed_model=fullragchat_embed_model, 
+                        mkey=mkey, 
+                        model=model, 
+                        fullragchat_temp=fullragchat_temp, 
+                        query=query )
             else:
                 answer = mistral_rag(
                     fullragchat_rag_source=fullragchat_rag_source, 
@@ -449,7 +513,7 @@ def fullragchat_init():
     fullragchat_history = []
     fullragchat_model = "open-mixtral-8x7b"
     fullragchat_temp = "0.25"
-    fullragchat_rag_source = ""
+    fullragchat_rag_source = "auto"
     fullragchat_embed_model = "mistral-embed"
     fullragchat_loop_context = "True"
     fullragchat_stop_words = ""
