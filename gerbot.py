@@ -66,6 +66,10 @@ def root():
     webserver_hostname = socket.gethostname()
     return render_template('staging.html', webserver_hostname=webserver_hostname)
 
+@app.route("/gerbotsamples")
+def gerbotsamples():
+    return render_template('gerbotsamples.html')
+
 def convo_mem_function(query):
     # ignoring query and generating text history from fullragchat_history dict
     history = f'<chat_history>\n'
@@ -162,13 +166,14 @@ def choose_rag(rag_source_clues, mkey, model, fullragchat_temp, query):
         "history": history_runnable })
     template = """
         Return a single path_filename.
-        You are the RAG conversational chatbot "GerBot". (RAG is Retrieval Augmented GenerativeAI.)
+        You are the conversational RAG chatbot "GerBot". (RAG is Retrieval Augmented GenerativeAI.)
         Your function is to assist users with exploring, searching, querying, and "chatting with" 
         Gerry Stahl's published works, all available here, http://gerrystahl.net/pub/index.html.
         (Each user question gets two LLM inferences, 
         first to choose next RAG document, 
         then second to generate an answer from question query against vectorized RAG document;
         this inference is the first of the two, to choose path_filename RAG document.)
+        Mentioning a book or even chapter title should be enough to return its path_filename.
         
         Question from user: 
         {question}
@@ -179,7 +184,7 @@ def choose_rag(rag_source_clues, mkey, model, fullragchat_temp, query):
         Provided context details path_filenames for various content/information areas: 
         {context}
         
-        Single path_filename from choices detailed in context:
+        Path_Filename:
     """
     prompt = ChatPromptTemplate.from_template(template)
     large_lang_model = ChatMistralAI(
@@ -436,13 +441,18 @@ def chat_query_return(
         if fullragchat_rag_source:
             if fullragchat_loop_context == 'True':
                 if fullragchat_rag_source != 'auto': # fullragchat_rag_source specified in UI
-                    answer = mistral_convo_rag(
-                        fullragchat_rag_source=fullragchat_rag_source, 
-                        fullragchat_embed_model=fullragchat_embed_model, 
-                        mkey=mkey, 
-                        model=model, 
-                        fullragchat_temp=fullragchat_temp, 
-                        query=query )
+                    if query == 'command: summarize':
+                        to_sum = get_rag_text(query)
+                        answer = f'Summary of {fullragchat_rag_source}: \n'
+                        answer += create_summary(to_sum, model, fullragchat_temp)
+                    else:
+                        answer = mistral_convo_rag(
+                            fullragchat_rag_source=fullragchat_rag_source, 
+                            fullragchat_embed_model=fullragchat_embed_model, 
+                            mkey=mkey, 
+                            model=model, 
+                            fullragchat_temp=fullragchat_temp, 
+                            query=query )
                 else: # fullragchat_rag_source set to 'auto'!
                     # figure out which staged rag doc to use
                     rag_source_clues = 'docs/rag_summary_link_to_rags.txt' # doc helps llm choose rag file
