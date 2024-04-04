@@ -232,6 +232,24 @@ def mistral_convo_rag(fullragchat_rag_source, fullragchat_embed_model, mkey, mod
     answer = chain.invoke(query)
     return answer
 
+summary_template = """
+In clear and concise language, summarize (key points, themes presented, interesting terms or jargon (if any) ) the text. 
+<text>
+{question}
+</text>
+Summary:
+"""
+
+def create_summary(to_sum, model, fullragchat_temp):
+    prompt = ChatPromptTemplate.from_template(summary_template)
+    llm = ChatMistralAI(
+            model_name=model, 
+            mistral_api_key=mkey, 
+            temperature=fullragchat_temp )
+    chain = ( prompt | llm | StrOutputParser() )
+    summary = chain.invoke(to_sum)
+    return summary
+
 def mistral_rag(fullragchat_rag_source, fullragchat_embed_model, mkey, model, fullragchat_temp, query):
     documents = get_rag_text(query)
     # Define the embedding model
