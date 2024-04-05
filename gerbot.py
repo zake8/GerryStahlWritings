@@ -1,13 +1,9 @@
 #!/usr/bin/env python
 
 # TODO:
-# implement saving vector DB
-# save down pdfs; pdf into txt chapters w/ book and chapter summaries
-# what are max token in sizes per model? 
-# agent-style answering:
-        # query
-        # based on query and context (chat history), what to pull for RAG within the token size? Reference these summaries.
-        # based on query and context and RAG, answer
+# !!! Implement saving vector DB
+# !!! Save down pdfs; pdf into txt chapters w/ book and chapter summaries
+# Q: what are max token in sizes per model? A: Mixtral-8x7b = 32k token context 
 
 ### GerBot project is an LLM RAG chat intended to make http://gerrystahl.net/pub/index.html even more accessible
 ### Generative AI "chat" about the gerrystahl.net writings
@@ -50,7 +46,7 @@ from langchain_community.document_loaders import TextLoader
 from langchain_community.document_loaders import WebBaseLoader
 from langchain_community.embeddings import OllamaEmbeddings
 from langchain_community.llms import Ollama
-from langchain_community.vectorstores import Chroma
+from langchain_community.vectorstores import Chroma ##### remove?
 from langchain_community.vectorstores import FAISS
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
@@ -463,7 +459,7 @@ def chat_query_return(model, query, fullragchat_temp, fullragchat_stop_words, fu
                     pattern = r'\*{5}(.+?)\*{5}' # Hope LLM put *****filename.txt***** in there somewhere...
                     match = re.search(pattern, selected_rag)
                     clean_selected_rag = match.group(1)
-                    answer = f'(Retrieved document "{clean_selected_rag}".) \n'
+                    answer = f'Retrieved document "{clean_selected_rag}". \n'
                     clean_selected_rag = f'docs/{clean_selected_rag}'
                     logging.info(f'===> clean_selected_rag: {clean_selected_rag}')
                     ##### global fullragchat_rag_source
