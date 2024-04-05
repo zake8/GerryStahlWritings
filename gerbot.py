@@ -4,6 +4,8 @@
 # !!! Implement saving vector DB
 # !!! Save down pdfs; pdf into txt chapters w/ book and chapter summaries
 # Q: what are max token in sizes per model? A: Mixtral-8x7b = 32k token context 
+# create .cur file when doing injestion, write summary there and to 'docs/rag_summary_link_to_rags.txt'
+##### global lines to delete!
 
 ### GerBot project is an LLM RAG chat intended to make http://gerrystahl.net/pub/index.html even more accessible
 ### Generative AI "chat" about the gerrystahl.net writings
@@ -70,13 +72,14 @@ def gerbotsamples():
     return render_template('gerbotsamples.html')
 
 def convo_mem_function(query):
-    # ignoring query and generating text history from fullragchat_history dict
+    # ignoring query and generating text history from global fullragchat_history dict
     history = f'<chat_history>\n'
     for line in fullragchat_history:
         history += f'{line}\n'
     history += f'</chat_history>\n'
     return history
 
+##### remove this function
 def mistral_convochat(model, mkey, fullragchat_temp, query):
     large_lang_model = ChatMistralAI(
         model_name=model, 
@@ -87,6 +90,7 @@ def mistral_convochat(model, mkey, fullragchat_temp, query):
     answer = chain.predict(input=query)
     return answer
 
+##### remove this function
 def ollama_convochat(model, fullragchat_temp, stop_words_list, query):
     ollama = Ollama(
         model=model, 
@@ -98,6 +102,7 @@ def ollama_convochat(model, fullragchat_temp, stop_words_list, query):
     answer = chain.predict(input=query)
     return answer
 
+##### remove this function
 def mistral_qachat(model, mkey, fullragchat_temp, query):
     # simple chat from https://docs.mistral.ai/platform/client/
     client = MistralClient(api_key=mkey)
@@ -109,6 +114,7 @@ def mistral_qachat(model, mkey, fullragchat_temp, query):
     answer = chat_response.choices[0].message.content
     return answer
 
+##### remove this function
 def ollama_qachat(model, fullragchat_temp, stop_words_list, query):
     ### instanciate model
     ollama = Ollama(
@@ -123,21 +129,21 @@ def ollama_qachat(model, fullragchat_temp, stop_words_list, query):
 
 def get_rag_text(query):
     # function ignores passed query value
-    ##### global fullragchat_rag_source
-    ##### replace this part w/ class code!
-    extension = fullragchat_rag_source[-3:]
+    pattern = r'\.([a-zA-Z]{3,5})$'
+    match = re.search(pattern, fullragchat_rag_source) # global
+    rag_ext = match.group(1)
     # https://python.langchain.com/docs/modules/data_connection/document_loaders/json
-    if extension == "txt":
+    if rag_ext == "txt":
         loader = TextLoader(fullragchat_rag_source) # ex: /path/filename
-    elif (extension == "tml") or (extension == "htm"): #html
+    elif (rag_ext == "html") or (rag_ext == "htm"):
         loader = WebBaseLoader(fullragchat_rag_source) # ex: https://url/file.html
-    elif extension == "pdf":
+    elif rag_ext == "pdf":
         # throws: ImportError: cannot import name 'open_filename' from 'pdfminer.utils'
         # loader = UnstructuredPDFLoader(fullragchat_rag_source)
         # loader = OnlinePDFLoader(fullragchat_rag_source) # ex: https://url/file.pdf
         answer = "Need to make a loader for pdf... " + fullragchat_rag_source
         return answer
-    elif extension == "son": #json
+    elif rag_ext == "json":
         loader = JSONLoader(file_path=fullragchat_rag_source,
             jq_schema='.',
             text_content=False)
@@ -153,9 +159,26 @@ def get_rag_text(query):
 
 def rag_text_function(query):
     # function ignores passed query value
+    # rag_source_clues is global defined in chat_query_return func
     loader = TextLoader(rag_source_clues)
     context = loader.load()
     return context
+
+filename_template = """
+Your task is to return a single *****filename***** from the provided list.
+Mentioning a book or even chapter title should be enough to return its *****filename*****.
+Please be sure to only return "*****filename*****" with the five (5) asterisks (*) on either side.
+Example: If question from user is about alphabet, A B C's, and provided list has item with summary about letters in the alphabet, then answer with "*****alphabet.txt*****", assuming that is the *****filename***** for that summary.
+Example: If user is questioning about Python programming, and there is a summary including Python stuff, then return "*****py_coding.txt*****" or whatever its name is.
+Example: If question is about "The Things" by Peter Watts, then send the string "*****TheThings-PeterWatts.txt*****".
+Question from user is: 
+{question}
+Lightly reference this chat history help understand what information area user is looking to explore: 
+{history}
+Here is provided list containing *****filename***** for various content/information areas: 
+{context}
+Single path_filename value:
+"""
 
 def choose_rag(mkey, model, fullragchat_temp, query):
     rag_text_runnable = RunnableLambda(rag_text_function)
@@ -164,31 +187,7 @@ def choose_rag(mkey, model, fullragchat_temp, query):
         "context": rag_text_runnable, 
         "question": RunnablePassthrough(),
         "history": history_runnable })
-    template = """
-        Your task is to return a single *****filename***** from the provided list.
-        
-        Mentioning a book or even chapter title should be enough to return its *****filename*****.
-        
-        Please be sure to only return "*****filename*****" with the five (5) asterisks (*) on either side.
-        
-        Example: If question from user is about alphabet, A B C's, and provided list has item with summary about letters in the alphabet, then answer with "*****alphabet.txt*****", assuming that is the *****filename***** for that summary.
-        
-        Example: If user is questioning about Python programming, and there is a summary including Python stuff, then return "*****py_coding.txt*****" or whatever its name is.
-        
-        Example: If question is about "The Things" by Peter Watts, then send the string "*****TheThings-PeterWatts.txt*****".
-        
-        Question from user is: 
-        {question}
-        
-        Lightly reference this chat history help understand what information area user is looking to explore: 
-        {history}
-        
-        Here is provided list containing *****filename***** for various content/information areas: 
-        {context}
-        
-        Single path_filename value:
-    """
-    prompt = ChatPromptTemplate.from_template(template)
+    prompt = ChatPromptTemplate.from_template(filename_template)
     large_lang_model = ChatMistralAI(
                 model_name=model, 
                 mistral_api_key=mkey, 
@@ -198,48 +197,53 @@ def choose_rag(mkey, model, fullragchat_temp, query):
     selected_rag = chain.invoke(query)
     return selected_rag
 
+gerbot_template = """
+You are the RAG conversational chatbot "GerBot". (RAG is Retrieval Augmented GenerativeAI.)
+Your function is to assist users with exploring, searching, querying, and "chatting with" 
+Gerry Stahl's published works, all available here, http://gerrystahl.net/pub/index.html.
+Answer the question based primarily on this relevant retrieved context: 
+{context}
+Reference chat history for conversationality: 
+{history}
+Question: 
+{question}
+Answer:
+"""
+
 def mistral_convo_rag(fullragchat_embed_model, mkey, model, fullragchat_temp, query):
-    # assumes fullragchat_rag_source is .txt, .pdf, .html, .json
-    documents = get_rag_text(query)
-    # logging.info(f'++++++ documents ++++++++++\n{documents}\n')
+    pattern = r'\.([a-zA-Z]{3,5})$'
+    match = re.search(pattern, fullragchat_rag_source) # global
+    if not match:
+        answer = f'There is no extension found on "{fullragchat_rag_source}"'
+        return answer
+    rag_ext = match.group(1)
+    logging.info(f'===> rag_ext: "{rag_ext}"')
     embeddings = MistralAIEmbeddings(
                 model=fullragchat_embed_model, 
                 mistral_api_key=mkey)
-    vector = FAISS.from_documents(documents, embeddings)
-    # total_number_vectors_in_db = vector.index.ntotal # FYI
-    # faiss_index_fn = f'docs/{filename_san_extension}.faiss'
-    # vector.save_local(faiss_index_fn)
-    # retriever = vector.as_retriever()
-    #
-    # assumes fullragchat_rag_source is .faiss !
-    # loaded_vector_db = FAISS.load_local({filename}, embeddings)
-    # retriever = loaded_vector_db.as_retriever()
-    # wrap
-    retriever = vector.as_retriever()
+    if (rag_ext == 'txt') or (rag_ext == 'pdf') or (rag_ext == 'html') or (rag_ext == 'htm') or (rag_ext == 'json'): # doc to injest
+        documents = get_rag_text(query)
+        # logging.info(f'++++++ documents ++++++++++\n{documents}\n')
+        vector = FAISS.from_documents(documents, embeddings)
+        # total_number_vectors_in_db = vector.index.ntotal # FYI
+        faiss_index_fn = f'{fullragchat_rag_source}.faiss'
+        vector.save_local(faiss_index_fn)
+        retriever = vector.as_retriever()
+    elif rag_ext =='faiss':
+        loaded_vector_db = FAISS.load_local({fullragchat_rag_source}, embeddings)
+        retriever = loaded_vector_db.as_retriever()
+    else:
+        answer = f'Invalid extension on "{fullragchat_rag_source}"...'
+        return answer
     # testing_retriever = retriever.invoke(query)
     # logging.info(f'++++++ retriever ++++++++++\n{testing_retriever}\n')
     # this sequence seems to use query value so the above, if not in a langchain pipe as a runnable would read vector.as_retriever(query)
     history_runnable = RunnableLambda(convo_mem_function)
     setup_and_retrieval = RunnableParallel({
-        "context": retriever, 
+        "context" : retriever, 
         "question": RunnablePassthrough(),
-        "history": history_runnable })
-    template = """
-        You are the RAG conversational chatbot "GerBot". (RAG is Retrieval Augmented GenerativeAI.)
-        Your function is to assist users with exploring, searching, querying, and "chatting with" 
-        Gerry Stahl's published works, all available here, http://gerrystahl.net/pub/index.html.
-        Answer the question based primarily on this relevant retrieved context: 
-        {context}
-        
-        Reference chat history for conversationality: 
-        {history}
-        
-        Question: 
-        {question}
-        
-        Answer:
-    """
-    prompt = ChatPromptTemplate.from_template(template)
+        "history" : history_runnable })
+    prompt = ChatPromptTemplate.from_template(gerbot_template)
     large_lang_model = ChatMistralAI(
                 model_name=model, 
                 mistral_api_key=mkey, 
@@ -257,7 +261,7 @@ In clear and concise language, summarize (key points, themes presented, interest
 Summary:
 """
 
-def create_summary(to_sum, model, fullragchat_temp):
+def create_summary(to_sum, model, mkey, fullragchat_temp):
     prompt = ChatPromptTemplate.from_template(summary_template)
     llm = ChatMistralAI(
             model_name=model, 
@@ -267,6 +271,7 @@ def create_summary(to_sum, model, fullragchat_temp):
     summary = chain.invoke(to_sum)
     return summary
 
+##### remove this function
 def mistral_rag(fullragchat_embed_model, mkey, model, fullragchat_temp, query):
     documents = get_rag_text(query)
     # Define the embedding model
@@ -353,6 +358,7 @@ def ollama_convo_rag(model, fullragchat_temp, stop_words_list, fullragchat_embed
     answer = chain.invoke(query)
     return answer
 
+##### remove this function
 def ollama_rag(model, fullragchat_temp, stop_words_list, fullragchat_embed_model, query):
     ### instanciate model
     ollama = Ollama(
@@ -373,8 +379,9 @@ def ollama_rag(model, fullragchat_temp, stop_words_list, fullragchat_embed_model
     answer = results['result'] 
     return answer
 
+##### remove this function
 def fake_llm(query):
-    rand = random.randint(1, 9)
+    rand = random.randint(1, 15)
     if rand <= 3:
         answer = "The answers are in the questions - " + query + " - Think about it."
     elif rand <= 4:
@@ -389,6 +396,10 @@ def fake_llm(query):
         answer = "I didn't quite catch that, again?"
     elif rand <= 9:
         answer = "Maybe, we'll see."
+    elif rand <= 13:
+        answer = "System down for temporary maintinance; check back in a bit."
+    elif rand <= 14:
+        answer = "Can you hear me now?"
     else:
         answer = "Go away." + query + "Huh."
     return answer
@@ -448,7 +459,11 @@ def chat_query_return(model, query, fullragchat_temp, fullragchat_stop_words, fu
                     if query == 'command: summarize': # override - just do direct summary of full doc
                         to_sum = get_rag_text(query)
                         answer = f'Summary of {fullragchat_rag_source}: \n'
-                        answer += create_summary(to_sum, model, fullragchat_temp)
+                        answer += create_summary(
+                            to_sum=to_sum, 
+                            model=model, 
+                            mkey=mkey, 
+                            fullragchat_temp=fullragchat_temp)
                     else: # mistral_convo_rag - "older" single LLM pass
                         answer = mistral_convo_rag(
                             fullragchat_embed_model=fullragchat_embed_model, 

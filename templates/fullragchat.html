@@ -36,7 +36,7 @@
 
 		<input type="text" name="rag_source" value="{{fullragchat_rag_source}}">
 		<lable for="rag_source"><strong>rag_source</strong></lable> - 
-		<font color="purple">path filename for websites, pdfs, or text files (only supporting single item)</font>
+		<font color="purple">Set to Auto to do double LLM passes, first for RAG, then for query; path filename for single faiss, website, pdf, or text file</font>
 		<br>
 
 		<input type="text" name="embed_model" value="{{fullragchat_embed_model}}">
@@ -45,7 +45,7 @@
 
 		<input type="text" name="loop_context" value="{{fullragchat_loop_context}}">
 		<lable for="model"><strong>loop_context</strong></lable>
-		<font color="purple"> - set to True to use memory for conversational chat</font>
+		<font color="purple"> - Set to True to use memory for conversational chat</font>
 		<br>
 
 		<input type="text" name="stop_words" value="{{fullragchat_stop_words}}">
@@ -63,5 +63,6 @@
 	</form>
 	<a href="/reset_history">reset</a><br>
 	('command: summarize' to simply return summary of rag_source)<br>
+	(docs/rag_summary_link_to_rags.txt controls rag selection)<br>
 	</body>
 </html>
