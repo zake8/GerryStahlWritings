@@ -246,6 +246,7 @@ def mistral_convo_rag(fullragchat_embed_model, mkey, model, fullragchat_temp, qu
     if (rag_ext == 'txt') or (rag_ext == 'pdf') or (rag_ext == 'html') or (rag_ext == 'htm') or (rag_ext == 'json'): # doc to injest
         # Injest new document, save faiss, and use as retriever
         documents = get_rag_text(query)
+        faiss_index_fn = f'{fullragchat_rag_source}.faiss'
         # logging.info(f'++++++ documents ++++++++++\n{documents}\n')
         vector = FAISS.from_documents(documents, embeddings)
         vector.save_local(faiss_index_fn)
@@ -253,17 +254,16 @@ def mistral_convo_rag(fullragchat_embed_model, mkey, model, fullragchat_temp, qu
         ### write new .cur file
         curfile_fn = fullragchat_rag_source + '.cur'
         date_time = datetime.now()
-        summary_text_for_cur = 'test summary'
-        # summary_text_for_cur = create_summary(
-        #     to_sum=documents, # documents is a list?, whereas this needs a string 
-        #     model=model, 
-        #     mkey=mkey, 
-        #     fullragchat_temp=fullragchat_temp)
-        curfile_content  = f'\nCuration content for HITL use. \n'
+        summary_text_for_cur = create_summary(
+            to_sum=documents, # documents is a list?, whereas this needs a string 
+            model=model, 
+            mkey=mkey, 
+            fullragchat_temp=fullragchat_temp)
+        curfile_content  = f'\nCuration content for HITL use. \n\n'
+        curfile_content += f'Date and time      = {date_time.strftime("%Y-%m-%d %H:%M:%S")} \n'
         curfile_content += f'Target document    = {fullragchat_rag_source} \n'
         curfile_content += f'Saved FAISS DB     = {faiss_index_fn} \n'
         curfile_content += f'# vectors in DB    = {vector.index.ntotal} \n'
-        curfile_content += f'Date and time      = {date_time.strftime("%Y-%m-%d %H:%M:%S")} \n'
         curfile_content += f'Model/temp DB      = {fullragchat_embed_model} / {fullragchat_temp} \n'
         curfile_content += f'Model/temp summary = {model} / {fullragchat_temp} \n'
         curfile_content += f'\n<summary>\n{summary_text_for_cur}\n</summary>\n'
@@ -271,9 +271,12 @@ def mistral_convo_rag(fullragchat_embed_model, mkey, model, fullragchat_temp, qu
             file.write(curfile_content)
         logging.info(f'===> saved new .cur file, "{curfile_fn}"')
         ### add name and summary to rag source clue file for LLM to use!
-        clue_file_text  = f'*****{faiss_index_fn}*****\n'
-        clue_file_text += f'    {summary_text_for_cur}\n'
-        clue_file_text += f'\n'
+        clue_file_text  = f'\n\n'
+        clue_file_text += f'*****{faiss_index_fn}*****\n'
+        clue_file_text += f'<summary text for *****{faiss_index_fn}*****>\n'
+        clue_file_text += f'{summary_text_for_cur}\n'
+        clue_file_text += f'</summary text for *****{faiss_index_fn}*****>\n'
+        clue_file_text += f'\n\n'
         with open(rag_source_clue_value, 'a') as file: # 'a' = append, file pointer placed at end of file
             file.write(clue_file_text)
         logging.info(f'===> Added new .faiss and summary to "{rag_source_clue_value}"')

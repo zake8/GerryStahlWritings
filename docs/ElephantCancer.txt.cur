@@ -1,19 +1,15 @@
-*****filename*****
-    Format example; summary of some things which should return "*****filename*****"
 
-*****TheThings-PeterWatts.txt.faiss*****
-    The text is a science fiction story titled "The Things" by Peter Watts. The story is a retelling of the 1982 film "The Thing"from the perspective of the shape-shifting alien. The alien, who refers to itself as "I," describes how it crashes on Earth and takes over the bodies of various researchers at an Antarctic base. However, it finds that the beings on this planet are very different from those it has encountered before - they are not open to communion or assimilation, and instead attack it on sight. The alien is eventually destroyed by the last remaining researcher, MacReady. The story explores themes of isolation, fear of the unknown, and the desire to communicate and understand other beings. The alien's perspective highlights the violence and hostility it faces on this planet, and its attempts to understand and communicate with the humans it encounters. The story also touches on the idea of what it means to be alive and the value of individuality versus communion. The text uses science fiction tropes to explore these themes and presents the alien's perspective through vivid and descriptive language.
+Curation content for HITL use. 
 
-*****test.txt*****
-    For testing purposes only.
+Date and time      = 2024-04-05 13:57:35 
+Target document    = docs/ElephantCancer.txt 
+Saved FAISS DB     = docs/ElephantCancer.txt.faiss 
+# vectors in DB    = 11 
+Model/temp DB      = mistral-embed / 0.25 
+Model/temp summary = open-mixtral-8x7b / 0.25 
 
-*****nothing.txt*****
-    For worst case fallback, when no RAG text is selectable/chooseable/appropriate.
-
-EOF
-
-*****docs/ElephantCancer.txt.faiss*****
-    Key points and themes presented in the text:
+<summary>
+Key points and themes presented in the text:
 
 1. Elephants have a low risk of cancer despite their large size and high number of cells.
 2. This is known as Peto's paradox.
@@ -31,4 +27,4 @@ Interesting terms or jargon:
 1. Peto's paradox: A phenomenon where large animals, despite having more cells that could potentially turn into cancerous cells, don't seem to have a higher risk of developing cancer than smaller animals.
 2. p53: A protein that helps prevent DNA damage in cells and reduces the risk of cancer.
 3. Copy-editing: The process of reviewing genetic material as cells multiply and potentially killing cells with any damages that could lead to cancer.
-
+</summary>
