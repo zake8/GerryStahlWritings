@@ -62,6 +62,8 @@ from langchain_mistralai.embeddings import MistralAIEmbeddings
 from mistralai.client import MistralClient
 from mistralai.models.chat_completion import ChatMessage
 
+fullragchat_rag_source = "Auto"
+
 @app.route("/")
 def root():
     webserver_hostname = socket.gethostname()
@@ -385,6 +387,7 @@ def fake_llm(query):
     return answer
 
 def chat_query_return(model, query, fullragchat_temp, fullragchat_stop_words, fullragchat_embed_model):
+    global fullragchat_rag_source
     stop_words_list = fullragchat_stop_words.split(', ')
     if stop_words_list == ['']: stop_words_list = None
     if model == "fake_llm":
@@ -463,7 +466,7 @@ def chat_query_return(model, query, fullragchat_temp, fullragchat_stop_words, fu
                     answer = f'(Retrieved document "{clean_selected_rag}".) \n'
                     clean_selected_rag = f'docs/{clean_selected_rag}'
                     logging.info(f'===> clean_selected_rag: {clean_selected_rag}')
-                    global fullragchat_rag_source
+                    ##### global fullragchat_rag_source
                     fullragchat_rag_source = clean_selected_rag
                     answer += mistral_convo_rag(
                         fullragchat_embed_model=fullragchat_embed_model, 
@@ -628,7 +631,6 @@ def fullragchat_reply():
         query, 
         fullragchat_temp, 
         fullragchat_stop_words, 
-        fullragchat_rag_source, 
         fullragchat_embed_model,
     )
     fullragchat_history.append({'user':'GerBot', 'message':answer})
