@@ -230,7 +230,8 @@ def mistral_convo_rag(fullragchat_embed_model, mkey, model, fullragchat_temp, qu
         vector.save_local(faiss_index_fn)
         retriever = vector.as_retriever()
     elif rag_ext =='faiss':
-        loaded_vector_db = FAISS.load_local({fullragchat_rag_source}, embeddings)
+        # loaded_vector_db = FAISS.load_local({fullragchat_rag_source}, embeddings)
+        loaded_vector_db = FAISS.load_local({fullragchat_rag_source}, embeddings, allow_dangerous_deserialization=True)
         retriever = loaded_vector_db.as_retriever()
     else:
         answer = f'Invalid extension on "{fullragchat_rag_source}"...'
