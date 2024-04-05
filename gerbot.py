@@ -124,6 +124,7 @@ def ollama_qachat(model, fullragchat_temp, stop_words_list, query):
 def get_rag_text(query):
     # function ignores passed query value
     ##### global fullragchat_rag_source
+    ##### replace this part w/ class code!
     extension = fullragchat_rag_source[-3:]
     # https://python.langchain.com/docs/modules/data_connection/document_loaders/json
     if extension == "txt":
@@ -198,12 +199,22 @@ def choose_rag(mkey, model, fullragchat_temp, query):
     return selected_rag
 
 def mistral_convo_rag(fullragchat_embed_model, mkey, model, fullragchat_temp, query):
+    # assumes fullragchat_rag_source is .txt, .pdf, .html, .json
     documents = get_rag_text(query)
     # logging.info(f'++++++ documents ++++++++++\n{documents}\n')
     embeddings = MistralAIEmbeddings(
                 model=fullragchat_embed_model, 
                 mistral_api_key=mkey)
     vector = FAISS.from_documents(documents, embeddings)
+    # total_number_vectors_in_db = vector.index.ntotal # FYI
+    # faiss_index_fn = f'docs/{filename_san_extension}.faiss'
+    # vector.save_local(faiss_index_fn)
+    # retriever = vector.as_retriever()
+    #
+    # assumes fullragchat_rag_source is .faiss !
+    # loaded_vector_db = FAISS.load_local({filename}, embeddings)
+    # retriever = loaded_vector_db.as_retriever()
+    # wrap
     retriever = vector.as_retriever()
     # testing_retriever = retriever.invoke(query)
     # logging.info(f'++++++ retriever ++++++++++\n{testing_retriever}\n')
