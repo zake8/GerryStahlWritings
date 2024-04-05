@@ -151,17 +151,17 @@ def get_rag_text(query):
     rag_text = text_splitter.split_documents(docs)
     return rag_text
 
-def rag_text_function(query, rag_source_clues):
+def rag_text_function(query):
     # function ignores passed query value
     loader = TextLoader(rag_source_clues)
     context = loader.load()
     return context
 
-def choose_rag(rag_source_clues, mkey, model, fullragchat_temp, query):
+def choose_rag(mkey, model, fullragchat_temp, query):
     rag_text_runnable = RunnableLambda(rag_text_function)
     history_runnable = RunnableLambda(convo_mem_function)
     setup_and_retrieval = RunnableParallel({
-        "context": rag_text_runnable(rag_source_clues=rag_source_clues), 
+        "context": rag_text_runnable, 
         "question": RunnablePassthrough(),
         "history": history_runnable })
     template = """
@@ -441,11 +441,11 @@ def chat_query_return(
         if fullragchat_rag_source:
             if fullragchat_loop_context == 'True':
                 if fullragchat_rag_source != 'auto': # fullragchat_rag_source specified in UI
-                    if query == 'command: summarize':
+                    if query == 'command: summarize': # override - just do direct summary of full doc
                         to_sum = get_rag_text(query)
                         answer = f'Summary of {fullragchat_rag_source}: \n'
                         answer += create_summary(to_sum, model, fullragchat_temp)
-                    else:
+                    else: # mistral_convo_rag - "older" single LLM pass
                         answer = mistral_convo_rag(
                             fullragchat_rag_source=fullragchat_rag_source, 
                             fullragchat_embed_model=fullragchat_embed_model, 
@@ -453,18 +453,19 @@ def chat_query_return(
                             model=model, 
                             fullragchat_temp=fullragchat_temp, 
                             query=query )
-                else: # fullragchat_rag_source set to 'auto'!
+                else: # fullragchat_rag_source set to 'auto'! - "newer" double LLM pass
                     # figure out which staged rag doc to use
+                    global rag_source_clues
                     rag_source_clues = 'docs/rag_summary_link_to_rags.txt' # doc helps llm choose rag file
-                    fullragchat_rag_source = choose_rag(
-                        rag_source_clues=rag_source_clues, 
+                    selected_rag = choose_rag(
                         mkey=mkey, 
                         model=model, 
                         fullragchat_temp=fullragchat_temp, 
                         query=query )
-                    # use above selected fullragchat_rag_source
-                    answer = mistral_convo_rag(
-                        fullragchat_rag_source=fullragchat_rag_source, 
+                    logging.info(f'Retrieved document "{selected_rag}"')
+                    answer = f'(Retrieved document "{selected_rag}".) \n'
+                    answer += mistral_convo_rag(
+                        fullragchat_rag_source=selected_rag, 
                         fullragchat_embed_model=fullragchat_embed_model, 
                         mkey=mkey, 
                         model=model, 
