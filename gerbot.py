@@ -1,10 +1,8 @@
 #!/usr/bin/env python
 
 # TODO:
-# !!! Implement saving vector DB
 # !!! Save down pdfs; pdf into txt chapters w/ book and chapter summaries
 # Q: what are max token in sizes per model? A: Mixtral-8x7b = 32k token context 
-# create .cur file when doing injestion, write summary there and to 'docs/rag_summary_link_to_rags.txt'
 ##### global lines to delete!
 
 ### GerBot project is an LLM RAG chat intended to make http://gerrystahl.net/pub/index.html even more accessible
@@ -36,6 +34,7 @@ import socket
 import random
 import os
 import re
+from datetime import datetime
 # from langchain_community.document_loaders import OnlinePDFLoader
 # from langchain_community.document_loaders import UnstructuredPDFLoader
 from langchain.chains import ConversationChain
@@ -60,7 +59,10 @@ from langchain_mistralai.embeddings import MistralAIEmbeddings
 from mistralai.client import MistralClient
 from mistralai.models.chat_completion import ChatMessage
 
+# initialize global variables
 fullragchat_rag_source = "Auto"
+rag_source_clue_value = 'docs/rag_summary_link_to_rags.txt' # doc helps llm choose rag file
+
 
 @app.route("/")
 def root():
@@ -154,6 +156,8 @@ def get_rag_text(query):
     docs = loader.load()
     # Split text into chunks
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=20)
+    # chunk_size= and chunk_overlap, what should they be, how do they relate to file size, word/token/letter count?
+    # what should overlap % be to retain meaning and searchability?
     rag_text = text_splitter.split_documents(docs)
     return rag_text
 
@@ -197,6 +201,24 @@ def choose_rag(mkey, model, fullragchat_temp, query):
     selected_rag = chain.invoke(query)
     return selected_rag
 
+summary_template = """
+In clear and concise language, summarize (key points, themes presented, interesting terms or jargon (if any) ) the text. 
+<text>
+{question}
+</text>
+Summary:
+"""
+
+def create_summary(to_sum, model, mkey, fullragchat_temp):
+    prompt = ChatPromptTemplate.from_template(summary_template)
+    llm = ChatMistralAI(
+            model_name=model, 
+            mistral_api_key=mkey, 
+            temperature=fullragchat_temp )
+    chain = ( prompt | llm | StrOutputParser() )
+    summary = chain.invoke(to_sum)
+    return summary
+
 gerbot_template = """
 You are the RAG conversational chatbot "GerBot". (RAG is Retrieval Augmented GenerativeAI.)
 Your function is to assist users with exploring, searching, querying, and "chatting with" 
@@ -222,16 +244,47 @@ def mistral_convo_rag(fullragchat_embed_model, mkey, model, fullragchat_temp, qu
                 model=fullragchat_embed_model, 
                 mistral_api_key=mkey)
     if (rag_ext == 'txt') or (rag_ext == 'pdf') or (rag_ext == 'html') or (rag_ext == 'htm') or (rag_ext == 'json'): # doc to injest
+        # Injest new document, save faiss, and use as retriever
         documents = get_rag_text(query)
         # logging.info(f'++++++ documents ++++++++++\n{documents}\n')
         vector = FAISS.from_documents(documents, embeddings)
-        # total_number_vectors_in_db = vector.index.ntotal # FYI
-        faiss_index_fn = f'{fullragchat_rag_source}.faiss'
         vector.save_local(faiss_index_fn)
+        logging.info(f'===> saved new FAISS, "{faiss_index_fn}"')
+        ### write new .cur file
+        curfile_fn = fullragchat_rag_source + '.cur'
+        date_time = datetime.now()
+        summary_text_for_cur = 'test summary'
+        # summary_text_for_cur = create_summary(
+        #     to_sum=documents, # documents is a list?, whereas this needs a string 
+        #     model=model, 
+        #     mkey=mkey, 
+        #     fullragchat_temp=fullragchat_temp)
+        curfile_content  = f'\nCuration content for HITL use. \n'
+        curfile_content += f'Target document    = {fullragchat_rag_source} \n'
+        curfile_content += f'Saved FAISS DB     = {faiss_index_fn} \n'
+        curfile_content += f'# vectors in DB    = {vector.index.ntotal} \n'
+        curfile_content += f'Date and time      = {date_time.strftime("%Y-%m-%d %H:%M:%S")} \n'
+        curfile_content += f'Model/temp DB      = {fullragchat_embed_model} / {fullragchat_temp} \n'
+        curfile_content += f'Model/temp summary = {model} / {fullragchat_temp} \n'
+        curfile_content += f'\n<summary>\n{summary_text_for_cur}\n</summary>\n'
+        with open(curfile_fn, 'a') as file: # 'a' = append, create new if none
+            file.write(curfile_content)
+        logging.info(f'===> saved new .cur file, "{curfile_fn}"')
+        ### add name and summary to rag source clue file for LLM to use!
+        clue_file_text  = f'*****{faiss_index_fn}*****\n'
+        clue_file_text += f'    {summary_text_for_cur}\n'
+        clue_file_text += f'\n'
+        with open(rag_source_clue_value, 'a') as file: # 'a' = append, file pointer placed at end of file
+            file.write(clue_file_text)
+        logging.info(f'===> Added new .faiss and summary to "{rag_source_clue_value}"')
+        
         retriever = vector.as_retriever()
     elif rag_ext =='faiss':
-        # loaded_vector_db = FAISS.load_local({fullragchat_rag_source}, embeddings)
-        loaded_vector_db = FAISS.load_local({fullragchat_rag_source}, embeddings, allow_dangerous_deserialization=True)
+        # Load existing faiss, and use as retriever
+        # Potentially dangerious - load only local known safe files
+        ### need to implement this safety check!
+        # if fullragchat_rag_source contains http or double wack "//" then set answer = 'illegal faiss source' and return
+        loaded_vector_db = FAISS.load_local(fullragchat_rag_source, embeddings  )
         retriever = loaded_vector_db.as_retriever()
     else:
         answer = f'Invalid extension on "{fullragchat_rag_source}"...'
@@ -253,24 +306,6 @@ def mistral_convo_rag(fullragchat_embed_model, mkey, model, fullragchat_temp, qu
     chain = ( setup_and_retrieval | prompt | large_lang_model | output_parser )
     answer = chain.invoke(query)
     return answer
-
-summary_template = """
-In clear and concise language, summarize (key points, themes presented, interesting terms or jargon (if any) ) the text. 
-<text>
-{question}
-</text>
-Summary:
-"""
-
-def create_summary(to_sum, model, mkey, fullragchat_temp):
-    prompt = ChatPromptTemplate.from_template(summary_template)
-    llm = ChatMistralAI(
-            model_name=model, 
-            mistral_api_key=mkey, 
-            temperature=fullragchat_temp )
-    chain = ( prompt | llm | StrOutputParser() )
-    summary = chain.invoke(to_sum)
-    return summary
 
 ##### remove this function
 def mistral_rag(fullragchat_embed_model, mkey, model, fullragchat_temp, query):
@@ -332,22 +367,7 @@ def ollama_convo_rag(model, fullragchat_temp, stop_words_list, fullragchat_embed
         "context":  context_runnable, 
         "question": RunnablePassthrough(),
         "history":  history_runnable})
-    template = """
-        You are the RAG conversational chatbot "GerBot". (RAG is Retrieval Augmented GenerativeAI.)
-        Your function is to assist users with exploring, searching, querying, and "chatting with" 
-        Gerry Stahl's published works, all available here, http://gerrystahl.net/pub/index.html.
-        Answer the question based primarily on this relevant retrieved context: 
-        {context}
-        
-        Reference chat history for conversationality: 
-        {history}
-        
-        Question: 
-        {question}
-        
-        Answer:
-    """
-    prompt = ChatPromptTemplate.from_template(template)
+    prompt = ChatPromptTemplate.from_template(gerbot_template)
     ollama = Ollama(
         model=model, 
         temperature=float(fullragchat_temp), 
@@ -475,7 +495,7 @@ def chat_query_return(model, query, fullragchat_temp, fullragchat_stop_words, fu
                 else: # source set to 'Auto' - "newer" double LLM pass
                     # figure out which staged rag doc to use
                     global rag_source_clues
-                    rag_source_clues = 'docs/rag_summary_link_to_rags.txt' # doc helps llm choose rag file
+                    rag_source_clues = rag_source_clue_value # doc helps llm choose rag file
                     selected_rag = choose_rag(
                         mkey=mkey, 
                         model=model, 
@@ -489,7 +509,6 @@ def chat_query_return(model, query, fullragchat_temp, fullragchat_stop_words, fu
                     answer = f'Retrieved document "{clean_selected_rag}". \n'
                     clean_selected_rag = f'docs/{clean_selected_rag}'
                     logging.info(f'===> clean_selected_rag: {clean_selected_rag}')
-                    ##### global fullragchat_rag_source
                     fullragchat_rag_source = clean_selected_rag
                     answer += mistral_convo_rag(
                         fullragchat_embed_model=fullragchat_embed_model, 
