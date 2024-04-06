@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
 # TODO:
-# !!! Save down pdfs; pdf into txt chapters w/ book and chapter summaries
+# injest pdfs
+# break pdf txt into chapters w/ book and chapter summaries
 # Q: what are max token in sizes per model? A: Mixtral-8x7b = 32k token context 
-##### global lines to delete!
 
 ### GerBot project is an LLM RAG chat intended to make http://gerrystahl.net/pub/index.html even more accessible
 ### Generative AI "chat" about the gerrystahl.net writings
@@ -37,6 +37,7 @@ import re
 from datetime import datetime
 # from langchain_community.document_loaders import OnlinePDFLoader
 # from langchain_community.document_loaders import UnstructuredPDFLoader
+from langchain_community.document_loaders import PyPDFLoader
 from langchain.chains import ConversationChain
 from langchain.chains import RetrievalQA
 from langchain.chains import create_retrieval_chain
@@ -47,7 +48,7 @@ from langchain_community.document_loaders import TextLoader
 from langchain_community.document_loaders import WebBaseLoader
 from langchain_community.embeddings import OllamaEmbeddings
 from langchain_community.llms import Ollama
-from langchain_community.vectorstores import Chroma ##### remove?
+from langchain_community.vectorstores import Chroma
 from langchain_community.vectorstores import FAISS
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
@@ -59,10 +60,15 @@ from langchain_mistralai.embeddings import MistralAIEmbeddings
 from mistralai.client import MistralClient
 from mistralai.models.chat_completion import ChatMessage
 
+# +++++++++++++++++++++++++++
 # initialize global variables
 fullragchat_rag_source = "Auto"
 rag_source_clue_value = 'docs/rag_summary_link_to_rags.txt' # doc helps llm choose rag file
-
+my_chunk_size=250
+my_chunk_overlap=37
+# chunk_size= and chunk_overlap, what should they be, how do they relate to file size, word/token/letter count?
+# what should overlap % be to retain meaning and searchability?
+# +++++++++++++++++++++++++++
 
 @app.route("/")
 def root():
@@ -140,11 +146,10 @@ def get_rag_text(query):
     elif (rag_ext == "html") or (rag_ext == "htm"):
         loader = WebBaseLoader(fullragchat_rag_source) # ex: https://url/file.html
     elif rag_ext == "pdf":
-        # throws: ImportError: cannot import name 'open_filename' from 'pdfminer.utils'
+        loader = PyPDFLoader(fullragchat_rag_source) 
+        # throw: ImportError: cannot import name 'open_filename' from 'pdfminer.utils'
         # loader = UnstructuredPDFLoader(fullragchat_rag_source)
         # loader = OnlinePDFLoader(fullragchat_rag_source) # ex: https://url/file.pdf
-        answer = "Need to make a loader for pdf... " + fullragchat_rag_source
-        return answer
     elif rag_ext == "json":
         loader = JSONLoader(file_path=fullragchat_rag_source,
             jq_schema='.',
@@ -155,9 +160,7 @@ def get_rag_text(query):
     # from https://docs.mistral.ai/guides/basic-RAG/
     docs = loader.load()
     # Split text into chunks
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=20)
-    # chunk_size= and chunk_overlap, what should they be, how do they relate to file size, word/token/letter count?
-    # what should overlap % be to retain meaning and searchability?
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=my_chunk_size, chunk_overlap=my_chunk_overlap)
     rag_text = text_splitter.split_documents(docs)
     return rag_text
 
@@ -551,7 +554,6 @@ def reset_fullragchat_history():
     global fullragchat_model
     global fullragchat_temp
     global fullragchat_stop_words
-    ##### global fullragchat_rag_source
     global fullragchat_embed_model
     global fullragchat_skin 
     global fullragchat_music
@@ -663,7 +665,6 @@ def fullragchat_reply():
     global fullragchat_model
     global fullragchat_temp
     global fullragchat_stop_words
-    ##### global fullragchat_rag_source
     global fullragchat_embed_model
     global fullragchat_skin 
     global fullragchat_music
