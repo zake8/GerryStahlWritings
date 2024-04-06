@@ -1,6 +1,6 @@
 # .gitignore
 .env
-gerbot.log
+*.log
 __pycache__/
 Pipfile
 Pipfile.lock
