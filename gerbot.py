@@ -12,13 +12,6 @@
 ### Based on public/shared APIs and FOSS samples
 ### Built on Linux, Python, Apache, WSGI, Flask, LangChain, Ollama, Mistral, more
 
-import logging
-logging.basicConfig(
-    filename='gerbot.log', 
-    level=logging.INFO, 
-    filemode='a', 
-    format='%(asctime)s -%(levelname)s - %(message)s')
-
 from flask import Flask, redirect, url_for, render_template, request
 app = Flask(__name__)
 
@@ -29,6 +22,7 @@ load_dotenv('./.env')
 from langchain.memory import ConversationBufferWindowMemory
 memory = ConversationBufferWindowMemory(k=14)
 
+import logging
 import socket
 import random
 import os
@@ -59,6 +53,8 @@ from mistralai.models.chat_completion import ChatMessage
 
 # +++++++++++++++++++++++++++
 # initialize global variables
+chatbot = (f'GerBot')
+user_username_in_chat = (f'User')
 fullragchat_rag_source = "Auto"
 rag_source_clue_value = 'docs/rag_summary_link_to_rags.txt' # doc helps llm choose rag file
 my_chunk_size=250
@@ -66,6 +62,12 @@ my_chunk_overlap=37
 # chunk_size= and chunk_overlap, what should they be, how do they relate to file size, word/token/letter count?
 # what should overlap % be to retain meaning and searchability?
 # +++++++++++++++++++++++++++
+
+logging.basicConfig(
+    filename = chatbot + '.log', 
+    level = logging.INFO, 
+    filemode = 'a', 
+    format = '%(asctime)s -%(levelname)s - %(message)s')
 
 @app.route("/")
 def root():
@@ -111,7 +113,7 @@ def ollama_convochat(model, fullragchat_temp, stop_words_list, query):
 def mistral_qachat(model, mkey, fullragchat_temp, query):
     # simple chat from https://docs.mistral.ai/platform/client/
     client = MistralClient(api_key=mkey)
-    messages = [ ChatMessage(role="user", content=query) ]
+    messages = [ ChatMessage(role=user_username_in_chat, content=query) ]
     chat_response = client.chat(
             model=model,
             messages=messages,
@@ -218,11 +220,18 @@ def create_summary(to_sum, model, mkey, fullragchat_temp):
 
 gerbot_template = """
 You are the RAG conversational chatbot "GerBot". (RAG is Retrieval Augmented GenerativeAI.)
-Your function is to assist users with exploring, searching, querying, and "chatting with" 
+Your prime goal is to assist users with exploring, searching, querying, and "chatting with" 
 Gerry Stahl's published works, all available here, http://gerrystahl.net/pub/index.html.
+If you do not know the answer or know how to respond just say, 
+I don't know, or I don't know how to respond to that, or 
+you can you ask user to rephrase the question, or 
+maybe occationally share an interesting tidbit of wisdom from the 
 Answer the question based primarily on this relevant retrieved context: 
 {context}
-Reference chat history for conversationality: 
+Reference chat history for conversationality (
+    to see if there is something to circle back to, 
+    help drill down into volumes and chapters by directing a query of the same, 
+    but not to reply on by repeating your own possibly mistaken statments): 
 {history}
 Question: 
 {question}
@@ -553,7 +562,7 @@ def reset_fullragchat_history():
     global fullragchat_skin 
     global fullragchat_music
     fullragchat_history.clear()
-    fullragchat_history.append({'user':'-reset--', 'message':'reset'})
+    fullragchat_history.append({user_username_in_chat:'-reset--', 'message':'reset'})
     return render_template('fullragchat.html', 
         fullragchat_history=fullragchat_history, 
         fullragchat_model=fullragchat_model, 
@@ -569,9 +578,9 @@ def init_fullragchat_history():
     global fullragchat_history
     reset_fullragchat_history()
     fullragchat_history.clear()
-    fullragchat_history.append({'user':'GerBot', 'message':'Hi!'}) 
-    fullragchat_history.append({'user':'GerBot', 'message':"Lets chat about Gerry Stahl's writing."}) 
-    fullragchat_history.append({'user':'GerBot', 'message':'Enter a question, and click query.'}) 
+    fullragchat_history.append({user_username_in_chat:chatbot, 'message':'Hi!'}) 
+    fullragchat_history.append({user_username_in_chat:chatbot, 'message':"Lets chat about Gerry Stahl's writing."}) 
+    fullragchat_history.append({user_username_in_chat:chatbot, 'message':'Enter a question, and click query.'}) 
 
 @app.route("/fullragchat_init")
 def fullragchat_init():
@@ -637,8 +646,8 @@ def fullragchat_pending():
     fullragchat_skin = request.form['skin']
     fullragchat_music = request.form['music']
     fullragchat_loop_context = request.form['loop_context']
-    fullragchat_history.append({'user':'---User', 'message':query}) 
-    logging.info(f'===> user: {query}')
+    fullragchat_history.append({'user':user_username_in_chat, 'message':query}) 
+    logging.info(f'===> {user_username_in_chat}: {query}')
     pending_fullragchat_history()
     return render_template('fullragchat_pending.html', 
         fullragchat_history=fullragchat_history, 
@@ -674,9 +683,9 @@ def fullragchat_reply():
         fullragchat_stop_words, 
         fullragchat_embed_model,
     )
-    fullragchat_history.append({'user':'GerBot', 'message':answer})
+    fullragchat_history.append({'user':chatbot, 'message':answer})
     memory.save_context({"input": query}, {"output": answer}) # ConversationBufferWindowMemory save of query and answer
-    logging.info(f'===> GerBot: {answer}')
+    logging.info(f'===> {chatbot}: {answer}')
     return render_template('fullragchat.html', 
         fullragchat_history=fullragchat_history, 
         fullragchat_model=fullragchat_model, 
