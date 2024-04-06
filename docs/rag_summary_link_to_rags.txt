@@ -106,3 +106,19 @@ This volume contains information on my sculpture and other artistic creations. T
 *****game.pdf*****
 Volume 21. Dynamic Geometry Game for Pods
 A print version of the online GeoGebra interactive game for students in small pods or home-schooling to experience dynamic geometry in a hands-on, stimulating, collaborative approach. 120 pages.
+
+
+*****cscltheories.pdf.faiss*****
+<summary text for *****cscltheories.pdf.faiss*****>
+The text presents a chapter on the theories of Computer Supported Collaborative Learning (CSCL). CSCL is defined as a theory- and research-based pedagogical vision of collaborative learning, shaped by rapidly evolving digital technologies, pedagogical practices, and research methods. The authors categorize relevant theories into three groups: subjective (individual cognition and learning), intersubjective (interactional meaning making), and inter-objective (networks of learners, tools, artifacts, and practices). The chapter discusses the role of theory in CSCL, the changing role of theory in CSCL, major theories currently influential in the field, and their philosophical and methodological underpinnings. The framework for examining theories of CSCL includes technology, practice, and method as interrelated and mutually shaping factors. The text also discusses the history and development of CSCL technologies, practices, and methods, and how they have been influenced by subjective, intersubjective, and inter-objective theories.
+</summary text for *****cscltheories.pdf.faiss*****>
+
+
+
+
+*****practices.pdf.faiss*****
+<summary text for *****practices.pdf.faiss*****>
+The text is a journal article titled "Group practices: a new way of viewing CSCL" published in the International Journal of Computer-Supported Collaborative Learning in 2017. The article is written by Gerry Stahl and focuses on the importance of analyzing group practices in Computer-Supported Collaborative Learning (CSCL) to understand how students learn collaboratively. The author argues that traditional methods of measuring changes in learning outcomes are insufficient and that CSCL needs ways to analyze group processes that bring about such changes. The author proposes a new method for CSCL that focuses on the small-group unit of analysis and the adoption of group practices by student teams. The article also discusses the theory of group practices and its implications for the design of CSCL software, curriculum, pedagogy, and experimental interventions. The document also includes references to previous research and publications by the author.
+</summary text for *****practices.pdf.faiss*****>
+
+

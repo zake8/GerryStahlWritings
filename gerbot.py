@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 # TODO:
-# injest pdfs
 # break pdf txt into chapters w/ book and chapter summaries
 # Q: what are max token in sizes per model? A: Mixtral-8x7b = 32k token context 
 
@@ -35,8 +34,6 @@ import random
 import os
 import re
 from datetime import datetime
-# from langchain_community.document_loaders import OnlinePDFLoader
-# from langchain_community.document_loaders import UnstructuredPDFLoader
 from langchain_community.document_loaders import PyPDFLoader
 from langchain.chains import ConversationChain
 from langchain.chains import RetrievalQA
@@ -147,9 +144,6 @@ def get_rag_text(query):
         loader = WebBaseLoader(fullragchat_rag_source) # ex: https://url/file.html
     elif rag_ext == "pdf":
         loader = PyPDFLoader(fullragchat_rag_source) 
-        # throw: ImportError: cannot import name 'open_filename' from 'pdfminer.utils'
-        # loader = UnstructuredPDFLoader(fullragchat_rag_source)
-        # loader = OnlinePDFLoader(fullragchat_rag_source) # ex: https://url/file.pdf
     elif rag_ext == "json":
         loader = JSONLoader(file_path=fullragchat_rag_source,
             jq_schema='.',
@@ -274,6 +268,7 @@ def mistral_convo_rag(fullragchat_embed_model, mkey, model, fullragchat_temp, qu
             file.write(curfile_content)
         logging.info(f'===> saved new .cur file, "{curfile_fn}"')
         ### add name and summary to rag source clue file for LLM to use!
+        faiss_index_fn = faiss_index_fn[5:] # strip off leading 'docs/' so as not to double it up later
         clue_file_text  = f'\n\n'
         clue_file_text += f'*****{faiss_index_fn}*****\n'
         clue_file_text += f'<summary text for *****{faiss_index_fn}*****>\n'
@@ -290,7 +285,7 @@ def mistral_convo_rag(fullragchat_embed_model, mkey, model, fullragchat_temp, qu
         # Potentially dangerious - load only local known safe files
         ### need to implement this safety check!
         # if fullragchat_rag_source contains http or double wack "//" then set answer = 'illegal faiss source' and return
-        loaded_vector_db = FAISS.load_local(fullragchat_rag_source, embeddings  )
+        loaded_vector_db = FAISS.load_local(fullragchat_rag_source, embeddings, allow_dangerous_deserialization=True)
         retriever = loaded_vector_db.as_retriever()
     else:
         answer = f'Invalid extension on "{fullragchat_rag_source}"...'
