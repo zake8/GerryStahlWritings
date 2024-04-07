@@ -3,6 +3,7 @@
 # TODO:
 # break pdf txt into chapters w/ book and chapter summaries
 # Q: what are max token in sizes per model? A: Mixtral-8x7b = 32k token context 
+##### cleanup
 
 ### GerBot project is an LLM RAG chat intended to make http://gerrystahl.net/pub/index.html even more accessible
 ### Generative AI "chat" about the gerrystahl.net writings
@@ -54,9 +55,10 @@ from mistralai.models.chat_completion import ChatMessage
 # +++++++++++++++++++++++++++
 # initialize global variables
 chatbot = (f'GerBot')
-user_username_in_chat = (f'User')
+user_username_in_chat = "User"
 fullragchat_rag_source = "Auto"
-rag_source_clue_value = 'docs/rag_summary_link_to_rags.txt' # doc helps llm choose rag file
+rag_source_clue_value = 'docs/rag_source_clues.txt' # doc helps llm choose rag file
+# rag_source_clue_value = 'docs/rag_summary_link_to_rags.txt' # doc helps llm choose rag file
 my_chunk_size=250
 my_chunk_overlap=37
 # chunk_size= and chunk_overlap, what should they be, how do they relate to file size, word/token/letter count?
@@ -168,17 +170,17 @@ def rag_text_function(query):
     return context
 
 filename_template = """
-Your task is to return a single *****filename***** from the provided list.
-Mentioning a book or even chapter title should be enough to return its *****filename*****.
-Please be sure to only return "*****filename*****" with the five (5) asterisks (*) on either side.
-Example: If question from user is about alphabet, A B C's, and provided list has item with summary about letters in the alphabet, then answer with "*****alphabet.txt*****", assuming that is the *****filename***** for that summary.
-Example: If user is questioning about Python programming, and there is a summary including Python stuff, then return "*****py_coding.txt*****" or whatever its name is.
-Example: If question is about "The Things" by Peter Watts, then send the string "*****TheThings-PeterWatts.txt*****".
+Your task is to return, in json format, a single filename, from the provided list.
+Mentioning a book or even chapter title should be enough to return its filename.
+Please be sure to return "filename": "return_filename.faiss".
+Example: If question from user is about alphabet, A B C's, and provided list has item with summary about letters in the alphabet, then answer with "filename": "alphabet.txt", assuming that is the filename for that summary.
+Example: If user is questioning about Python programming, and there is a summary including Python stuff, then return "filename": "py_coding.txt" or whatever its name is.
+Example: If question is about "The Things" by Peter Watts, then send the string "filename": "TheThings-PeterWatts.txt".
 Question from user is: 
 {question}
 Lightly reference this chat history help understand what information area user is looking to explore: 
 {history}
-Here is provided list containing *****filename***** for various content/information areas: 
+Here is provided list containing filenames for various content/information areas: 
 {context}
 Single path_filename value:
 """
@@ -257,6 +259,11 @@ def mistral_convo_rag(fullragchat_embed_model, mkey, model, fullragchat_temp, qu
         vector = FAISS.from_documents(documents, embeddings)
         vector.save_local(faiss_index_fn)
         logging.info(f'===> saved new FAISS, "{faiss_index_fn}"')
+        ### write text to disk
+        txtfile_fn = fullragchat_rag_source + '.txt'
+        with open(txtfile_fn, 'a') as file: # 'a' = append, create new if none
+            file.write(documents)
+        logging.info(f'===> saved new .txt file, "{txtfile_fn}"')
         ### write new .cur file
         curfile_fn = fullragchat_rag_source + '.cur'
         date_time = datetime.now()
@@ -278,16 +285,28 @@ def mistral_convo_rag(fullragchat_embed_model, mkey, model, fullragchat_temp, qu
         logging.info(f'===> saved new .cur file, "{curfile_fn}"')
         ### add name and summary to rag source clue file for LLM to use!
         faiss_index_fn = faiss_index_fn[5:] # strip off leading 'docs/' so as not to double it up later
-        clue_file_text  = f'\n\n'
-        clue_file_text += f'*****{faiss_index_fn}*****\n'
-        clue_file_text += f'<summary text for *****{faiss_index_fn}*****>\n'
-        clue_file_text += f'{summary_text_for_cur}\n'
-        clue_file_text += f'</summary text for *****{faiss_index_fn}*****>\n'
-        clue_file_text += f'\n\n'
+        clue_file_text  = f'\n'
+        clue_file_text += f'  { \n'
+        clue_file_text += f'    "rag_item": { \n'
+        clue_file_text += f'      "filename": "{faiss_index_fn}", \n'
+        clue_file_text += f'      "title": "", \n'
+        clue_file_text += f'      "volume": "", \n'
+        clue_file_text += f'      "chapter": "", \n'
+        clue_file_text += f'      "summary": "{summary_text_for_cur}", \n'
+        clue_file_text += f'      "txt_filename": "", \n'
+        clue_file_text += f'    } \n'
+        clue_file_text += f'  } \n'
+        clue_file_text += f'\n'
+        ##### cleanup
+        # clue_file_text  = f'\n\n'
+        # clue_file_text += f'*****{faiss_index_fn}*****\n'
+        # clue_file_text += f'<summary text for *****{faiss_index_fn}*****>\n'
+        # clue_file_text += f'{summary_text_for_cur}\n'
+        # clue_file_text += f'</summary text for *****{faiss_index_fn}*****>\n'
+        # clue_file_text += f'\n\n'
         with open(rag_source_clue_value, 'a') as file: # 'a' = append, file pointer placed at end of file
             file.write(clue_file_text)
         logging.info(f'===> Added new .faiss and summary to "{rag_source_clue_value}"')
-        
         retriever = vector.as_retriever()
     elif rag_ext =='faiss':
         # Load existing faiss, and use as retriever
@@ -513,9 +532,14 @@ def chat_query_return(model, query, fullragchat_temp, fullragchat_stop_words, fu
                         query=query )
                     logging.info(f'===> choose_rag returned: {selected_rag}')
                     # cleanup as LLM tends to be chatting and not listen to just the filename please...
-                    pattern = r'\*{5}(.+?)\*{5}' # Hope LLM put *****filename.txt***** in there somewhere...
-                    match = re.search(pattern, selected_rag)
+                    # Should be json like {"filename": "return_filename.faiss"}
+                    # note: drops any comments from LLM...
+                    match = re.search(r'"filename":\s+"([^"]+)"', selected_rag)
                     clean_selected_rag = match.group(1)
+                    ##### cleanup
+                    # pattern = r'\*{5}(.+?)\*{5}' # Hope LLM put *****filename.txt***** in there somewhere...
+                    # match = re.search(pattern, selected_rag)
+                    # clean_selected_rag = match.group(1)
                     answer = f'Retrieved document "{clean_selected_rag}". \n'
                     clean_selected_rag = f'docs/{clean_selected_rag}'
                     logging.info(f'===> clean_selected_rag: {clean_selected_rag}')
@@ -562,7 +586,7 @@ def reset_fullragchat_history():
     global fullragchat_skin 
     global fullragchat_music
     fullragchat_history.clear()
-    fullragchat_history.append({user_username_in_chat:'-reset--', 'message':'reset'})
+    fullragchat_history.append({'user':'-reset--', 'message':'reset'})
     return render_template('fullragchat.html', 
         fullragchat_history=fullragchat_history, 
         fullragchat_model=fullragchat_model, 
@@ -578,9 +602,9 @@ def init_fullragchat_history():
     global fullragchat_history
     reset_fullragchat_history()
     fullragchat_history.clear()
-    fullragchat_history.append({user_username_in_chat:chatbot, 'message':'Hi!'}) 
-    fullragchat_history.append({user_username_in_chat:chatbot, 'message':"Lets chat about Gerry Stahl's writing."}) 
-    fullragchat_history.append({user_username_in_chat:chatbot, 'message':'Enter a question, and click query.'}) 
+    fullragchat_history.append({'user':chatbot, 'message':'Hi!'}) 
+    fullragchat_history.append({'user':chatbot, 'message':"Lets chat about Gerry Stahl's writing."}) 
+    fullragchat_history.append({'user':chatbot, 'message':'Enter a question, and click query.'}) 
 
 @app.route("/fullragchat_init")
 def fullragchat_init():

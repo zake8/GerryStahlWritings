@@ -26,7 +26,7 @@ I began writing as a student of philosophy. In that field, books are the traditi
 I hope that this eLibrary allows readers to browse through my writings and follow their interests as deeply as they desire through these aggregated texts.
 """
 
-Volumes_of_the_eLibrary = 
+Volumes of the eLibrary = 
 {
     {
       "rag_item": {
