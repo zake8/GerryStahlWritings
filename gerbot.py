@@ -1,17 +1,17 @@
 #!/usr/bin/env python
 
-# TODO:
-# break pdf txt into chapters w/ book and chapter summaries
-# Q: what are max token in sizes per model? A: Mixtral-8x7b = 32k token context 
+### TODO:
+### break pdf txt into chapters w/ book and chapter summaries
+### Q: what are max token in sizes per model? A: Mixtral-8x7b = 32k token context 
 ##### cleanup
 
-### GerBot project is an LLM RAG chat intended to make http://gerrystahl.net/pub/index.html even more accessible
-### Generative AI "chat" about the gerrystahl.net writings
-### Code by Zake Stahl
-### https://github.com/zake8/GerryStahlWritings
-### March, April 2024
-### Based on public/shared APIs and FOSS samples
-### Built on Linux, Python, Apache, WSGI, Flask, LangChain, Ollama, Mistral, more
+# GerBot project is an LLM RAG chat intended to make http://gerrystahl.net/pub/index.html even more accessible
+# Generative AI "chat" about the gerrystahl.net writings
+# Code by Zake Stahl
+# https://github.com/zake8/GerryStahlWritings
+# March, April 2024
+# Based on public/shared APIs and FOSS samples
+# Built on Linux, Python, Apache, WSGI, Flask, LangChain, Ollama, Mistral, more
 
 from flask import Flask, redirect, url_for, render_template, request
 app = Flask(__name__)
@@ -24,6 +24,13 @@ from langchain.memory import ConversationBufferWindowMemory
 memory = ConversationBufferWindowMemory(k=14)
 
 import logging
+logging.basicConfig(
+    filename = 'convo_rag_agent_retreival_chatbot.log', 
+    level = logging.INFO, 
+    filemode = 'a', 
+    format = '%(asctime)s -%(levelname)s - %(message)s')
+logging.info(f'===> Starting main')
+
 import socket
 import random
 import os
@@ -58,18 +65,12 @@ chatbot = (f'GerBot')
 user_username_in_chat = "User"
 fullragchat_rag_source = "Auto"
 rag_source_clue_value = 'docs/rag_source_clues.txt' # doc helps llm choose rag file
-# rag_source_clue_value = 'docs/rag_summary_link_to_rags.txt' # doc helps llm choose rag file
-my_chunk_size=250
-my_chunk_overlap=37
+my_chunk_size = 250
+my_chunk_overlap = 37
 # chunk_size= and chunk_overlap, what should they be, how do they relate to file size, word/token/letter count?
 # what should overlap % be to retain meaning and searchability?
+fullragchat_history = []
 # +++++++++++++++++++++++++++
-
-logging.basicConfig(
-    filename = chatbot + '.log', 
-    level = logging.INFO, 
-    filemode = 'a', 
-    format = '%(asctime)s -%(levelname)s - %(message)s')
 
 @app.route("/")
 def root():
@@ -156,11 +157,8 @@ def get_rag_text(query):
         answer = "Unable to make loader for " + fullragchat_rag_source
         return answer
     # from https://docs.mistral.ai/guides/basic-RAG/
-    docs = loader.load()
-    # Split text into chunks
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=my_chunk_size, chunk_overlap=my_chunk_overlap)
-    rag_text = text_splitter.split_documents(docs)
-    return rag_text
+    docs = loader.load() # docs is a list...
+    return docs
 
 def rag_text_function(query):
     # function ignores passed query value
@@ -247,31 +245,38 @@ def mistral_convo_rag(fullragchat_embed_model, mkey, model, fullragchat_temp, qu
         answer = f'There is no extension found on "{fullragchat_rag_source}"'
         return answer
     rag_ext = match.group(1)
-    logging.info(f'===> rag_ext: "{rag_ext}"')
     embeddings = MistralAIEmbeddings(
                 model=fullragchat_embed_model, 
                 mistral_api_key=mkey)
     if (rag_ext == 'txt') or (rag_ext == 'pdf') or (rag_ext == 'html') or (rag_ext == 'htm') or (rag_ext == 'json'): # doc to injest
         # Injest new document, save faiss, and use as retriever
-        documents = get_rag_text(query)
-        faiss_index_fn = f'{fullragchat_rag_source}.faiss'
-        # logging.info(f'++++++ documents ++++++++++\n{documents}\n')
-        vector = FAISS.from_documents(documents, embeddings)
-        vector.save_local(faiss_index_fn)
-        logging.info(f'===> saved new FAISS, "{faiss_index_fn}"')
-        ### write text to disk
-        txtfile_fn = fullragchat_rag_source + '.txt'
-        with open(txtfile_fn, 'a') as file: # 'a' = append, create new if none
-            file.write(documents)
-        logging.info(f'===> saved new .txt file, "{txtfile_fn}"')
-        ### write new .cur file
-        curfile_fn = fullragchat_rag_source + '.cur'
-        date_time = datetime.now()
+        rag_text = get_rag_text(query)
         summary_text_for_cur = create_summary(
-            to_sum=documents, # documents is a list?, whereas this needs a string 
+            to_sum=rag_text, 
             model=model, 
             mkey=mkey, 
             fullragchat_temp=fullragchat_temp)
+        base_fn = fullragchat_rag_source[:-(len(rag_ext)+1)]
+        # write _loadered.txt to disk
+        txtfile_fn = ''
+        ### txtfile_fn = f'{base_fn}_loadered.txt'
+        ### rag_text_srt = ' '.join(rag_text) # must be str, not list...
+        ### with open(txtfile_fn, 'a') as file: # 'a' = append, create new if none
+        ###     file.write(rag_text_srt)
+        ### logging.info(f'===> saved new .txt file, "{txtfile_fn}"')
+        
+        # Split text into chunks
+        text_splitter = RecursiveCharacterTextSplitter(chunk_size=my_chunk_size, chunk_overlap=my_chunk_overlap)
+        documents = text_splitter.split_documents(rag_text)
+
+        faiss_index_fn = f'{base_fn}.faiss'
+        vector = FAISS.from_documents(documents, embeddings)
+        # Could not load library with AVX2 support due to: ModuleNotFoundError("No module named 'faiss.swigfaiss_avx2'")
+        vector.save_local(faiss_index_fn)
+        logging.info(f'===> saved new FAISS, "{faiss_index_fn}"')
+        # write new .cur file
+        curfile_fn = f'{base_fn}.cur'
+        date_time = datetime.now()
         curfile_content  = f'\nCuration content for HITL use. \n\n'
         curfile_content += f'Date and time      = {date_time.strftime("%Y-%m-%d %H:%M:%S")} \n'
         curfile_content += f'Target document    = {fullragchat_rag_source} \n'
@@ -283,27 +288,20 @@ def mistral_convo_rag(fullragchat_embed_model, mkey, model, fullragchat_temp, qu
         with open(curfile_fn, 'a') as file: # 'a' = append, create new if none
             file.write(curfile_content)
         logging.info(f'===> saved new .cur file, "{curfile_fn}"')
-        ### add name and summary to rag source clue file for LLM to use!
+        # add name and summary to rag source clue file for LLM to use!
         faiss_index_fn = faiss_index_fn[5:] # strip off leading 'docs/' so as not to double it up later
-        clue_file_text  = f'\n'
-        clue_file_text += f'  { \n'
-        clue_file_text += f'    "rag_item": { \n'
-        clue_file_text += f'      "filename": "{faiss_index_fn}", \n'
-        clue_file_text += f'      "title": "", \n'
-        clue_file_text += f'      "volume": "", \n'
-        clue_file_text += f'      "chapter": "", \n'
-        clue_file_text += f'      "summary": "{summary_text_for_cur}", \n'
-        clue_file_text += f'      "txt_filename": "", \n'
-        clue_file_text += f'    } \n'
-        clue_file_text += f'  } \n'
-        clue_file_text += f'\n'
-        ##### cleanup
-        # clue_file_text  = f'\n\n'
-        # clue_file_text += f'*****{faiss_index_fn}*****\n'
-        # clue_file_text += f'<summary text for *****{faiss_index_fn}*****>\n'
-        # clue_file_text += f'{summary_text_for_cur}\n'
-        # clue_file_text += f'</summary text for *****{faiss_index_fn}*****>\n'
-        # clue_file_text += f'\n\n'
+        clue_file_text  = '\n'
+        clue_file_text += '  { \n'
+        clue_file_text += '    "rag_item": { \n'
+        clue_file_text += '      "filename": "' + faiss_index_fn + '", \n'
+        clue_file_text += '      "title": "", \n'
+        clue_file_text += '      "volume": "", \n'
+        clue_file_text += '      "chapter": "", \n'
+        clue_file_text += '      "summary": "' + summary_text_for_cur + '", \n'
+        clue_file_text += '      "txt_filename": "' + txtfile_fn + '", \n'
+        clue_file_text += '    } \n'
+        clue_file_text += '  } \n'
+        clue_file_text += '\n'
         with open(rag_source_clue_value, 'a') as file: # 'a' = append, file pointer placed at end of file
             file.write(clue_file_text)
         logging.info(f'===> Added new .faiss and summary to "{rag_source_clue_value}"')
@@ -318,8 +316,6 @@ def mistral_convo_rag(fullragchat_embed_model, mkey, model, fullragchat_temp, qu
     else:
         answer = f'Invalid extension on "{fullragchat_rag_source}"...'
         return answer
-    # testing_retriever = retriever.invoke(query)
-    # logging.info(f'++++++ retriever ++++++++++\n{testing_retriever}\n')
     # this sequence seems to use query value so the above, if not in a langchain pipe as a runnable would read vector.as_retriever(query)
     history_runnable = RunnableLambda(convo_mem_function)
     setup_and_retrieval = RunnableParallel({
@@ -524,6 +520,7 @@ def chat_query_return(model, query, fullragchat_temp, fullragchat_stop_words, fu
                 else: # source set to 'Auto' - "newer" double LLM pass
                     # figure out which staged rag doc to use
                     global rag_source_clues
+                    logging.info(f'===> Starting first double LLM pass')
                     rag_source_clues = rag_source_clue_value # doc helps llm choose rag file
                     selected_rag = choose_rag(
                         mkey=mkey, 
@@ -536,13 +533,8 @@ def chat_query_return(model, query, fullragchat_temp, fullragchat_stop_words, fu
                     # note: drops any comments from LLM...
                     match = re.search(r'"filename":\s+"([^"]+)"', selected_rag)
                     clean_selected_rag = match.group(1)
-                    ##### cleanup
-                    # pattern = r'\*{5}(.+?)\*{5}' # Hope LLM put *****filename.txt***** in there somewhere...
-                    # match = re.search(pattern, selected_rag)
-                    # clean_selected_rag = match.group(1)
                     answer = f'Retrieved document "{clean_selected_rag}". \n'
                     clean_selected_rag = f'docs/{clean_selected_rag}'
-                    logging.info(f'===> clean_selected_rag: {clean_selected_rag}')
                     fullragchat_rag_source = clean_selected_rag
                     answer += mistral_convo_rag(
                         fullragchat_embed_model=fullragchat_embed_model, 
@@ -617,7 +609,6 @@ def fullragchat_init():
     global fullragchat_skin 
     global fullragchat_music
     global fullragchat_loop_context
-    ### set initial values
     fullragchat_history = []
     fullragchat_model = "open-mixtral-8x7b"
     fullragchat_temp = "0.25"
@@ -628,6 +619,7 @@ def fullragchat_init():
     fullragchat_skin = "not yet implemented"
     fullragchat_music = "not yet implemented"
     init_fullragchat_history()
+    logging.info(f'===> Set initial values, starting html loop')
     return render_template('fullragchat.html', 
         fullragchat_history=fullragchat_history,
         fullragchat_model=fullragchat_model,
