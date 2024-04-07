@@ -3,7 +3,10 @@
 ### TODO:
 ### break pdf txt into chapters w/ book and chapter summaries
 ### Q: what are max token in sizes per model? A: Mixtral-8x7b = 32k token context 
-##### cleanup
+### botname_cmd.summary(path_filename, template_additions)
+### botname_cmd.injest(path_filename, template_additions)
+##### function cleanup...
+##### misc cleanup
 
 # GerBot project is an LLM RAG chat intended to make http://gerrystahl.net/pub/index.html even more accessible
 # Generative AI "chat" about the gerrystahl.net writings
