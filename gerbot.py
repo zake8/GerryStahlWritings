@@ -41,7 +41,6 @@ import re
 import json
 from datetime import datetime
 from langchain_community.document_loaders import PyPDFLoader
-from langchain.chains import ConversationChain
 from langchain.chains import RetrievalQA
 from langchain.chains import create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
@@ -92,54 +91,6 @@ def convo_mem_function(query):
         history += f'{line}\n'
     history += f'</chat_history>\n'
     return history
-
-##### remove this function
-def mistral_convochat(model, mkey, fullragchat_temp, query):
-    large_lang_model = ChatMistralAI(
-        model_name=model, 
-        mistral_api_key=mkey, 
-        temperature=float(fullragchat_temp) )
-    global memory
-    chain = ConversationChain(llm=large_lang_model, memory=memory) # ConversationBufferWindowMemory leveraged by ConversationChain
-    answer = chain.predict(input=query)
-    return answer
-
-##### remove this function
-def ollama_convochat(model, fullragchat_temp, stop_words_list, query):
-    ollama = Ollama(
-        model=model, 
-        temperature=float(fullragchat_temp), 
-        stop=stop_words_list, 
-        verbose=True )
-    global memory
-    chain = ConversationChain(llm=ollama, memory=memory) # ConversationBufferWindowMemory leveraged by ConversationChain
-    answer = chain.predict(input=query)
-    return answer
-
-##### remove this function
-def mistral_qachat(model, mkey, fullragchat_temp, query):
-    # simple chat from https://docs.mistral.ai/platform/client/
-    client = MistralClient(api_key=mkey)
-    messages = [ ChatMessage(role=user_username_in_chat, content=query) ]
-    chat_response = client.chat(
-            model=model,
-            messages=messages,
-            temperature=float(fullragchat_temp) )
-    answer = chat_response.choices[0].message.content
-    return answer
-
-##### remove this function
-def ollama_qachat(model, fullragchat_temp, stop_words_list, query):
-    ### instanciate model
-    ollama = Ollama(
-        model=model, 
-        temperature=float(fullragchat_temp), 
-        stop=stop_words_list, 
-        verbose=True )
-    ### invoke model
-    answer = ollama(query)
-    # answer = ollama.invoke(query) # is this preferred? how does the above know what to do?
-    return answer
 
 def get_rag_text(query):
     # function ignores passed query value
@@ -335,100 +286,31 @@ def mistral_convo_rag(fullragchat_embed_model, mkey, model, fullragchat_temp, qu
     answer = chain.invoke(query)
     return answer
 
-##### remove this function
-def mistral_rag(fullragchat_embed_model, mkey, model, fullragchat_temp, query):
-    documents = get_rag_text(query)
-    # Define the embedding model
-    embeddings = MistralAIEmbeddings(
-                model=fullragchat_embed_model, 
-                mistral_api_key=mkey
+"""
+Notes on Ollama:
+   if (model == "orca-mini") or 
+      (model == "phi") or 
+      (model == "tinyllama") or
+      (model == "llama2") or 
+      (model == "llama2-uncensored") or 
+      (model == "mistral") or 
+      (model == "mixtral") or 
+      (model == "command-r") ):
+        pass
+    ollama = Ollama(
+        model=model, 
+        temperature=float(fullragchat_temp), 
+        stop=stop_words_list, 
+        verbose=True,
     )
-    # Create the vector store 
-    vector = FAISS.from_documents(documents, embeddings)
-    # Define a retriever interface
-    retriever = vector.as_retriever()
-    # Define LLM
-    large_lang_model = ChatMistralAI(
-                model_name=model, 
-                mistral_api_key=mkey, 
-                temperature=float(fullragchat_temp), 
-    )
-    # Define prompt template
-    prompt = ChatPromptTemplate.from_template("""
-        Answer the following question based only on the provided context:
-        <context>
-        {context}
-        </context>
-        Question: {input}
-        Answer:
-    """)
-    # Create a retrieval chain to answer questions
-    document_chain = create_stuff_documents_chain(large_lang_model, prompt)
-    retrieval_chain = create_retrieval_chain(retriever, document_chain)
-    input_query = {}
-    input_query['input'] = query
-    # invoke chain
-    response_dic = retrieval_chain.invoke(input_query)
-    answer = response_dic['answer'] # parse return from LLM with input, context, and, answer into just answer
-    return answer
-
-def ollama_embed_search(query):
-    global fullragchat_embed_model
     oembed = OllamaEmbeddings(model=fullragchat_embed_model)
-    all_splits = get_rag_text(query)
     vectorstore = Chroma.from_documents(documents=all_splits, embedding=oembed)
-    docs = vectorstore.similarity_search(query)
-    # this sequence uses the query to return a few text strings of similar semantics
-    # also Chroma sends out Anonymized telemetry https://docs.trychroma.com/telemetry
-    # replace with FAISS code!
-    vector_store_hits = len(docs)
-    context_text = f'<rag_context>\n'
-    for line in docs:
-        context_text += f'{line}\n'
-    context_text += f'</rag_context>\n'
-    return context_text
-
-def ollama_convo_rag(model, fullragchat_temp, stop_words_list, fullragchat_embed_model, query):
+    # Chroma sends out Anonymized telemetry
     context_runnable = RunnableLambda(ollama_embed_search)
     history_runnable = RunnableLambda(convo_mem_function)
-    setup_and_retrieval = RunnableParallel({
-        "context":  context_runnable, 
-        "question": RunnablePassthrough(),
-        "history":  history_runnable})
-    prompt = ChatPromptTemplate.from_template(gerbot_template)
-    ollama = Ollama(
-        model=model, 
-        temperature=float(fullragchat_temp), 
-        stop=stop_words_list, 
-        verbose=True,
-    )
-    output_parser = StrOutputParser()
     chain = ( setup_and_retrieval | prompt | ollama | output_parser )
-    answer = chain.invoke(query)
-    return answer
+"""
 
-##### remove this function
-def ollama_rag(model, fullragchat_temp, stop_words_list, fullragchat_embed_model, query):
-    ### instanciate model
-    ollama = Ollama(
-        model=model, 
-        temperature=float(fullragchat_temp), 
-        stop=stop_words_list, 
-        verbose=True,
-    )
-    all_splits = get_rag_text(query)
-    oembed = OllamaEmbeddings(model=fullragchat_embed_model)
-    vectorstore = Chroma.from_documents(documents=all_splits, embedding=oembed)
-    docs = vectorstore.similarity_search(query)
-    vector_store_hits = len(docs)
-    ### create chain w/ model
-    qachain=RetrievalQA.from_chain_type(ollama, retriever=vectorstore.as_retriever())
-    ### invoke chain
-    results = qachain.invoke({"query": query})
-    answer = results['result'] 
-    return answer
-
-##### remove this function
 def fake_llm(query):
     rand = random.randint(1, 15)
     if rand <= 3:
@@ -460,45 +342,17 @@ def chat_query_return(model, query, fullragchat_temp, fullragchat_stop_words, fu
     if stop_words_list == ['']: stop_words_list = None
     if model == "fake_llm":
         answer = fake_llm(query)
-    elif ( (model == "orca-mini") or 
-            (model == "phi") or 
-            (model == "tinyllama") or
-            (model == "llama2") or 
-            (model == "llama2-uncensored") or 
-            (model == "mistral") or 
-            (model == "mixtral") or 
-            (model == "command-r") ):
+    elif (model == "orca-mini"):
         if fullragchat_rag_source:
             if fullragchat_loop_context == 'True':
-                answer = ollama_convo_rag(
-                    model=model, 
-                    fullragchat_temp=fullragchat_temp, 
-                    stop_words_list=stop_words_list, 
-                    fullragchat_embed_model=fullragchat_embed_model, 
-                    query=query
-                )
+                pass
             else:
-                answer = ollama_rag(
-                    model=model, 
-                    fullragchat_temp=fullragchat_temp, 
-                    stop_words_list=stop_words_list, 
-                    fullragchat_embed_model=fullragchat_embed_model, 
-                    query=query )
+                pass    
         else:
             if fullragchat_loop_context == 'True':
-                answer = ollama_convochat(
-                    model=model, 
-                    fullragchat_temp=fullragchat_temp, 
-                    stop_words_list=stop_words_list, 
-                    query=query, 
-                )
+                pass
             else:
-                answer = ollama_qachat(
-                    model=model, 
-                    fullragchat_temp=fullragchat_temp, 
-                    stop_words_list=stop_words_list, 
-                    query=query, 
-                )
+                pass
     elif ( (model == "open-mixtral-8x7b") or 
             (model == "mistral-large-latest") or 
             (model == "open-mistral-7b") ):
@@ -562,25 +416,12 @@ def chat_query_return(model, query, fullragchat_temp, fullragchat_stop_words, fu
                         query=query )
                     fullragchat_rag_source = 'Auto' # now set global back to 'Auto' for UI and next round
             else:
-                answer = mistral_rag(
-                    fullragchat_embed_model=fullragchat_embed_model, 
-                    mkey=mkey, 
-                    model=model, 
-                    fullragchat_temp=fullragchat_temp, 
-                    query=query )
+                pass
         else:
             if fullragchat_loop_context == 'True':
-                answer = mistral_convochat(
-                    mkey=mkey, 
-                    query=query, 
-                    model=model, 
-                    fullragchat_temp=fullragchat_temp )
+                pass
             else:
-                answer = mistral_qachat(
-                    mkey=mkey, 
-                    query=query, 
-                    model=model, 
-                    fullragchat_temp=fullragchat_temp )
+                pass
     else:
         answer = "No LLM named " + model
     return answer
