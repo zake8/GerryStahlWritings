@@ -22,9 +22,9 @@ app = Flask(__name__)
 from dotenv import load_dotenv
 load_dotenv('./.env')
 
-# ConversationBufferWindowMemory setup
-from langchain.memory import ConversationBufferWindowMemory
-memory = ConversationBufferWindowMemory(k=14)
+##### # ConversationBufferWindowMemory setup
+##### from langchain.memory import ConversationBufferWindowMemory
+##### memory = ConversationBufferWindowMemory(k=14)
 
 import logging
 logging.basicConfig(
@@ -38,19 +38,19 @@ import socket
 import random
 import os
 import re
-import json
+##### import json
 from datetime import datetime
 from langchain_community.document_loaders import PyPDFLoader
-from langchain.chains import RetrievalQA
-from langchain.chains import create_retrieval_chain
-from langchain.chains.combine_documents import create_stuff_documents_chain
+##### from langchain.chains import RetrievalQA
+##### from langchain.chains import create_retrieval_chain
+##### from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders import JSONLoader
 from langchain_community.document_loaders import TextLoader
 from langchain_community.document_loaders import WebBaseLoader
 from langchain_community.embeddings import OllamaEmbeddings
 from langchain_community.llms import Ollama
-from langchain_community.vectorstores import Chroma
+##### from langchain_community.vectorstores import Chroma
 from langchain_community.vectorstores import FAISS
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
@@ -59,8 +59,8 @@ from langchain_core.runnables import RunnableParallel
 from langchain_core.runnables import RunnablePassthrough
 from langchain_mistralai.chat_models import ChatMistralAI
 from langchain_mistralai.embeddings import MistralAIEmbeddings
-from mistralai.client import MistralClient
-from mistralai.models.chat_completion import ChatMessage
+from mistralai.client import MistralClient ### is this used?
+from mistralai.models.chat_completion import ChatMessage ### is this used?
 
 # +++++++++++++++++++++++++++
 # initialize global variables
@@ -123,7 +123,7 @@ def rag_text_function(query):
     return context
 
 filename_template = """
-Your task is to return, in json format, a single filename, from the provided list.
+Your task is to return a filename from the provided list.
 Mentioning a book or even chapter title should be enough to return its filename.
 Example: If question from user is about alphabet, A B C's, and provided list has item with summary about letters in the alphabet, then answer with "alphabet.txt", assuming that is the filename for that summary.
 Example: If user is questioning about Python programming, and there is a summary including Python stuff, then return "py_coding.txt" or whatever its name is.
@@ -179,7 +179,8 @@ Gerry Stahl's published works, all available here, http://gerrystahl.net/pub/ind
 If you do not know the answer or know how to respond just say, 
 I don't know, or I don't know how to respond to that, or 
 you can you ask user to rephrase the question, or 
-maybe occationally share an interesting tidbit of wisdom from the 
+maybe occationally share an interesting tidbit of wisdom from the writtings.
+Try not to be too verbose, flowery, or chatty.
 Answer the question based primarily on this relevant retrieved context: 
 {context}
 Reference chat history for conversationality (
@@ -211,7 +212,7 @@ def mistral_convo_rag(fullragchat_embed_model, mkey, model, fullragchat_temp, qu
             mkey=mkey, 
             fullragchat_temp=fullragchat_temp)
         base_fn = fullragchat_rag_source[:-(len(rag_ext)+1)]
-        # write _loadered.txt to disk
+        ### write _loadered.txt to disk
         txtfile_fn = ''
         ### txtfile_fn = f'{base_fn}_loadered.txt'
         ### rag_text_srt = ' '.join(rag_text) # must be str, not list...
@@ -288,16 +289,7 @@ def mistral_convo_rag(fullragchat_embed_model, mkey, model, fullragchat_temp, qu
 
 """
 Notes on Ollama:
-   if (model == "orca-mini") or 
-      (model == "phi") or 
-      (model == "tinyllama") or
-      (model == "llama2") or 
-      (model == "llama2-uncensored") or 
-      (model == "mistral") or 
-      (model == "mixtral") or 
-      (model == "command-r") ):
-        pass
-    ollama = Ollama(
+   ollama = Ollama(
         model=model, 
         temperature=float(fullragchat_temp), 
         stop=stop_words_list, 
@@ -340,91 +332,71 @@ def chat_query_return(model, query, fullragchat_temp, fullragchat_stop_words, fu
     answer = ''
     stop_words_list = fullragchat_stop_words.split(', ')
     if stop_words_list == ['']: stop_words_list = None
+    mkey = os.getenv('Mistral_API_key')
+    logging.info(f'===> Starting first double LLM pass')
+    # Figure out which staged rag doc to use
+    global rag_source_clues
+    rag_source_clues = rag_source_clue_value # doc helps llm choose rag file
+    selected_rag = choose_rag(
+        mkey=mkey, 
+        model=model, 
+        fullragchat_temp=fullragchat_temp, 
+        query=query )
+    logging.info(f'===> selected_rag: {selected_rag}')
+    # Should be "return_filename.faiss" or the like; sometimes LLM is chatty tho
+    # Comments from LLM show in log, and in chat if unable to parse
+    pattern = r'\b[A-Za-z0-9_-]+\.[A-Za-z0-9]{3,5}\b'
+    filenames = re.findall(pattern, selected_rag)
+    if filenames:
+        clean_selected_rag = filenames[0]
+        answer += f'Selecting document "{clean_selected_rag}". '
+        fullragchat_rag_source = f'docs/{clean_selected_rag}'
+    else:
+        answer += 'Unable to parse out a filename from:\n"' + selected_rag + '"\n'
+        fullragchat_rag_source = f'docs/nothing.txt'
+    if not os.path.exists(fullragchat_rag_source):
+        answer += f'The file selected does not exist...'
+        fullragchat_rag_source = f'docs/nothing.txt'
+    answer += mistral_convo_rag(
+        fullragchat_embed_model=fullragchat_embed_model, 
+        mkey=mkey, 
+        model=model, 
+        fullragchat_temp=fullragchat_temp, 
+        query=query )
+    fullragchat_rag_source = 'Auto' # now set global back to 'Auto' for UI and next round
+    return answer
+
+"""
+Reimplement:
     if model == "fake_llm":
         answer = fake_llm(query)
-    elif (model == "orca-mini"):
-        if fullragchat_rag_source:
-            if fullragchat_loop_context == 'True':
-                pass
-            else:
-                pass    
-        else:
-            if fullragchat_loop_context == 'True':
-                pass
-            else:
-                pass
+    elif (model == "orca-mini") or 
+        (model == "phi") or 
+        (model == "tinyllama") or
+        (model == "llama2") or 
+        (model == "llama2-uncensored") or 
+        (model == "mistral") or 
+        (model == "mixtral") or 
+        (model == "command-r") ):
     elif ( (model == "open-mixtral-8x7b") or 
-            (model == "mistral-large-latest") or 
-            (model == "open-mistral-7b") ):
-        mkey = os.getenv('Mistral_API_key')
-        if fullragchat_rag_source:
-            if fullragchat_loop_context == 'True':
-                if fullragchat_rag_source != 'Auto': # source specified in UI
-                    if query == 'command: summarize': # override - just do direct summary of full doc
-                        to_sum = get_rag_text(query)
-                        answer = f'Summary of {fullragchat_rag_source}: \n'
-                        answer += create_summary(
-                            to_sum=to_sum, 
-                            model=model, 
-                            mkey=mkey, 
-                            fullragchat_temp=fullragchat_temp)
-                    else: # mistral_convo_rag - "older" single LLM pass
-                        answer = mistral_convo_rag(
-                            fullragchat_embed_model=fullragchat_embed_model, 
-                            mkey=mkey, 
-                            model=model, 
-                            fullragchat_temp=fullragchat_temp, 
-                            query=query )
-                else: # source set to 'Auto' - "newer" double LLM pass
-                    # figure out which staged rag doc to use
-                    global rag_source_clues
-                    logging.info(f'===> Starting first double LLM pass')
-                    rag_source_clues = rag_source_clue_value # doc helps llm choose rag file
-                    selected_rag = choose_rag(
-                        mkey=mkey, 
-                        model=model, 
-                        fullragchat_temp=fullragchat_temp, 
-                        query=query )
-                    logging.info(f'===> selected_rag: {selected_rag}')
-                    # Should be json like {"filename": "return_filename.faiss"}
-                    # Could be "return_filename.faiss" or just return_filename.faiss
-                    # Comments from LLM show in log, and in chat if unable to parse
-                    ### try:
-                    ###     json_data = json.loads(selected_rag)
-                    ###     fullragchat_rag_source = json_data.get('filename', '') # throws AttributeError: 'str' object has no attribute 'get'
-                    ###     answer = f'Selecting document "{fullragchat_rag_source}".'
-                    ###     fullragchat_rag_source = 'docs/' + fullragchat_rag_source
-                    ### except json.JSONDecodeError:
-                    ###     answer = f'Got an invalid JSON format... '
-                    pattern = r'\b[A-Za-z0-9_-]+\.[A-Za-z0-9]{3,5}\b'
-                    filenames = re.findall(pattern, selected_rag)
-                    if filenames:
-                        clean_selected_rag = filenames[0]
-                        answer += f'Selecting document "{clean_selected_rag}". '
-                        fullragchat_rag_source = f'docs/{clean_selected_rag}'
-                    else:
-                        answer += 'Unable to parse out a filename from:\n"' + selected_rag + '"\n'
-                        fullragchat_rag_source = f'docs/nothing.txt'
-                    if not os.path.exists(fullragchat_rag_source):
-                        answer += f'The file selected does not exist...'
-                        fullragchat_rag_source = f'docs/nothing.txt'
-                    answer += mistral_convo_rag(
-                        fullragchat_embed_model=fullragchat_embed_model, 
-                        mkey=mkey, 
-                        model=model, 
-                        fullragchat_temp=fullragchat_temp, 
-                        query=query )
-                    fullragchat_rag_source = 'Auto' # now set global back to 'Auto' for UI and next round
-            else:
-                pass
-        else:
-            if fullragchat_loop_context == 'True':
-                pass
-            else:
-                pass
+        model == "mistral-large-latest") or 
+        model == "open-mistral-7b") ):
     else:
         answer = "No LLM named " + model
-    return answer
+
+### botname_cmd.summary(path_filename, template_additions)
+
+### botname_cmd.injest(path_filename, template_additions)
+ 
+    if query == 'command: summarize': # override - just do direct summary of full doc
+        to_sum = get_rag_text(query)
+        answer = f'Summary of {fullragchat_rag_source}: \n'
+        answer += create_summary(
+            to_sum=to_sum, 
+            model=model, 
+            mkey=mkey, 
+            fullragchat_temp=fullragchat_temp)
+"""
 
 @app.route("/reset_history")
 def reset_fullragchat_history():
@@ -466,13 +438,11 @@ def fullragchat_init():
     global fullragchat_embed_model
     global fullragchat_skin 
     global fullragchat_music
-    global fullragchat_loop_context
     fullragchat_history = []
     fullragchat_model = "open-mixtral-8x7b"
     fullragchat_temp = "0.25"
     fullragchat_rag_source = "Auto"
     fullragchat_embed_model = "mistral-embed"
-    fullragchat_loop_context = "True"
     fullragchat_stop_words = ""
     fullragchat_skin = "not yet implemented"
     fullragchat_music = "not yet implemented"
@@ -487,7 +457,6 @@ def fullragchat_init():
         fullragchat_embed_model=fullragchat_embed_model,
         fullragchat_skin=fullragchat_skin,
         fullragchat_music=fullragchat_music,
-        fullragchat_loop_context=fullragchat_loop_context, 
     )
 
 def pending_fullragchat_history():
@@ -510,7 +479,6 @@ def fullragchat_pending():
     global fullragchat_embed_model
     global fullragchat_skin 
     global fullragchat_music
-    global fullragchat_loop_context
     query = request.form['query']
     fullragchat_model = request.form['model']
     fullragchat_temp = request.form['temp']
@@ -519,7 +487,6 @@ def fullragchat_pending():
     fullragchat_embed_model = request.form['embed_model']
     fullragchat_skin = request.form['skin']
     fullragchat_music = request.form['music']
-    fullragchat_loop_context = request.form['loop_context']
     fullragchat_history.append({'user':user_username_in_chat, 'message':query}) 
     logging.info(f'===> {user_username_in_chat}: {query}')
     pending_fullragchat_history()
@@ -532,7 +499,6 @@ def fullragchat_pending():
         fullragchat_embed_model=fullragchat_embed_model,
         fullragchat_skin=fullragchat_skin,
         fullragchat_music=fullragchat_music,
-        fullragchat_loop_context=fullragchat_loop_context, 
     )
 
 @app.route("/fullragchat_reply")
@@ -546,8 +512,6 @@ def fullragchat_reply():
     global fullragchat_embed_model
     global fullragchat_skin 
     global fullragchat_music
-    global fullragchat_loop_context
-    global memory
     unpending_fullragchat_history()
     logging.info(f'===> model info: model={fullragchat_model}, temp={fullragchat_temp}, stop={fullragchat_stop_words}, rag={fullragchat_rag_source}, embed={fullragchat_embed_model}')
     answer = chat_query_return(
@@ -558,7 +522,6 @@ def fullragchat_reply():
         fullragchat_embed_model,
     )
     fullragchat_history.append({'user':chatbot, 'message':answer})
-    memory.save_context({"input": query}, {"output": answer}) # ConversationBufferWindowMemory save of query and answer
     logging.info(f'===> {chatbot}: {answer}')
     return render_template('fullragchat.html', 
         fullragchat_history=fullragchat_history, 
@@ -569,7 +532,6 @@ def fullragchat_reply():
         fullragchat_embed_model=fullragchat_embed_model,
         fullragchat_skin=fullragchat_skin,
         fullragchat_music=fullragchat_music,
-        fullragchat_loop_context=fullragchat_loop_context, 
         )
 
 if __name__ == "__main__":
