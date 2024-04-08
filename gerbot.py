@@ -455,6 +455,7 @@ def fake_llm(query):
 
 def chat_query_return(model, query, fullragchat_temp, fullragchat_stop_words, fullragchat_embed_model):
     global fullragchat_rag_source
+    answer = ''
     stop_words_list = fullragchat_stop_words.split(', ')
     if stop_words_list == ['']: stop_words_list = None
     if model == "fake_llm":
@@ -530,25 +531,26 @@ def chat_query_return(model, query, fullragchat_temp, fullragchat_stop_words, fu
                         model=model, 
                         fullragchat_temp=fullragchat_temp, 
                         query=query )
+                    logging.info(f'===> selected_rag: {selected_rag}')
                     # Should be json like {"filename": "return_filename.faiss"}
                     # Could be "return_filename.faiss" or just return_filename.faiss
-                    # Comments from LLM show in log and in chat if unable to parse
-                    try:
-                        json_data = json.loads(selected_rag)
-                        fullragchat_rag_source = json_data.get('filename', '')
-                        answer = f'Selecting document "{fullragchat_rag_source}".'
-                        fullragchat_rag_source = 'docs/' + fullragchat_rag_source
-                   except json.JSONDecodeError:
-                        answer = f'Got an invalid JSON format... '
-                        pattern = r'\b[a-zA-Z0-9_-]+\.(?:[a-zA-Z0-9]){3,5}\b'
-                        match = re.search(pattern, selected_rag)
-                        if match:
-                            clean_selected_rag = match.group(1)
-                            answer += f'Selecting document "{clean_selected_rag}".'
-                            fullragchat_rag_source = f'docs/{clean_selected_rag}'
-                        else:
-                            answer += 'Unable to parse out a filename from:\n"' + selected_rag + '"\n'
-                            fullragchat_rag_source = f'docs/nothing.txt'
+                    # Comments from LLM show in log, and in chat if unable to parse
+                    ### try:
+                    ###     json_data = json.loads(selected_rag)
+                    ###     fullragchat_rag_source = json_data.get('filename', '') # throws AttributeError: 'str' object has no attribute 'get'
+                    ###     answer = f'Selecting document "{fullragchat_rag_source}".'
+                    ###     fullragchat_rag_source = 'docs/' + fullragchat_rag_source
+                    ### except json.JSONDecodeError:
+                    ###     answer = f'Got an invalid JSON format... '
+                    pattern = r'\b[A-Za-z0-9_-]+\.[A-Za-z0-9]{3,5}\b'
+                    filenames = re.findall(pattern, selected_rag)
+                    if filenames:
+                        clean_selected_rag = filenames[0]
+                        answer += f'Selecting document "{clean_selected_rag}". '
+                        fullragchat_rag_source = f'docs/{clean_selected_rag}'
+                    else:
+                        answer += 'Unable to parse out a filename from:\n"' + selected_rag + '"\n'
+                        fullragchat_rag_source = f'docs/nothing.txt'
                     if not os.path.exists(fullragchat_rag_source):
                         answer += f'The file selected does not exist...'
                         fullragchat_rag_source = f'docs/nothing.txt'

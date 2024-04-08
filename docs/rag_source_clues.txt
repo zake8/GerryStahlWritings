@@ -1,16 +1,12 @@
 #!/usr/bin/env python
 
-prompt = ('Check against the summaries and return a filename in json format like this example.')
-
-example =
-    {
-      "rag_item": {
-        "filename": "return_filename.faiss",
-        "comments": "whole of comments is optional", 
-      }
-    }
-
+prompt = """
+Parse json formated Volumes_of_the_eLibrary and return a value from a "filename" label; 
+in other words, 
+check against the summaries and return a "filename.faiss" (or "filename.txt").
 """
+
+Volumes_of_the_eLibrary_intro = """
 Gerry Stahl's Assembled Texts:
 My CV lists about 400 publications and presentations.
 To organize them thematially and to make them more accessible, I have assembled the best versions of them in 21 volumes. To the extent possible, I have made these volumes available for free in electronic format (pdf, epub and mobi) and at low cost in paperback.
@@ -26,7 +22,7 @@ I began writing as a student of philosophy. In that field, books are the traditi
 I hope that this eLibrary allows readers to browse through my writings and follow their interests as deeply as they desire through these aggregated texts.
 """
 
-Volumes of the eLibrary = 
+Volumes_of_the_eLibrary = 
 {
     {
       "rag_item": {
