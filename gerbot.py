@@ -38,6 +38,7 @@ import socket
 import random
 import os
 import re
+import json
 from datetime import datetime
 from langchain_community.document_loaders import PyPDFLoader
 from langchain.chains import ConversationChain
@@ -173,17 +174,16 @@ def rag_text_function(query):
 filename_template = """
 Your task is to return, in json format, a single filename, from the provided list.
 Mentioning a book or even chapter title should be enough to return its filename.
-Please be sure to return {"filename": "return_filename.faiss"}.
-Example: If question from user is about alphabet, A B C's, and provided list has item with summary about letters in the alphabet, then answer with {"filename": "alphabet.txt"}, assuming that is the filename for that summary.
-Example: If user is questioning about Python programming, and there is a summary including Python stuff, then return {"filename": "py_coding.txt"} or whatever its name is.
-Example: If question is about "The Things" by Peter Watts, then send the string {"filename": "TheThings-PeterWatts.txt"}.
+Example: If question from user is about alphabet, A B C's, and provided list has item with summary about letters in the alphabet, then answer with "alphabet.txt", assuming that is the filename for that summary.
+Example: If user is questioning about Python programming, and there is a summary including Python stuff, then return "py_coding.txt" or whatever its name is.
+Example: If question is about "The Things" by Peter Watts, then send "TheThings-PeterWatts.faiss".
 Question from user is: 
 {question}
 Lightly reference this chat history help understand what information area user is looking to explore: 
 {history}
 Here is provided list containing filenames for various content/information areas: 
 {context}
-Single path_filename value:
+Single filename value:
 """
 
 def choose_rag(mkey, model, fullragchat_temp, query):
@@ -530,28 +530,35 @@ def chat_query_return(model, query, fullragchat_temp, fullragchat_stop_words, fu
                         model=model, 
                         fullragchat_temp=fullragchat_temp, 
                         query=query )
-                    logging.info(f'===> choose_rag returned: {selected_rag}')
-                    # cleanup as LLM tends to be chatting and not listen to just the filename please...
                     # Should be json like {"filename": "return_filename.faiss"}
-                    # note: drops any comments from LLM...
-                    pattern = r'"filename":\s+"([^"]+)"'
-                    match = re.search(pattern, selected_rag)
-                    if not match:
-                        answer = 'Unable to parse out a filename from:\n"' + selected_rag + '"\n'
+                    # Could be "return_filename.faiss" or just return_filename.faiss
+                    # Comments from LLM show in log and in chat if unable to parse
+                    try:
+                        json_data = json.loads(selected_rag)
+                        fullragchat_rag_source = json_data.get('filename', '')
+                        answer = f'Selecting document "{fullragchat_rag_source}".'
+                        fullragchat_rag_source = 'docs/' + fullragchat_rag_source
+                   except json.JSONDecodeError:
+                        answer = f'Got an invalid JSON format... '
+                        pattern = r'\b[a-zA-Z0-9_-]+\.(?:[a-zA-Z0-9]){3,5}\b'
+                        match = re.search(pattern, selected_rag)
+                        if match:
+                            clean_selected_rag = match.group(1)
+                            answer += f'Selecting document "{clean_selected_rag}".'
+                            fullragchat_rag_source = f'docs/{clean_selected_rag}'
+                        else:
+                            answer += 'Unable to parse out a filename from:\n"' + selected_rag + '"\n'
+                            fullragchat_rag_source = f'docs/nothing.txt'
+                    if not os.path.exists(fullragchat_rag_source):
+                        answer += f'The file selected does not exist...'
                         fullragchat_rag_source = f'docs/nothing.txt'
-                    else:
-                        clean_selected_rag = match.group(1)
-                        answer = f'Retrieved document "{clean_selected_rag}". \n'
-                        clean_selected_rag = f'docs/{clean_selected_rag}'
-                        fullragchat_rag_source = clean_selected_rag
                     answer += mistral_convo_rag(
                         fullragchat_embed_model=fullragchat_embed_model, 
                         mkey=mkey, 
                         model=model, 
                         fullragchat_temp=fullragchat_temp, 
                         query=query )
-                    # now set global back to 'Auto' for UI and next round
-                    fullragchat_rag_source = 'Auto'
+                    fullragchat_rag_source = 'Auto' # now set global back to 'Auto' for UI and next round
             else:
                 answer = mistral_rag(
                     fullragchat_embed_model=fullragchat_embed_model, 
