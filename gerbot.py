@@ -173,10 +173,10 @@ def rag_text_function(query):
 filename_template = """
 Your task is to return, in json format, a single filename, from the provided list.
 Mentioning a book or even chapter title should be enough to return its filename.
-Please be sure to return "filename": "return_filename.faiss".
-Example: If question from user is about alphabet, A B C's, and provided list has item with summary about letters in the alphabet, then answer with "filename": "alphabet.txt", assuming that is the filename for that summary.
-Example: If user is questioning about Python programming, and there is a summary including Python stuff, then return "filename": "py_coding.txt" or whatever its name is.
-Example: If question is about "The Things" by Peter Watts, then send the string "filename": "TheThings-PeterWatts.txt".
+Please be sure to return {"filename": "return_filename.faiss"}.
+Example: If question from user is about alphabet, A B C's, and provided list has item with summary about letters in the alphabet, then answer with {"filename": "alphabet.txt"}, assuming that is the filename for that summary.
+Example: If user is questioning about Python programming, and there is a summary including Python stuff, then return {"filename": "py_coding.txt"} or whatever its name is.
+Example: If question is about "The Things" by Peter Watts, then send the string {"filename": "TheThings-PeterWatts.txt"}.
 Question from user is: 
 {question}
 Lightly reference this chat history help understand what information area user is looking to explore: 
@@ -534,11 +534,16 @@ def chat_query_return(model, query, fullragchat_temp, fullragchat_stop_words, fu
                     # cleanup as LLM tends to be chatting and not listen to just the filename please...
                     # Should be json like {"filename": "return_filename.faiss"}
                     # note: drops any comments from LLM...
-                    match = re.search(r'"filename":\s+"([^"]+)"', selected_rag)
-                    clean_selected_rag = match.group(1)
-                    answer = f'Retrieved document "{clean_selected_rag}". \n'
-                    clean_selected_rag = f'docs/{clean_selected_rag}'
-                    fullragchat_rag_source = clean_selected_rag
+                    pattern = r'"filename":\s+"([^"]+)"'
+                    match = re.search(pattern, selected_rag)
+                    if not match:
+                        answer = 'Unable to parse out a filename from:\n"' + selected_rag + '"\n'
+                        fullragchat_rag_source = f'docs/nothing.txt'
+                    else:
+                        clean_selected_rag = match.group(1)
+                        answer = f'Retrieved document "{clean_selected_rag}". \n'
+                        clean_selected_rag = f'docs/{clean_selected_rag}'
+                        fullragchat_rag_source = clean_selected_rag
                     answer += mistral_convo_rag(
                         fullragchat_embed_model=fullragchat_embed_model, 
                         mkey=mkey, 

@@ -294,7 +294,7 @@ Volumes of the eLibrary =
 
     {
       "rag_item": {
-        "filename": "cscltheories.pdf.faiss",
+        "filename": "cscltheories.faiss",
         "title": "",
         "volume": "",
         "chapter": "",
@@ -305,7 +305,7 @@ Volumes of the eLibrary =
 
     {
       "rag_item": {
-        "filename": "practices.pdf.faiss",
+        "filename": "practices.faiss",
         "title": "",
         "volume": "",
         "chapter": "",
