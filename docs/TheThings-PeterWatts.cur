@@ -1,30 +1,7 @@
 
 Curation content for HITL use. 
 
-Date and time      = 2024-04-06 23:41:22 
-Target document    = docs/TheThings-PeterWatts.txt 
-Saved FAISS DB     = docs/TheThings-PeterWatts.t.faiss 
-# vectors in DB    = 233 
-Model/temp DB      = mistral-embed / 0.25 
-Model/temp summary = open-mixtral-8x7b / 0.25 
-
-<summary>
-The text is a science fiction story titled "The Things" by Peter Watts, which offers a unique perspective on John Carpenter's film "The Thing." The story is presented as an account of the shapeshifting alien's thoughts and experiences during the events of the film. The alien, which refers to itself as "I," reflects on its origins, its purpose, and its interactions with the human characters in the story. It explains how it spreads by assimilating other lifeforms and how it has learned to hide and adapt to its environment. The alien has a sense of mission, believing it is a soldier at war with entropy, perfecting the universe through adaptation and communion.
-
-Throughout the story, the alien takes on various human and dog forms, including Blair, Copper, Childs, and Palmer. It reveals that it has infiltrated the human camp and is aware of their plans to destroy it. Despite being discovered and attacked, the alien manages to escape and destroy the camp, causing the humans to unknowingly destroy themselves in the process. The story ends with the alien reflecting on its experiences and its newfound understanding of the humans' inability to change and communicate, which it finds both tragic and fascinating.
-
-Key terms and jargon:
-
-1. Biomass: the alien uses this term to refer to organic matter that it can assimilate and take control of.
-2. Communion: the process by which the alien assimilates other lifeforms and gains access to their memories and knowledge.
-3. Shapeshifting: the alien's ability to transform its appearance and take on the form of other lifeforms.
-4. Adaptation: the alien's use of shapeshifting and communion to survive and thrive in various environments.
-5. Entropy: a concept from thermodynamics, referring to the disorder or randomness of a system; the alien sees itself as a force fighting against entropy, constantly striving for order and improvement.
-</summary>
-
-Curation content for HITL use. 
-
-Date and time      = 2024-04-06 23:51:15 
+Date and time      = 2024-04-09 12:04:09 
 Target document    = docs/TheThings-PeterWatts.txt 
 Saved FAISS DB     = docs/TheThings-PeterWatts.faiss 
 # vectors in DB    = 233 
@@ -32,19 +9,20 @@ Model/temp DB      = mistral-embed / 0.25
 Model/temp summary = open-mixtral-8x7b / 0.25 
 
 <summary>
-The text is a science fiction story titled "The Things" by Peter Watts, which offers a unique perspective on John Carpenter's film "The Thing." The story is presented as an account of the events from the perspective of the shape-shifting alien organism. The creature describes its origins, its mission to assimilate and adapt, and its experiences on Earth. It reflects on the concept of communication, change, and loneliness. The alien intelligence highlights the tragic misunderstandings that led to its conflict with the human characters, as they fail to understand its nature and intentions. Ultimately, the creature is left alone, marooned on Earth, as it waits for a chance to be taken back into space and find communion with other beings.
+The text is a science fiction story titled "The Things" by Peter Watts, which offers a unique perspective on John Carpenter's film "The Thing." The story is presented as an account of the events from the viewpoint of the creature, an extraterrestrial lifeform capable of assimilating and mimicking other organisms. The creature reflects on its experiences and the tragedy of its situation, where it is forced to destroy the inhabitants of an Antarctic research station to ensure its survival.
 
 Key points and themes:
 
-1. The story explores the perspective of the shape-shifting alien organism from the movie "The Thing."
-2. The creature emphasizes the importance of adaptation and communication.
-3. The alien intelligence reflects on the misunderstandings between humans and the creature, which result in conflict.
-4. The creature is left alone on Earth, longing for communion with other beings.
+1. The creature's perspective: The story is a unique retelling of "The Thing" from the viewpoint of the shapeshifting alien organism, which allows for a deeper understanding of its motivations and actions.
+2. Adaptation and survival: The creature's primary goal is to adapt and survive in various environments, which it achieves by assimilating and mimicking other lifeforms.
+3. Fear and mistrust: The story explores the consequences of fear and mistrust among the research station's inhabitants, as they struggle to determine who has been assimilated by the creature.
+4. Loneliness and isolation: The creature reflects on the loneliness it experiences, being the last of its kind and unable to communicate with the humans it encounters.
+5. Violence and conflict: The story highlights the violent consequences that arise from the creature's need to assimilate other organisms to survive and the humans' determination to destroy it.
 
 Interesting terms or jargon:
 
-1. Shape-shifting alien organism: a life form that can adapt and take the shape of other beings it assimilates.
-2. Communion: the concept of sharing information and connecting with other beings on a deeper level.
-3. Adaptation: the ability to change and evolve in response to new environments or situations.
-4. Top-down constraint: a theoretical concept suggesting that higher-level structures limit the evolution and adaptation of lower-level components.
+1. Assimilation: The process by which the creature absorbs and mimics other lifeforms.
+2. Biomass: A term used to describe the organic material that the creature can assimilate.
+3. Mimicry: The creature's ability to take on the appearance and characteristics of the organisms it has assimilated.
+4. Shapeshifting: The creature's capacity to transform its shape and form, allowing it to adapt to various environments and situations.
 </summary>

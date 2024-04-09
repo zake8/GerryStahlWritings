@@ -109,7 +109,7 @@ def get_rag_text(query): # loads from loader fullragchat_rag_source path/file w/
         answer = "Unable to make loader for " + fullragchat_rag_source
         return answer
     # from https://docs.mistral.ai/guides/basic-RAG/
-    docs = loader.load() # docs is a list...
+    docs = loader.load() # docs is a type 'document'...
     return docs
 
 def rag_text_function(query):
@@ -191,6 +191,7 @@ Answer:
 """
 
 def injest_document(model, fullragchat_embed_model, mkey, query, fullragchat_temp):
+    logging.info(f'===> Attempting injestion on "{fullragchat_rag_source}"')
     answer = ''
     pattern = r'\.([a-zA-Z]{3,5})$'
     match = re.search(pattern, fullragchat_rag_source) # global
@@ -200,7 +201,7 @@ def injest_document(model, fullragchat_embed_model, mkey, query, fullragchat_tem
     rag_ext = match.group(1)
     # get text
     rag_text = get_rag_text(query)
-    answer += 'Read "' + fullragchat_rag_source + '" \n'
+    answer += f'Read "{fullragchat_rag_source}". '
     # prep summary
     summary_text_for_cur = create_summary(
         to_sum=rag_text, 
@@ -210,12 +211,11 @@ def injest_document(model, fullragchat_embed_model, mkey, query, fullragchat_tem
     base_fn = fullragchat_rag_source[:-(len(rag_ext)+1)]
     # write _loadered.txt to disk
     txtfile_fn = f'{base_fn}_loadered.txt'
-    ##### rag_text_str = ' '.join(rag_text) # must be str, not list...; or iterate list in write!?
+    text_string = rag_text[0].page_content # LangChain document object is a list, each list item is a dictionary with two keys, page_content and metadata
     with open(txtfile_fn, 'a') as file: # 'a' = append, create new if none
-        for item in rag_text: # iterate thru list...
-            file.write(item)
+        file.write(text_string)
     logging.info(f'===> Saved new .txt file, "{txtfile_fn}"')
-    answer += 'Wrote "' + txtfile_fn + '" \n'
+    answer += f'Wrote "{txtfile_fn}". '
     # write FAISS to disk
     # Split text into chunks
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=my_chunk_size, chunk_overlap=my_chunk_overlap)
@@ -228,7 +228,7 @@ def injest_document(model, fullragchat_embed_model, mkey, query, fullragchat_tem
     # Could not load library with AVX2 support due to: ModuleNotFoundError("No module named 'faiss.swigfaiss_avx2'")
     vector.save_local(faiss_index_fn)
     logging.info(f'===> saved new FAISS, "{faiss_index_fn}"')
-    answer += 'Wrote "' + faiss_index_fn + '" \n'
+    answer += f'Wrote "{faiss_index_fn}". '
     # write new .cur file
     curfile_fn = f'{base_fn}.cur'
     date_time = datetime.now()
@@ -243,7 +243,7 @@ def injest_document(model, fullragchat_embed_model, mkey, query, fullragchat_tem
     with open(curfile_fn, 'a') as file: # 'a' = append, create new if none
         file.write(curfile_content)
     logging.info(f'===> saved new .cur file, "{curfile_fn}"')
-    answer += 'Wrote "' + curfile_fn + '" \n'
+    answer += f'Wrote "{curfile_fn}". '
     # add name and summary to rag source clue file for LLM to use!
     faiss_index_fn = faiss_index_fn[5:] # strip off leading 'docs/' so as not to double it up later ### review
     clue_file_text  = '\n'
@@ -261,7 +261,7 @@ def injest_document(model, fullragchat_embed_model, mkey, query, fullragchat_tem
     with open(rag_source_clue_value, 'a') as file: # 'a' = append, file pointer placed at end of file
         file.write(clue_file_text)
     logging.info(f'===> Added new .faiss and summary to "{rag_source_clue_value}"')
-    answer += 'Updated "' + rag_source_clue_value + '" \n'
+    answer += f'Updated "{rag_source_clue_value}". '
     return answer
 
 def mistral_convo_rag(fullragchat_embed_model, mkey, model, fullragchat_temp, query):

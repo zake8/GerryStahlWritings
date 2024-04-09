@@ -48,17 +48,6 @@ Volumes_of_the_eLibrary =
 
     {
       "rag_item": {
-        "filename": "TheThings-PeterWatts.txt",
-        "title": "The Things by Peter Watts",
-        "volume": "",
-        "chapter": "",
-        "summary": "The text is a science fiction story titled "The Things" by Peter Watts. The story is a retelling of the 1982 film "The Thing"from the perspective of the shape-shifting alien. The alien, who refers to itself as "I," describes how it crashes on Earth and takes over the bodies of various researchers at an Antarctic base. However, it finds that the beings on this planet are very different from those it has encountered before - they are not open to communion or assimilation, and instead attack it on sight. The alien is eventually destroyed by the last remaining researcher, MacReady. The story explores themes of isolation, fear of the unknown, and the desire to communicate and understand other beings. The alien's perspective highlights the violence and hostility it faces on this planet, and its attempts to understand and communicate with the humans it encounters. The story also touches on the idea of what it means to be alive and the value of individuality versus communion. The text uses science fiction tropes to explore these themes and presents the alien's perspective through vivid and descriptive language."
-        "txt_filename": "TheThings-PeterWatts.txt",
-      }
-    }
-
-    {
-      "rag_item": {
         "filename": "marx.pdf",
         "title": "Marx and Heidegger (1975)",
         "volume": "Volume 1.",
@@ -332,29 +321,28 @@ Key terms and jargon:
     } 
   } 
 
-
   { 
     "rag_item": { 
       "filename": "TheThings-PeterWatts.faiss", 
       "title": "", 
       "volume": "", 
       "chapter": "", 
-      "summary": "The text is a science fiction story titled "The Things" by Peter Watts, which offers a unique perspective on John Carpenter's film "The Thing." The story is presented as an account of the events from the perspective of the shape-shifting alien organism. The creature describes its origins, its mission to assimilate and adapt, and its experiences on Earth. It reflects on the concept of communication, change, and loneliness. The alien intelligence highlights the tragic misunderstandings that led to its conflict with the human characters, as they fail to understand its nature and intentions. Ultimately, the creature is left alone, marooned on Earth, as it waits for a chance to be taken back into space and find communion with other beings.
+      "summary": "The text is a science fiction story titled "The Things" by Peter Watts, which offers a unique perspective on John Carpenter's film "The Thing." The story is presented as an account of the events from the viewpoint of the creature, an extraterrestrial lifeform capable of assimilating and mimicking other organisms. The creature reflects on its experiences and the tragedy of its situation, where it is forced to destroy the inhabitants of an Antarctic research station to ensure its survival.
 
 Key points and themes:
 
-1. The story explores the perspective of the shape-shifting alien organism from the movie "The Thing."
-2. The creature emphasizes the importance of adaptation and communication.
-3. The alien intelligence reflects on the misunderstandings between humans and the creature, which result in conflict.
-4. The creature is left alone on Earth, longing for communion with other beings.
+1. The creature's perspective: The story is a unique retelling of "The Thing" from the viewpoint of the shapeshifting alien organism, which allows for a deeper understanding of its motivations and actions.
+2. Adaptation and survival: The creature's primary goal is to adapt and survive in various environments, which it achieves by assimilating and mimicking other lifeforms.
+3. Fear and mistrust: The story explores the consequences of fear and mistrust among the research station's inhabitants, as they struggle to determine who has been assimilated by the creature.
+4. Loneliness and isolation: The creature reflects on the loneliness it experiences, being the last of its kind and unable to communicate with the humans it encounters.
+5. Violence and conflict: The story highlights the violent consequences that arise from the creature's need to assimilate other organisms to survive and the humans' determination to destroy it.
 
 Interesting terms or jargon:
 
-1. Shape-shifting alien organism: a life form that can adapt and take the shape of other beings it assimilates.
-2. Communion: the concept of sharing information and connecting with other beings on a deeper level.
-3. Adaptation: the ability to change and evolve in response to new environments or situations.
-4. Top-down constraint: a theoretical concept suggesting that higher-level structures limit the evolution and adaptation of lower-level components.", 
-      "txt_filename": "", 
+1. Assimilation: The process by which the creature absorbs and mimics other lifeforms.
+2. Biomass: A term used to describe the organic material that the creature can assimilate.
+3. Mimicry: The creature's ability to take on the appearance and characteristics of the organisms it has assimilated.
+4. Shapeshifting: The creature's capacity to transform its shape and form, allowing it to adapt to various environments and situations.", 
+      "txt_filename": "docs/TheThings-PeterWatts_loadered.txt", 
     } 
   } 
-

@@ -20,9 +20,9 @@
 	<a id="spot"></a>
 	<form action="/fullragchat_pending" method="post">
 
-		<br>
-		<br>
-		<br>
+		<!-- query text box with no click to submit while inferencing -->
+		<textarea rows="8" cols="120"></textarea>
+		<!-- query text box with no click to submit while inferencing -->
 
 		<input type="text" name="model" value="{{fullragchat_model}}">
 		<lable for="model"><strong>LLM model</strong></lable> - 
@@ -60,7 +60,6 @@
 	chatbot_command.summary()<br>
 	chatbot_command.injest()<br>
 	chatbot_command.download()<br>
-	chatbot_command.list()<br>
 	docs/rag_source_clues.txt controls rag selection<br>
 	</body>
 </html>
