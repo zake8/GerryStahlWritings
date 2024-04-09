@@ -62,15 +62,27 @@ from mistralai.models.chat_completion import ChatMessage ### is this used?
 
 # +++++++++++++++++++++++++++
 # initialize global variables
-chatbot = (f'GerBot')
+
+# you can change this
 user_username_in_chat = "User"
-rag_source_clue_value = 'docs/rag_source_clues.txt' # doc helps llm choose rag file
+
+# you can change these...
+chatbot = (f'GerBot')
 my_chunk_size = 250
 my_chunk_overlap = 37
+rag_source_clue_value = 'docs/rag_source_clues.txt' # doc helps llm choose rag file
 # chunk_size= and chunk_overlap, what should they be, how do they relate to file size, word/token/letter count?
 # what should overlap % be to retain meaning and searchability?
+
+# change these in fullragchat_init()
 fullragchat_history = []
 fullragchat_rag_source = "docs/nothing.txt"
+fullragchat_model = ''
+fullragchat_temp = ''
+fullragchat_stop_words = ''
+fullragchat_embed_model = ''
+query = ''
+
 # +++++++++++++++++++++++++++
 logging.info(f'===> Starting main')
 
@@ -263,6 +275,9 @@ def mistral_convo_rag(fullragchat_embed_model, mkey, model, fullragchat_temp, qu
     # Potentially dangerious - load only local known safe files
     ### need to implement this safety check!
     ### if fullragchat_rag_source contains http or double wack "//" then set answer = 'illegal faiss source' and return
+    embeddings = MistralAIEmbeddings(
+            model=fullragchat_embed_model, 
+            mistral_api_key=mkey)
     loaded_vector_db = FAISS.load_local(fullragchat_rag_source, embeddings, allow_dangerous_deserialization=True)
     retriever = loaded_vector_db.as_retriever()
     # this sequence seems to use query value so the above, if not in a langchain pipe as a runnable would read vector.as_retriever(query)
@@ -327,7 +342,7 @@ def chat_query_return(model, query, fullragchat_temp, fullragchat_stop_words, fu
     stop_words_list = fullragchat_stop_words.split(', ')
     if stop_words_list == ['']: stop_words_list = None
     mkey = os.getenv('Mistral_API_key')
-    if query.startswith(f'{chatbot}_command.': # check for overrides
+    if query.startswith(f'{chatbot}_command.'): # check for overrides
         ### check if user is an admin
         meth = '' ###
         path_filename = '' ###
