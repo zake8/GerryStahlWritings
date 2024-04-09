@@ -381,14 +381,24 @@ def chat_query_return(model, query, fullragchat_temp, fullragchat_stop_words, fu
         clean_selected_rag = filenames[0]
         answer += f'Selecting document "{clean_selected_rag}". '
         fullragchat_rag_source = f'docs/{clean_selected_rag}'
+        if not os.path.exists(fullragchat_rag_source):
+            answer += f'The file selected does not exist... '
+            fullragchat_rag_source = f'docs/nothing.faiss'
+        pattern = r'\.([a-zA-Z]{3,5})$'
+        match = re.search(pattern, clean_selected_rag)
+        if match:
+            rag_ext = match.group(1)
+            if rag_ext != 'faiss':
+                answer += f'.faiss is required at this point... '
+                fullragchat_rag_source = f'docs/nothing.faiss'
+        else:
+            answer += f'There is no extension found on "{fullragchat_rag_source}". '
+            fullragchat_rag_source = f'docs/nothing.faiss'
     else:
         answer += 'Unable to parse out a filename from:\n"' + selected_rag + '"\n'
-        fullragchat_rag_source = f'docs/nothing.txt'
-    if not os.path.exists(fullragchat_rag_source):
-        answer += f'The file selected does not exist...'
-        fullragchat_rag_source = f'docs/nothing.txt'
+        fullragchat_rag_source = f'docs/nothing.faiss'
     logging.info(f'===> Second/last of the double LLM pass')
-    ### sanity check that filename is docs/ and ends in .txt or .faiss
+    ### sanity check that filename is docs/ and ends in .faiss
     answer += mistral_convo_rag(
         fullragchat_embed_model=fullragchat_embed_model, 
         mkey=mkey, 
