@@ -3,10 +3,7 @@
 ### TODO:
 ### break pdf txt into chapters w/ book and chapter summaries
 ### Q: what are max token in sizes per model? A: Mixtral-8x7b = 32k token context 
-### botname_cmd.summary(path_filename, template_additions)
-### botname_cmd.injest(path_filename, template_additions)
 ### Ability to load a (small) text file as a rag doc and hit LLM w/ whole thing, no vector query 
-##### function cleanup...
 ##### misc cleanup
 
 # GerBot project is an LLM RAG chat intended to make http://gerrystahl.net/pub/index.html even more accessible
@@ -53,6 +50,7 @@ import socket
 import random
 import os
 import re
+import requests
 from datetime import datetime
 from langchain_community.document_loaders import PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
@@ -69,8 +67,8 @@ from langchain_core.runnables import RunnableParallel
 from langchain_core.runnables import RunnablePassthrough
 from langchain_mistralai.chat_models import ChatMistralAI
 from langchain_mistralai.embeddings import MistralAIEmbeddings
-from mistralai.client import MistralClient ### is this used?
-from mistralai.models.chat_completion import ChatMessage ### is this used?
+##### from mistralai.client import MistralClient
+##### from mistralai.models.chat_completion import ChatMessage
 
 @app.route("/")
 def root():
@@ -199,6 +197,12 @@ def injest_document(model, fullragchat_embed_model, mkey, query, fullragchat_tem
         answer += f'There is no extension found on "{fullragchat_rag_source}"'
         return answer
     rag_ext = match.group(1)
+    base_fn = fullragchat_rag_source[:-(len(rag_ext)+1)]
+    faiss_index_fn = f'{base_fn}.faiss'
+    # Check if file to save already exists...
+    if os.path.exists(faiss_index_fn):
+        answer += f'{faiss_index_fn} already exists; please delete and then retry. '
+        return answer
     # get text
     rag_text = get_rag_text(query)
     answer += f'Read "{fullragchat_rag_source}". '
@@ -208,19 +212,18 @@ def injest_document(model, fullragchat_embed_model, mkey, query, fullragchat_tem
         model=model, 
         mkey=mkey, 
         fullragchat_temp=fullragchat_temp)
-    base_fn = fullragchat_rag_source[:-(len(rag_ext)+1)]
     # write _loadered.txt to disk
-    txtfile_fn = f'{base_fn}_loadered.txt'
-    text_string = rag_text[0].page_content # LangChain document object is a list, each list item is a dictionary with two keys, page_content and metadata
-    with open(txtfile_fn, 'a') as file: # 'a' = append, create new if none
-        file.write(text_string)
-    logging.info(f'===> Saved new .txt file, "{txtfile_fn}"')
-    answer += f'Wrote "{txtfile_fn}". '
+    if rag_ext != 'txt': #don't write out a '_loadered.txt' if input was '.txt'
+        txtfile_fn = f'{base_fn}_loadered.txt'
+        text_string = rag_text[0].page_content # LangChain document object is a list, each list item is a dictionary with two keys, page_content and metadata
+        with open(txtfile_fn, 'a') as file: # 'a' = append, create new if none
+            file.write(text_string)
+        logging.info(f'===> Saved new .txt file, "{txtfile_fn}"')
+        answer += f'Wrote "{txtfile_fn}". '
     # write FAISS to disk
     # Split text into chunks
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=my_chunk_size, chunk_overlap=my_chunk_overlap)
     documents = text_splitter.split_documents(rag_text)
-    faiss_index_fn = f'{base_fn}.faiss'
     embeddings = MistralAIEmbeddings(
                 model=fullragchat_embed_model, 
                 mistral_api_key=mkey)
@@ -245,7 +248,8 @@ def injest_document(model, fullragchat_embed_model, mkey, query, fullragchat_tem
     logging.info(f'===> saved new .cur file, "{curfile_fn}"')
     answer += f'Wrote "{curfile_fn}". '
     # add name and summary to rag source clue file for LLM to use!
-    faiss_index_fn = faiss_index_fn[5:] # strip off leading 'docs/' so as not to double it up later ### review
+    strip = len(f'{docs_dir}/')
+    faiss_index_fn = faiss_index_fn[strip:] # strip off leading 'docs/' so as not to double it up later
     clue_file_text  = '\n'
     clue_file_text += '  { \n'
     clue_file_text += '    "rag_item": { \n'
@@ -339,7 +343,7 @@ def chat_query_return(model, query, fullragchat_temp, fullragchat_stop_words, fu
     ### check if user is an admin !!!
     pattern = r'^chatbot_command\.([a-z]+)\(([^)]+)\)$'
     match = re.search(pattern, query)
-    if match:
+    if match: # override for commands
         meth = match.group(1)
         path_filename = match.group(2)
         pattern = r'\.([a-zA-Z]{3,5})$'
@@ -361,7 +365,6 @@ def chat_query_return(model, query, fullragchat_temp, fullragchat_stop_words, fu
                         fullragchat_temp=fullragchat_temp )
                     return answer
                 elif meth == 'injest': # Saves X as .txt and .faiss w/ .cur file and adds to rag_source_clue_value
-                    ### check if file to save already exists
                     fullragchat_rag_source = path_filename
                     answer = injest_document(
                         model=model, 
@@ -370,24 +373,31 @@ def chat_query_return(model, query, fullragchat_temp, fullragchat_stop_words, fu
                         query=query, 
                         fullragchat_temp=fullragchat_temp )
                     return answer
-                elif meth == 'download': ### Saves X as X (slightly low priority to build)
+                elif meth == 'download': ### Saves X as X
+                    local_filename = os.path.basename(path_filename)
                     ### check if file to save already exists
-                    fullragchat_rag_source = path_filename
-                    ### download_stuff()
-                    answer = f'Download not implemented; just use ssh or WinSCP'
-                    # answer = f'Downloaded "{path_filename}".'
+                    if os.path.exists(docs_dir + '/' + local_filename):
+                        answer += f'{local_filename} already exists; please delete and then retry. '
+                        return answer
+                    response = requests.get(path_filename)
+                    if response.status_code == 200:
+                        with open(local_filename, 'wb') as file:
+                            file.write(response.content)
+                        answer += f'Downloaded and saved as {local_filename}. '
+                    else:
+                        answer += f'Fail to download {path_filename}, status code: {response.status_code} '
                     return answer
                 elif meth == 'list': ### lists all X (low priority to build)
                     fullragchat_rag_source = rag_source_clue_value
                     # list docs dir too; faiss, txt, pdf, etc.
                     download_stuff()
-                    answer = f'List not implemented; just use ssh or WinSCP'
+                    answer = f'List not implemented; just use ssh or WinSCP. '
                     # answer = f'Downloaded "{path_filename}".'
                     return answer
                 elif meth == 'delete': ### deletes X (low priority to build)
                     ### check if file to save already exists
                     ### delete file
-                    answer = f'Delete not implemented; just use ssh or WinSCP'
+                    answer = f'Delete not implemented; just use ssh or WinSCP. '
                     # answer = f'Deleted "{path_filename}".'
                     return answer
                 else:

@@ -346,3 +346,15 @@ Interesting terms or jargon:
       "txt_filename": "docs/TheThings-PeterWatts_loadered.txt", 
     } 
   } 
+
+  { 
+    "rag_item": { 
+      "filename": "nothing.faiss", 
+      "title": "", 
+      "volume": "", 
+      "chapter": "", 
+      "summary": "The text provided does not contain any substantial information or key points as it is a response indicating that a RAG (Retrieval Augmented Generative AI) text has not been provided. The text simply states that a RAG text is required and refers to a document located at 'docs/nothing.txt'. There are no notable themes, terms, or jargon presented in the text.", 
+      "txt_filename": "docs/nothing_loadered.txt", 
+    } 
+  } 
+

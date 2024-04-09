@@ -1,0 +1,13 @@
+
+Curation content for HITL use. 
+
+Date and time      = 2024-04-09 12:14:39 
+Target document    = docs/nothing.txt 
+Saved FAISS DB     = docs/nothing.faiss 
+# vectors in DB    = 1 
+Model/temp DB      = mistral-embed / 0.25 
+Model/temp summary = open-mixtral-8x7b / 0.25 
+
+<summary>
+The text provided does not contain any substantial information or key points as it is a response indicating that a RAG (Retrieval Augmented Generative AI) text has not been provided. The text simply states that a RAG text is required and refers to a document located at 'docs/nothing.txt'. There are no notable themes, terms, or jargon presented in the text.
+</summary>
