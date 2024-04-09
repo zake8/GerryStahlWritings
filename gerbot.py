@@ -347,15 +347,17 @@ def chat_query_return(model, query, fullragchat_temp, fullragchat_stop_words, fu
         match = re.search(pattern, path_filename)
         if match:
             rag_ext = match.group(1)
-            if rag_ext != ('pdf' or 'html' or 'htm' or 'txt' or 'json'):
-                answer += 'Error: Invalid extension request.'
+            if (rag_ext != 'pdf') and (rag_ext != 'html') and (rag_ext != 'htm') and (rag_ext != 'txt') and (rag_ext != 'json'):
+                answer += f'Error: Invalid extension request, "{rag_ext}".'
                 return answer
             else:
+                answer += f'would issue steps to {meth} {path_filename}.'
+                return answer
                 if meth == 'summary': # Takes X and returns summary to chat
                     answer = f'Summary of "{path_filename}": ' + '\n'
                     fullragchat_rag_source = path_filename
                     some_text_blob = get_rag_text(query)
-                    answer += create_summary()
+                    answer += create_summary(
                         to_sum=some_text_blob, 
                         model=model, 
                         mkey=mkey, 
