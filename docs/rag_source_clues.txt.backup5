@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
 prompt = """
-Parse json formated "Volumes_of_the_eLibrary" and return a value from a "filename" label; in other words, 
+Parse json formated Volumes_of_the_eLibrary and return a value from a "filename" label; 
+in other words, 
 check against the summaries and return a "filename.faiss" (or "filename.txt").
 """
 
@@ -34,16 +35,16 @@ Volumes_of_the_eLibrary =
       }
     }
 
-  { 
-    "rag_item": { 
-      "filename": "nothing.faiss", 
-      "title": "", 
-      "volume": "", 
-      "chapter": "", 
-      "summary": "The text provided does not contain any substantial information or key points as it is a response indicating that a RAG (Retrieval Augmented Generative AI) text has not been provided. The text simply states that a RAG text is required and refers to a document located at 'docs/nothing.txt'. There are no notable themes, terms, or jargon presented in the text.", 
-      "txt_filename": "docs/nothing_loadered.txt", 
-    } 
-  } 
+    {
+      "rag_item": {
+        "filename": "nothing.txt",
+        "title": "",
+        "volume": "",
+        "chapter": "",
+        "summary": "For worst case fallback, when no RAG text is selectable/chooseable/appropriate."
+        "txt_filename": "nothing.txt", 
+      }
+    }
 
     {
       "rag_item": {
@@ -298,3 +299,80 @@ Volumes_of_the_eLibrary =
       }
     }
 }
+
+  { 
+    "rag_item": { 
+      "filename": "TheThings-PeterWatts.faiss", 
+      "title": "", 
+      "volume": "", 
+      "chapter": "", 
+      "summary": "The text is a science fiction story titled "The Things" by Peter Watts, which offers a unique perspective on John Carpenter's film "The Thing." The story is presented as an account of the shapeshifting alien's thoughts and experiences during the events of the film. The alien, which refers to itself as "I," reflects on its origins, its purpose, and its interactions with the human characters in the story. It explains how it spreads by assimilating other lifeforms and how it has learned to hide and adapt to its environment. The alien has a sense of mission, believing it is a soldier at war with entropy, perfecting the universe through adaptation and communion.
+
+Throughout the story, the alien takes on various human and dog forms, including Blair, Copper, Childs, and Palmer. It reveals that it has infiltrated the human camp and is aware of their plans to destroy it. Despite being discovered and attacked, the alien manages to escape and destroy the camp, causing the humans to unknowingly destroy themselves in the process. The story ends with the alien reflecting on its experiences and its newfound understanding of the humans' inability to change and communicate, which it finds both tragic and fascinating.
+
+Key terms and jargon:
+
+1. Biomass: the alien uses this term to refer to organic matter that it can assimilate and take control of.
+2. Communion: the process by which the alien assimilates other lifeforms and gains access to their memories and knowledge.
+3. Shapeshifting: the alien's ability to transform its appearance and take on the form of other lifeforms.
+4. Adaptation: the alien's use of shapeshifting and communion to survive and thrive in various environments.
+5. Entropy: a concept from thermodynamics, referring to the disorder or randomness of a system; the alien sees itself as a force fighting against entropy, constantly striving for order and improvement.", 
+      "txt_filename": "", 
+    } 
+  } 
+
+  { 
+    "rag_item": { 
+      "filename": "TheThings-PeterWatts.faiss", 
+      "title": "", 
+      "volume": "", 
+      "chapter": "", 
+      "summary": "The text is a science fiction story titled "The Things" by Peter Watts, which offers a unique perspective on John Carpenter's film "The Thing." The story is presented as an account of the events from the viewpoint of the creature, an extraterrestrial lifeform capable of assimilating and mimicking other organisms. The creature reflects on its experiences and the tragedy of its situation, where it is forced to destroy the inhabitants of an Antarctic research station to ensure its survival.
+
+Key points and themes:
+
+1. The creature's perspective: The story is a unique retelling of "The Thing" from the viewpoint of the shapeshifting alien organism, which allows for a deeper understanding of its motivations and actions.
+2. Adaptation and survival: The creature's primary goal is to adapt and survive in various environments, which it achieves by assimilating and mimicking other lifeforms.
+3. Fear and mistrust: The story explores the consequences of fear and mistrust among the research station's inhabitants, as they struggle to determine who has been assimilated by the creature.
+4. Loneliness and isolation: The creature reflects on the loneliness it experiences, being the last of its kind and unable to communicate with the humans it encounters.
+5. Violence and conflict: The story highlights the violent consequences that arise from the creature's need to assimilate other organisms to survive and the humans' determination to destroy it.
+
+Interesting terms or jargon:
+
+1. Assimilation: The process by which the creature absorbs and mimics other lifeforms.
+2. Biomass: A term used to describe the organic material that the creature can assimilate.
+3. Mimicry: The creature's ability to take on the appearance and characteristics of the organisms it has assimilated.
+4. Shapeshifting: The creature's capacity to transform its shape and form, allowing it to adapt to various environments and situations.", 
+      "txt_filename": "docs/TheThings-PeterWatts_loadered.txt", 
+    } 
+  } 
+
+  { 
+    "rag_item": { 
+      "filename": "nothing.faiss", 
+      "title": "", 
+      "volume": "", 
+      "chapter": "", 
+      "summary": "The text provided does not contain any substantial information or key points as it is a response indicating that a RAG (Retrieval Augmented Generative AI) text has not been provided. The text simply states that a RAG text is required and refers to a document located at 'docs/nothing.txt'. There are no notable themes, terms, or jargon presented in the text.", 
+      "txt_filename": "docs/nothing_loadered.txt", 
+    } 
+  } 
+
+
+  { 
+    "rag_item": { 
+      "filename": ".faiss", 
+      "title": "", 
+      "volume": "", 
+      "chapter": "", 
+      "summary": "SteelRabbit Go is a summary of the game Go, a non-chance combinatorial game with perfect information. The text presents general terms such as "go" (encircling game), "ko" (can't repeat board position), "komi" (2nd move bonus), and "tsumego" (death and life). It also covers tactical terms, including "atari" (one liberty remaining), "iron bar" (straight connection), "one space jump" (skip over and leave one space), "knights move" (2x1 "L" move), "shicho" (ladder), "geta" (net capturing tactic), and "pincer (hasami)" (surrounds from both sides).
+
+The text introduces dynamic tension terms, such as "sente" (having initiative), "goté" (defending), and "reverse sente" (stops opponent from getting sente). Strategic terms like "fueski" (opening strategy), "kikashi" (move forcing a specific response), "tenuki" (not following the opponent's lead), "yose" (endgame-like tightening play), and "aji" (latent potential) are also discussed.
+
+Shape terms, such as "katachi" (shape), "double eye," "seki" (mutually alive pairs of white and black groups), "karui" (move basic to or causing a quality shape), "moyo" (framework for potential territory), "thickness" (well-connected but not heavy), and "thinness" (stretched out, loosely connected at best) are presented.
+
+The text also includes location names, book recommendations, sequence philosophies, rule sets/counting methods, resources, online servers, and lessons learned from AlphaGoZero.", 
+      "txt_filename": "index_loadered.txt", 
+    } 
+  } 
+

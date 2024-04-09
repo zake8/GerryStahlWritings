@@ -4,7 +4,6 @@
 ### break pdf txt into chapters w/ book and chapter summaries
 ### Q: what are max token in sizes per model? A: Mixtral-8x7b = 32k token context 
 ### Ability to load a (small) text file as a rag doc and hit LLM w/ whole thing, no vector query 
-##### misc cleanup
 
 # GerBot project is an LLM RAG chat intended to make http://gerrystahl.net/pub/index.html even more accessible
 # Generative AI "chat" about the gerrystahl.net writings
@@ -18,7 +17,7 @@
 # you can change this:
 user_username_in_chat = "User"
 # you can change these...:
-docs_dir = 'docs'
+docs_dir = 'docs' # ex: 'docs' or '/home/leet/GerryStahlWritings/docs' but not 'docs/'
 chatbot = f'GerBot'
 my_chunk_size = 250 # chunk_size= and chunk_overlap, what should they be, how do they relate to file size, word/token/letter count?
 my_chunk_overlap = 37 # what should overlap % be to retain meaning and searchability?
@@ -67,8 +66,6 @@ from langchain_core.runnables import RunnableParallel
 from langchain_core.runnables import RunnablePassthrough
 from langchain_mistralai.chat_models import ChatMistralAI
 from langchain_mistralai.embeddings import MistralAIEmbeddings
-##### from mistralai.client import MistralClient
-##### from mistralai.models.chat_completion import ChatMessage
 
 @app.route("/")
 def root():
@@ -197,7 +194,8 @@ def injest_document(model, fullragchat_embed_model, mkey, query, fullragchat_tem
         answer += f'There is no extension found on "{fullragchat_rag_source}"'
         return answer
     rag_ext = match.group(1)
-    base_fn = fullragchat_rag_source[:-(len(rag_ext)+1)]
+    base_fn = os.path.basename(fullragchat_rag_source) # strip path
+    base_fn = base_fn[:-(len(rag_ext)+1)] # strip extension
     faiss_index_fn = f'{base_fn}.faiss'
     # Check if file to save already exists...
     if os.path.exists(faiss_index_fn):
@@ -216,7 +214,7 @@ def injest_document(model, fullragchat_embed_model, mkey, query, fullragchat_tem
     if rag_ext != 'txt': #don't write out a '_loadered.txt' if input was '.txt'
         txtfile_fn = f'{base_fn}_loadered.txt'
         text_string = rag_text[0].page_content # LangChain document object is a list, each list item is a dictionary with two keys, page_content and metadata
-        with open(txtfile_fn, 'a') as file: # 'a' = append, create new if none
+        with open(docs_dir + '/' + txtfile_fn, 'a') as file: # 'a' = append, create new if none
             file.write(text_string)
         logging.info(f'===> Saved new .txt file, "{txtfile_fn}"')
         answer += f'Wrote "{txtfile_fn}". '
@@ -229,7 +227,7 @@ def injest_document(model, fullragchat_embed_model, mkey, query, fullragchat_tem
                 mistral_api_key=mkey)
     vector = FAISS.from_documents(documents, embeddings)
     # Could not load library with AVX2 support due to: ModuleNotFoundError("No module named 'faiss.swigfaiss_avx2'")
-    vector.save_local(faiss_index_fn)
+    vector.save_local(docs_dir + '/' + faiss_index_fn)
     logging.info(f'===> saved new FAISS, "{faiss_index_fn}"')
     answer += f'Wrote "{faiss_index_fn}". '
     # write new .cur file
@@ -243,7 +241,7 @@ def injest_document(model, fullragchat_embed_model, mkey, query, fullragchat_tem
     curfile_content += f'Model/temp DB      = {fullragchat_embed_model} / {fullragchat_temp} \n'
     curfile_content += f'Model/temp summary = {model} / {fullragchat_temp} \n'
     curfile_content += f'\n<summary>\n{summary_text_for_cur}\n</summary>\n'
-    with open(curfile_fn, 'a') as file: # 'a' = append, create new if none
+    with open(docs_dir + '/' + curfile_fn, 'a') as file: # 'a' = append, create new if none
         file.write(curfile_content)
     logging.info(f'===> saved new .cur file, "{curfile_fn}"')
     answer += f'Wrote "{curfile_fn}". '
@@ -354,7 +352,7 @@ def chat_query_return(model, query, fullragchat_temp, fullragchat_stop_words, fu
                 answer += f'Error: Invalid extension request, "{rag_ext}".'
                 return answer
             else:
-                if meth == 'summary': # Takes X and returns summary to chat
+                if meth == 'summary': # output to chat only
                     answer = f'Summary of "{path_filename}": ' + '\n'
                     fullragchat_rag_source = path_filename
                     some_text_blob = get_rag_text(query)
@@ -364,7 +362,7 @@ def chat_query_return(model, query, fullragchat_temp, fullragchat_stop_words, fu
                         mkey=mkey, 
                         fullragchat_temp=fullragchat_temp )
                     return answer
-                elif meth == 'injest': # Saves X as .txt and .faiss w/ .cur file and adds to rag_source_clue_value
+                elif meth == 'injest': # from web or local - saves X as .faiss (and .txt), w/ .cur file, and adds to rag_source_clue_value
                     fullragchat_rag_source = path_filename
                     answer = injest_document(
                         model=model, 
@@ -373,17 +371,16 @@ def chat_query_return(model, query, fullragchat_temp, fullragchat_stop_words, fu
                         query=query, 
                         fullragchat_temp=fullragchat_temp )
                     return answer
-                elif meth == 'download': ### Saves X as X
-                    local_filename = os.path.basename(path_filename)
-                    ### check if file to save already exists
-                    if os.path.exists(docs_dir + '/' + local_filename):
+                elif meth == 'download': # just save from web to local
+                    local_filename = docs_dir + '/' + os.path.basename(path_filename)
+                    if os.path.exists(local_filename):
                         answer += f'{local_filename} already exists; please delete and then retry. '
                         return answer
                     response = requests.get(path_filename)
                     if response.status_code == 200:
                         with open(local_filename, 'wb') as file:
                             file.write(response.content)
-                        answer += f'Downloaded and saved as {local_filename}. '
+                        answer += f'Downloaded {path_filename} and saved as {local_filename}. '
                     else:
                         answer += f'Fail to download {path_filename}, status code: {response.status_code} '
                     return answer
@@ -395,8 +392,8 @@ def chat_query_return(model, query, fullragchat_temp, fullragchat_stop_words, fu
                     # answer = f'Downloaded "{path_filename}".'
                     return answer
                 elif meth == 'delete': ### deletes X (low priority to build)
-                    ### check if file to save already exists
-                    ### delete file
+                    # check if file to save already exists
+                    # delete file
                     answer = f'Delete not implemented; just use ssh or WinSCP. '
                     # answer = f'Deleted "{path_filename}".'
                     return answer
@@ -476,7 +473,7 @@ def reset_fullragchat_history():
     global fullragchat_skin 
     global fullragchat_music
     fullragchat_history.clear()
-    fullragchat_history.append({'user':'-reset--', 'message':'reset'})
+    fullragchat_history.append({'user':'System', 'message':'Reset.'})
     return render_template('fullragchat.html', 
         fullragchat_history=fullragchat_history, 
         fullragchat_model=fullragchat_model, 
@@ -529,7 +526,7 @@ def fullragchat_init():
 
 def pending_fullragchat_history():
     global fullragchat_history
-    fullragchat_history.append({'user':'-reset', 'message':'pending - please wait for model inferences - small moving graphic on browser tab should indicate working'}) 
+    fullragchat_history.append({'user':'System', 'message':'pending - please wait for model inferences - small moving graphic on browser tab should indicate working'}) 
 
 def unpending_fullragchat_history():
     global fullragchat_history
