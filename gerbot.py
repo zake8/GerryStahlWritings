@@ -397,6 +397,21 @@ def chat_query_return(model, query, fullragchat_temp, fullragchat_stop_words, fu
                     answer = f'Delete not implemented; just use ssh or WinSCP. '
                     # answer = f'Deleted "{path_filename}".'
                     return answer
+                elif meth == 'batchinjestpdf': # batch injest from list text file
+                    if os.path.exists(path_filename):
+                        with open(path_filename, 'r') as file:
+                            batch_list = file.read()
+                        for item in batch_list:
+                            fullragchat_rag_source = item
+                            answer += injest_document(
+                                model=model, 
+                                fullragchat_embed_model=fullragchat_embed_model, 
+                                mkey=mkey, 
+                                query=query, 
+                                fullragchat_temp=fullragchat_temp )
+                    else:
+                        answer += f'Unable to batch from non-existent (local) file: "{path_filename}".'
+                    return answer
                 else:
                     answer += 'Error: Invalid command.'
                     return answer
