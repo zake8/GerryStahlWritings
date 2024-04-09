@@ -49,27 +49,18 @@ app = Flask(__name__)
 from dotenv import load_dotenv
 load_dotenv('./.env')
 
-##### # ConversationBufferWindowMemory setup
-##### from langchain.memory import ConversationBufferWindowMemory
-##### memory = ConversationBufferWindowMemory(k=14)
-
 import socket
 import random
 import os
 import re
-##### import json
 from datetime import datetime
 from langchain_community.document_loaders import PyPDFLoader
-##### from langchain.chains import RetrievalQA
-##### from langchain.chains import create_retrieval_chain
-##### from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders import JSONLoader
 from langchain_community.document_loaders import TextLoader
 from langchain_community.document_loaders import WebBaseLoader
 from langchain_community.embeddings import OllamaEmbeddings
 from langchain_community.llms import Ollama
-##### from langchain_community.vectorstores import Chroma
 from langchain_community.vectorstores import FAISS
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
@@ -199,38 +190,45 @@ Question:
 Answer:
 """
 
-def injest_document():
+def injest_document(model, fullragchat_embed_model, mkey, query, fullragchat_temp):
+    answer = ''
     pattern = r'\.([a-zA-Z]{3,5})$'
     match = re.search(pattern, fullragchat_rag_source) # global
     if not match:
-        answer = f'There is no extension found on "{fullragchat_rag_source}"'
+        answer += f'There is no extension found on "{fullragchat_rag_source}"'
         return answer
     rag_ext = match.group(1)
-    embeddings = MistralAIEmbeddings(
-                model=fullragchat_embed_model, 
-                mistral_api_key=mkey)
+    # get text
     rag_text = get_rag_text(query)
+    answer += 'Read "' + fullragchat_rag_source + '" \n'
+    # prep summary
     summary_text_for_cur = create_summary(
         to_sum=rag_text, 
         model=model, 
         mkey=mkey, 
         fullragchat_temp=fullragchat_temp)
     base_fn = fullragchat_rag_source[:-(len(rag_ext)+1)]
-    ### write _loadered.txt to disk
-    txtfile_fn = ''
-    ### txtfile_fn = f'{base_fn}_loadered.txt'
-    ### rag_text_srt = ' '.join(rag_text) # must be str, not list...
-    ### with open(txtfile_fn, 'a') as file: # 'a' = append, create new if none
-    ###     file.write(rag_text_srt)
-    ### logging.info(f'===> saved new .txt file, "{txtfile_fn}"')
+    # write _loadered.txt to disk
+    txtfile_fn = f'{base_fn}_loadered.txt'
+    ##### rag_text_str = ' '.join(rag_text) # must be str, not list...; or iterate list in write!?
+    with open(txtfile_fn, 'a') as file: # 'a' = append, create new if none
+        for item in rag_text: # iterate thru list...
+            file.write(item)
+    logging.info(f'===> Saved new .txt file, "{txtfile_fn}"')
+    answer += 'Wrote "' + txtfile_fn + '" \n'
+    # write FAISS to disk
     # Split text into chunks
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=my_chunk_size, chunk_overlap=my_chunk_overlap)
     documents = text_splitter.split_documents(rag_text)
     faiss_index_fn = f'{base_fn}.faiss'
+    embeddings = MistralAIEmbeddings(
+                model=fullragchat_embed_model, 
+                mistral_api_key=mkey)
     vector = FAISS.from_documents(documents, embeddings)
     # Could not load library with AVX2 support due to: ModuleNotFoundError("No module named 'faiss.swigfaiss_avx2'")
     vector.save_local(faiss_index_fn)
     logging.info(f'===> saved new FAISS, "{faiss_index_fn}"')
+    answer += 'Wrote "' + faiss_index_fn + '" \n'
     # write new .cur file
     curfile_fn = f'{base_fn}.cur'
     date_time = datetime.now()
@@ -245,8 +243,9 @@ def injest_document():
     with open(curfile_fn, 'a') as file: # 'a' = append, create new if none
         file.write(curfile_content)
     logging.info(f'===> saved new .cur file, "{curfile_fn}"')
+    answer += 'Wrote "' + curfile_fn + '" \n'
     # add name and summary to rag source clue file for LLM to use!
-    faiss_index_fn = faiss_index_fn[5:] # strip off leading 'docs/' so as not to double it up later
+    faiss_index_fn = faiss_index_fn[5:] # strip off leading 'docs/' so as not to double it up later ### review
     clue_file_text  = '\n'
     clue_file_text += '  { \n'
     clue_file_text += '    "rag_item": { \n'
@@ -262,8 +261,8 @@ def injest_document():
     with open(rag_source_clue_value, 'a') as file: # 'a' = append, file pointer placed at end of file
         file.write(clue_file_text)
     logging.info(f'===> Added new .faiss and summary to "{rag_source_clue_value}"')
-    ##### retriever = vector.as_retriever()
-    return None
+    answer += 'Updated "' + rag_source_clue_value + '" \n'
+    return answer
 
 def mistral_convo_rag(fullragchat_embed_model, mkey, model, fullragchat_temp, query):
     # load existing faiss, and use as retriever
@@ -351,8 +350,6 @@ def chat_query_return(model, query, fullragchat_temp, fullragchat_stop_words, fu
                 answer += f'Error: Invalid extension request, "{rag_ext}".'
                 return answer
             else:
-                answer += f'would issue steps to {meth} {path_filename}.'
-                return answer
                 if meth == 'summary': # Takes X and returns summary to chat
                     answer = f'Summary of "{path_filename}": ' + '\n'
                     fullragchat_rag_source = path_filename
@@ -366,26 +363,31 @@ def chat_query_return(model, query, fullragchat_temp, fullragchat_stop_words, fu
                 elif meth == 'injest': # Saves X as .txt and .faiss w/ .cur file and adds to rag_source_clue_value
                     ### check if file to save already exists
                     fullragchat_rag_source = path_filename
-                    injest_document()
-                    answer = f'Injested "{path_filename}".'
+                    answer = injest_document(
+                        model=model, 
+                        fullragchat_embed_model=fullragchat_embed_model, 
+                        mkey=mkey, 
+                        query=query, 
+                        fullragchat_temp=fullragchat_temp )
                     return answer
-                elif meth == 'download': ### Saves X as X
+                elif meth == 'download': ### Saves X as X (slightly low priority to build)
                     ### check if file to save already exists
                     fullragchat_rag_source = path_filename
                     ### download_stuff()
-                    answer = f'Downloaded "{path_filename}".'
+                    answer = f'Download not implemented; just use ssh or WinSCP'
+                    # answer = f'Downloaded "{path_filename}".'
                     return answer
-                elif meth == 'list': ### 
+                elif meth == 'list': ### lists all X (low priority to build)
                     fullragchat_rag_source = rag_source_clue_value
                     # list docs dir too; faiss, txt, pdf, etc.
                     download_stuff()
-                    answer = f'List Not implemented.'
+                    answer = f'List not implemented; just use ssh or WinSCP'
                     # answer = f'Downloaded "{path_filename}".'
                     return answer
-                elif meth == 'delete': ### 
+                elif meth == 'delete': ### deletes X (low priority to build)
                     ### check if file to save already exists
                     ### delete file
-                    answer = f'Delete Not implemented.'
+                    answer = f'Delete not implemented; just use ssh or WinSCP'
                     # answer = f'Deleted "{path_filename}".'
                     return answer
                 else:
@@ -437,15 +439,6 @@ def chat_query_return(model, query, fullragchat_temp, fullragchat_stop_words, fu
 
 """
 Reimplement:
-    pattern = r'\.([a-zA-Z]{3,5})$'
-    match = re.search(pattern, fullragchat_rag_source) # global
-    if not match:
-        answer = f'There is no extension found on "{fullragchat_rag_source}"'
-        return answer
-    rag_ext = match.group(1)
-    if (rag_ext == 'txt') or (rag_ext == 'pdf') or (rag_ext == 'html') or (rag_ext == 'htm') or (rag_ext == 'json'): # doc to injest
-    elif rag_ext =='faiss': 
-    
     if model == "fake_llm":
         answer = fake_llm(query)
     elif (model == "orca-mini") or 
@@ -584,8 +577,7 @@ def fullragchat_reply():
         query, 
         fullragchat_temp, 
         fullragchat_stop_words, 
-        fullragchat_embed_model,
-    )
+        fullragchat_embed_model )
     fullragchat_history.append({'user':chatbot, 'message':answer})
     logging.info(f'===> {chatbot}: {answer}')
     return render_template('fullragchat.html', 
