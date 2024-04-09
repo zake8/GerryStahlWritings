@@ -5,6 +5,7 @@
 ### Q: what are max token in sizes per model? A: Mixtral-8x7b = 32k token context 
 ### botname_cmd.summary(path_filename, template_additions)
 ### botname_cmd.injest(path_filename, template_additions)
+### Ability to load a (small) text file as a rag doc and hit LLM w/ whole thing, no vector query 
 ##### function cleanup...
 ##### misc cleanup
 
@@ -16,6 +17,32 @@
 # Based on public/shared APIs and FOSS samples
 # Built on Linux, Python, Apache, WSGI, Flask, LangChain, Ollama, Mistral, more
 
+# initialize global variables
+# you can change this:
+user_username_in_chat = "User"
+# you can change these...:
+docs_dir = 'docs'
+chatbot = f'GerBot'
+my_chunk_size = 250 # chunk_size= and chunk_overlap, what should they be, how do they relate to file size, word/token/letter count?
+my_chunk_overlap = 37 # what should overlap % be to retain meaning and searchability?
+rag_source_clue_value = f'{docs_dir}/rag_source_clues.txt' # doc helps llm choose rag file
+# change these in fullragchat_init() or UI:
+fullragchat_history = []
+fullragchat_rag_source = f'{docs_dir}/nothing.txt'
+fullragchat_model = ''
+fullragchat_temp = ''
+fullragchat_stop_words = ''
+fullragchat_embed_model = ''
+query = ''
+
+import logging
+logging.basicConfig(
+    filename = 'convo_rag_agent_retreival_chatbot.log', 
+    level = logging.INFO, 
+    filemode = 'a', 
+    format = '%(asctime)s -%(levelname)s - %(message)s')
+logging.info(f'===> Starting main')
+
 from flask import Flask, redirect, url_for, render_template, request
 app = Flask(__name__)
 
@@ -26,12 +53,6 @@ load_dotenv('./.env')
 ##### from langchain.memory import ConversationBufferWindowMemory
 ##### memory = ConversationBufferWindowMemory(k=14)
 
-import logging
-logging.basicConfig(
-    filename = 'convo_rag_agent_retreival_chatbot.log', 
-    level = logging.INFO, 
-    filemode = 'a', 
-    format = '%(asctime)s -%(levelname)s - %(message)s')
 import socket
 import random
 import os
@@ -59,32 +80,6 @@ from langchain_mistralai.chat_models import ChatMistralAI
 from langchain_mistralai.embeddings import MistralAIEmbeddings
 from mistralai.client import MistralClient ### is this used?
 from mistralai.models.chat_completion import ChatMessage ### is this used?
-
-# +++++++++++++++++++++++++++
-# initialize global variables
-
-# you can change this
-user_username_in_chat = "User"
-
-# you can change these...
-chatbot = (f'GerBot')
-my_chunk_size = 250
-my_chunk_overlap = 37
-rag_source_clue_value = 'docs/rag_source_clues.txt' # doc helps llm choose rag file
-# chunk_size= and chunk_overlap, what should they be, how do they relate to file size, word/token/letter count?
-# what should overlap % be to retain meaning and searchability?
-
-# change these in fullragchat_init()
-fullragchat_history = []
-fullragchat_rag_source = "docs/nothing.txt"
-fullragchat_model = ''
-fullragchat_temp = ''
-fullragchat_stop_words = ''
-fullragchat_embed_model = ''
-query = ''
-
-# +++++++++++++++++++++++++++
-logging.info(f'===> Starting main')
 
 @app.route("/")
 def root():
@@ -342,27 +337,58 @@ def chat_query_return(model, query, fullragchat_temp, fullragchat_stop_words, fu
     stop_words_list = fullragchat_stop_words.split(', ')
     if stop_words_list == ['']: stop_words_list = None
     mkey = os.getenv('Mistral_API_key')
-    if query.startswith(f'{chatbot}_command.'): # check for overrides
-        ### check if user is an admin
-        meth = '' ###
-        path_filename = '' ###
-        if meth == 'summary': # Takes X and returns summary
-            ### sanity check that filename is docs/ and ends in pdf html txt 
-            answer = f'Summary of "{path_filename}": ' + '\n'
-            fullragchat_rag_source = path_filename
-            some_text_blob = get_rag_text(query)
-            answer += create_summary(
-                to_sum=some_text_blob, 
-                model=model, 
-                mkey=mkey, 
-                fullragchat_temp=fullragchat_temp )
-            return answer
-        elif meth == 'injest': # Saves X as .txt and .faiss w/ .cur file and adds to rag_source_clue_value
-            ### sanity check that filename is docs/ and ends in pdf html txt 
-            fullragchat_rag_source = path_filename
-            injest_document()
-            answer = f'Injested "{path_filename}".'
-            return answer
+    ### check if user is an admin !!!
+    pattern = r'^chatbot_command\.([a-z]+)\(([^)]+)\)$'
+    match = re.search(pattern, query)
+    if match:
+        meth = match.group(1)
+        path_filename = match.group(2)
+        pattern = r'\.([a-zA-Z]{3,5})$'
+        match = re.search(pattern, path_filename)
+        if match:
+            rag_ext = match.group(1)
+            if rag_ext != ('pdf' or 'html' or 'htm' or 'txt' or 'json'):
+                answer += 'Error: Invalid extension request.'
+                return answer
+            else:
+                if meth == 'summary': # Takes X and returns summary to chat
+                    answer = f'Summary of "{path_filename}": ' + '\n'
+                    fullragchat_rag_source = path_filename
+                    some_text_blob = get_rag_text(query)
+                    answer += create_summary()
+                        to_sum=some_text_blob, 
+                        model=model, 
+                        mkey=mkey, 
+                        fullragchat_temp=fullragchat_temp )
+                    return answer
+                elif meth == 'injest': # Saves X as .txt and .faiss w/ .cur file and adds to rag_source_clue_value
+                    ### check if file to save already exists
+                    fullragchat_rag_source = path_filename
+                    injest_document()
+                    answer = f'Injested "{path_filename}".'
+                    return answer
+                elif meth == 'download': ### Saves X as X
+                    ### check if file to save already exists
+                    fullragchat_rag_source = path_filename
+                    ### download_stuff()
+                    answer = f'Downloaded "{path_filename}".'
+                    return answer
+                elif meth == 'list': ### 
+                    fullragchat_rag_source = rag_source_clue_value
+                    # list docs dir too; faiss, txt, pdf, etc.
+                    download_stuff()
+                    answer = f'List Not implemented.'
+                    # answer = f'Downloaded "{path_filename}".'
+                    return answer
+                elif meth == 'delete': ### 
+                    ### check if file to save already exists
+                    ### delete file
+                    answer = f'Delete Not implemented.'
+                    # answer = f'Deleted "{path_filename}".'
+                    return answer
+                else:
+                    answer += 'Error: Invalid command.'
+                    return answer
     logging.info(f'===> Starting first double LLM pass')
     # Figure out which staged rag doc to use
     global rag_source_clues
@@ -375,30 +401,30 @@ def chat_query_return(model, query, fullragchat_temp, fullragchat_stop_words, fu
     logging.info(f'===> selected_rag: {selected_rag}')
     # Should be "return_filename.faiss" or the like; sometimes LLM is chatty tho
     # Comments from LLM show in log, and in chat if unable to parse
+    # sanity check that filename is docs/ and ends in .faiss follows
     pattern = r'\b[A-Za-z0-9_-]+\.[A-Za-z0-9]{3,5}\b'
     filenames = re.findall(pattern, selected_rag)
     if filenames:
         clean_selected_rag = filenames[0]
         answer += f'Selecting document "{clean_selected_rag}". '
-        fullragchat_rag_source = f'docs/{clean_selected_rag}'
+        fullragchat_rag_source = f'{docs_dir}/{clean_selected_rag}'
         if not os.path.exists(fullragchat_rag_source):
             answer += f'The file selected does not exist... '
-            fullragchat_rag_source = f'docs/nothing.faiss'
+            fullragchat_rag_source = f'{docs_dir}/nothing.faiss'
         pattern = r'\.([a-zA-Z]{3,5})$'
         match = re.search(pattern, clean_selected_rag)
         if match:
             rag_ext = match.group(1)
             if rag_ext != 'faiss':
                 answer += f'.faiss is required at this point... '
-                fullragchat_rag_source = f'docs/nothing.faiss'
+                fullragchat_rag_source = f'{docs_dir}/nothing.faiss'
         else:
             answer += f'There is no extension found on "{fullragchat_rag_source}". '
-            fullragchat_rag_source = f'docs/nothing.faiss'
+            fullragchat_rag_source = f'{docs_dir}/nothing.faiss'
     else:
         answer += 'Unable to parse out a filename from:\n"' + selected_rag + '"\n'
         fullragchat_rag_source = f'docs/nothing.faiss'
     logging.info(f'===> Second/last of the double LLM pass')
-    ### sanity check that filename is docs/ and ends in .faiss
     answer += mistral_convo_rag(
         fullragchat_embed_model=fullragchat_embed_model, 
         mkey=mkey, 
