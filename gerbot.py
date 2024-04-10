@@ -107,6 +107,11 @@ def get_rag_text(query): # loads from loader fullragchat_rag_source path/file w/
     docs = loader.load() # docs is a type 'document'...
     return docs
 
+def get_rag_text_pdf_chapter(chap_num):
+    docs = ''
+    ### need to write this func...
+    return docs
+
 def rag_text_function(query):
     # function ignores passed query value
     # rag_source_clues is global defined in chat_query_return func
@@ -185,7 +190,7 @@ Question:
 Answer:
 """
 
-def injest_document(model, fullragchat_embed_model, mkey, query, fullragchat_temp):
+def injest_document(model, fullragchat_embed_model, mkey, query, fullragchat_temp, chap_num):
     logging.info(f'===> Attempting injestion on "{fullragchat_rag_source}"')
     answer = ''
     pattern = r'\.([a-zA-Z]{3,5})$'
@@ -202,7 +207,10 @@ def injest_document(model, fullragchat_embed_model, mkey, query, fullragchat_tem
         answer += f'{faiss_index_fn} already exists; please delete and then retry. '
         return answer
     # get text
-    rag_text = get_rag_text(query)
+    if chap_num: # pdf chapter number is provided
+        rag_text = get_rag_text_pdf_chapter(chap_num)
+    else: # None
+        rag_text = get_rag_text(query)
     answer += f'Read "{fullragchat_rag_source}". '
     # prep summary
     summary_text_for_cur = create_summary(
@@ -369,7 +377,8 @@ def chat_query_return(model, query, fullragchat_temp, fullragchat_stop_words, fu
                         fullragchat_embed_model=fullragchat_embed_model, 
                         mkey=mkey, 
                         query=query, 
-                        fullragchat_temp=fullragchat_temp )
+                        fullragchat_temp=fullragchat_temp,
+                        chap_num=None )
                     return answer
                 elif meth == 'download': # just save from web to local
                     local_filename = docs_dir + '/' + os.path.basename(path_filename)
@@ -402,17 +411,20 @@ def chat_query_return(model, query, fullragchat_temp, fullragchat_stop_words, fu
                         with open(path_filename, 'r') as file:
                             batch_list = file.read()
                         for item in batch_list:
-                            fullragchat_rag_source = item
-                            answer += injest_document(
-                                model=model, 
-                                fullragchat_embed_model=fullragchat_embed_model, 
-                                mkey=mkey, 
-                                query=query, 
-                                fullragchat_temp=fullragchat_temp )
+                            if item[0:2] != '# ': # skips comments
+                                ### split item into batch_pathfilename and chap_num
+                                fullragchat_rag_source = batch_pathfilename
+                                answer += injest_document(
+                                    model=model, 
+                                    fullragchat_embed_model=fullragchat_embed_model, 
+                                    mkey=mkey, 
+                                    query=query, 
+                                    fullragchat_temp=fullragchat_temp,
+                                    chap_num=chap_num )
                     else:
                         answer += f'Unable to batch from non-existent (local) file: "{path_filename}".'
                     return answer
-                else:
+                else: # Invalid command
                     answer += 'Error: Invalid command.'
                     return answer
     logging.info(f'===> Starting first double LLM pass')
