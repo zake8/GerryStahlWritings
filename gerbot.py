@@ -107,10 +107,13 @@ def get_rag_text(query): # loads from loader fullragchat_rag_source path/file w/
     docs = loader.load() # docs is a type 'document'...
     return docs
 
-def get_rag_text_pdf_chapter(chap_num):
-    docs = ''
-    ### need to write this func...
-    return docs
+def get_rag_text_pdf_pages(start_pdf_page, end_pdf_page): ###
+    text_string = ''
+    loader = PyPDFLoader(fullragchat_rag_source) # global
+    docs = loader.load()
+    for page_number in range(start_pdf_page-1, end_pdf_page-1)
+        text_string += docs[page_number].page_content
+    return text_string
 
 def rag_text_function(query):
     # function ignores passed query value
@@ -190,7 +193,7 @@ Question:
 Answer:
 """
 
-def injest_document(model, fullragchat_embed_model, mkey, query, fullragchat_temp, chap_num):
+def injest_document(model, fullragchat_embed_model, mkey, query, fullragchat_temp, start_pdf_page, end_pdf_page):
     logging.info(f'===> Attempting injestion on "{fullragchat_rag_source}"')
     answer = ''
     pattern = r'\.([a-zA-Z]{3,5})$'
@@ -201,16 +204,18 @@ def injest_document(model, fullragchat_embed_model, mkey, query, fullragchat_tem
     rag_ext = match.group(1)
     base_fn = os.path.basename(fullragchat_rag_source) # strip path
     base_fn = base_fn[:-(len(rag_ext)+1)] # strip extension
+    if start_pdf_page and end_pdf_page: # tweak filename to save with pdf page numbers
+        base_fn = f'{base_fn}-{start_pdf_page}-{end_pdf_page}'
     faiss_index_fn = f'{base_fn}.faiss'
     # Check if file to save already exists...
     if os.path.exists(faiss_index_fn):
         answer += f'{faiss_index_fn} already exists; please delete and then retry. '
         return answer
-    # get text
-    if chap_num: # pdf chapter number is provided
-        rag_text = get_rag_text_pdf_chapter(chap_num)
+    # Get text
+    if start_pdf_page and end_pdf_page: # pdf pages provided
+        rag_text = get_rag_text_pdf_pages(start_pdf_page=start_pdf_page, end_pdf_page=end_pdf_page) # gets string?
     else: # None
-        rag_text = get_rag_text(query)
+        rag_text = get_rag_text(query) # gets 'document'?
     answer += f'Read "{fullragchat_rag_source}". '
     # prep summary
     summary_text_for_cur = create_summary(
@@ -221,8 +226,11 @@ def injest_document(model, fullragchat_embed_model, mkey, query, fullragchat_tem
     # write _loadered.txt to disk
     if rag_ext != 'txt': #don't write out a '_loadered.txt' if input was '.txt'
         txtfile_fn = f'{base_fn}_loadered.txt'
+        ### need to closely check this as rag_text[0].page_content might only be the first page, losing the rest of doc!
         text_string = rag_text[0].page_content # LangChain document object is a list, each list item is a dictionary with two keys, page_content and metadata
         with open(docs_dir + '/' + txtfile_fn, 'a') as file: # 'a' = append, create new if none
+            if start_pdf_page and end_pdf_page:
+                file.write(f'Specifically PDF pages {start_pdf_page} to {end_pdf_page} \n')
             file.write(text_string)
         logging.info(f'===> Saved new .txt file, "{txtfile_fn}"')
         answer += f'Wrote "{txtfile_fn}". '
@@ -244,6 +252,8 @@ def injest_document(model, fullragchat_embed_model, mkey, query, fullragchat_tem
     curfile_content  = f'\nCuration content for HITL use. \n\n'
     curfile_content += f'Date and time      = {date_time.strftime("%Y-%m-%d %H:%M:%S")} \n'
     curfile_content += f'Target document    = {fullragchat_rag_source} \n'
+    if start_pdf_page and end_pdf_page:
+        curfile_content += f'PDF pages          = {start_pdf_page} to {end_pdf_page} \n'
     curfile_content += f'Saved FAISS DB     = {faiss_index_fn} \n'
     curfile_content += f'# vectors in DB    = {vector.index.ntotal} \n'
     curfile_content += f'Model/temp DB      = {fullragchat_embed_model} / {fullragchat_temp} \n'
@@ -261,8 +271,8 @@ def injest_document(model, fullragchat_embed_model, mkey, query, fullragchat_tem
     clue_file_text += '    "rag_item": { \n'
     clue_file_text += '      "filename": "' + faiss_index_fn + '", \n'
     clue_file_text += '      "title": "", \n'
-    clue_file_text += '      "volume": "", \n'
-    clue_file_text += '      "chapter": "", \n'
+    if start_pdf_page and end_pdf_page:
+        clue_file_text += '      "pages": "' + start_pdf_page + '" to "' + end_pdf_page + '", \n'
     clue_file_text += '      "summary": "' + summary_text_for_cur + '", \n'
     clue_file_text += '      "txt_filename": "' + txtfile_fn + '", \n'
     clue_file_text += '    } \n'
@@ -378,7 +388,8 @@ def chat_query_return(model, query, fullragchat_temp, fullragchat_stop_words, fu
                         mkey=mkey, 
                         query=query, 
                         fullragchat_temp=fullragchat_temp,
-                        chap_num=None )
+                        start_pdf_page=None, 
+                        end_pdf_page=None )
                     return answer
                 elif meth == 'download': # just save from web to local
                     local_filename = docs_dir + '/' + os.path.basename(path_filename)
@@ -412,15 +423,23 @@ def chat_query_return(model, query, fullragchat_temp, fullragchat_stop_words, fu
                             batch_list = file.read()
                         for item in batch_list:
                             if item[0:2] != '# ': # skips comments
-                                ### split item into batch_pathfilename and chap_num
-                                fullragchat_rag_source = batch_pathfilename
-                                answer += injest_document(
-                                    model=model, 
-                                    fullragchat_embed_model=fullragchat_embed_model, 
-                                    mkey=mkey, 
-                                    query=query, 
-                                    fullragchat_temp=fullragchat_temp,
-                                    chap_num=chap_num )
+                                pattern = r'^([\w.]+),\s*(\d+),\s*(\d+)$'
+                                match = re.search(pattern, item)
+                                if match:
+                                    batch_pathfilename = match.group(1)
+                                    start_pdf_page = match.group(2)
+                                    end_pdf_page = match.group(3)
+                                    fullragchat_rag_source = batch_pathfilename
+                                    answer += injest_document(
+                                        model=model, 
+                                        fullragchat_embed_model=fullragchat_embed_model, 
+                                        mkey=mkey, 
+                                        query=query, 
+                                        fullragchat_temp=fullragchat_temp,
+                                        start_pdf_page=start_pdf_page,
+                                        end_pdf_page=end_pdf_page )
+                                else:
+                                    answer += f'No file, page, page match for {item}! '
                     else:
                         answer += f'Unable to batch from non-existent (local) file: "{path_filename}".'
                     return answer
