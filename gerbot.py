@@ -477,10 +477,8 @@ def chat_query_return(model, query, fullragchat_temp, fullragchat_stop_words, fu
                                         fullragchat_temp=fullragchat_temp,
                                         start_pdf_page=None,
                                         end_pdf_page=None )
-                            else:
-                                answer += f'Can not process: "{item}" '
-                    
-                    print(answer)
+                                else:
+                                    answer += f'Can not process: "{item}" '
                 else:
                     answer += f'Unable to batch from non-existent (local) file: "{path_filename}".'
                 return answer
