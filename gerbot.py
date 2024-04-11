@@ -111,7 +111,7 @@ def get_rag_text_pdf_pages(start_pdf_page, end_pdf_page): ###
     text_string = ''
     loader = PyPDFLoader(fullragchat_rag_source) # global
     docs = loader.load()
-    for page_number in range(start_pdf_page-1, end_pdf_page-1)
+    for page_number in range(start_pdf_page-1, end_pdf_page-1):
         text_string += docs[page_number].page_content
     return text_string
 
@@ -213,28 +213,31 @@ def injest_document(model, fullragchat_embed_model, mkey, query, fullragchat_tem
         return answer
     # Get text
     if start_pdf_page and end_pdf_page: # pdf pages provided
-        rag_text = get_rag_text_pdf_pages(start_pdf_page=start_pdf_page, end_pdf_page=end_pdf_page) # gets string?
+        rag_text = get_rag_text_pdf_pages(start_pdf_page=start_pdf_page, end_pdf_page=end_pdf_page) # returns string type
     else: # None
-        rag_text = get_rag_text(query) # gets 'document'?
+        rag_text = get_rag_text(query) # returns 'document' type
     answer += f'Read "{fullragchat_rag_source}". '
-    # prep summary
+    # Prep summary
     summary_text_for_cur = create_summary(
         to_sum=rag_text, 
         model=model, 
         mkey=mkey, 
         fullragchat_temp=fullragchat_temp)
-    # write _loadered.txt to disk
+    # Write _loadered.txt to disk
     if rag_ext != 'txt': #don't write out a '_loadered.txt' if input was '.txt'
         txtfile_fn = f'{base_fn}_loadered.txt'
-        ### need to closely check this as rag_text[0].page_content might only be the first page, losing the rest of doc!
-        text_string = rag_text[0].page_content # LangChain document object is a list, each list item is a dictionary with two keys, page_content and metadata
+        text_string = ''
+        for page_number in range(0, len(rag_text) ):
+            text_string += rag_text[page_number].page_content
+            # LangChain document object is a list, each list item is a dictionary with two keys, 
+            # page_content and metadata
         with open(docs_dir + '/' + txtfile_fn, 'a') as file: # 'a' = append, create new if none
             if start_pdf_page and end_pdf_page:
                 file.write(f'Specifically PDF pages {start_pdf_page} to {end_pdf_page} \n')
             file.write(text_string)
         logging.info(f'===> Saved new .txt file, "{txtfile_fn}"')
         answer += f'Wrote "{txtfile_fn}". '
-    # write FAISS to disk
+    # Write FAISS to disk
     # Split text into chunks
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=my_chunk_size, chunk_overlap=my_chunk_overlap)
     documents = text_splitter.split_documents(rag_text)
@@ -242,11 +245,11 @@ def injest_document(model, fullragchat_embed_model, mkey, query, fullragchat_tem
                 model=fullragchat_embed_model, 
                 mistral_api_key=mkey)
     vector = FAISS.from_documents(documents, embeddings)
-    # Could not load library with AVX2 support due to: ModuleNotFoundError("No module named 'faiss.swigfaiss_avx2'")
+    ### Could not load library with AVX2 support due to: ModuleNotFoundError("No module named 'faiss.swigfaiss_avx2'")
     vector.save_local(docs_dir + '/' + faiss_index_fn)
     logging.info(f'===> saved new FAISS, "{faiss_index_fn}"')
     answer += f'Wrote "{faiss_index_fn}". '
-    # write new .cur file
+    # Write new .cur file
     curfile_fn = f'{base_fn}.cur'
     date_time = datetime.now()
     curfile_content  = f'\nCuration content for HITL use. \n\n'
@@ -263,7 +266,7 @@ def injest_document(model, fullragchat_embed_model, mkey, query, fullragchat_tem
         file.write(curfile_content)
     logging.info(f'===> saved new .cur file, "{curfile_fn}"')
     answer += f'Wrote "{curfile_fn}". '
-    # add name and summary to rag source clue file for LLM to use!
+    # Add name and summary to rag source clue file for LLM to use!
     strip = len(f'{docs_dir}/')
     faiss_index_fn = faiss_index_fn[strip:] # strip off leading 'docs/' so as not to double it up later
     clue_file_text  = '\n'
@@ -439,7 +442,7 @@ def chat_query_return(model, query, fullragchat_temp, fullragchat_stop_words, fu
                                         start_pdf_page=start_pdf_page,
                                         end_pdf_page=end_pdf_page )
                                 else:
-                                    answer += f'No file, page, page match for {item}! '
+                                    answer += f'No file, page, page, match for {item}! '
                     else:
                         answer += f'Unable to batch from non-existent (local) file: "{path_filename}".'
                     return answer
