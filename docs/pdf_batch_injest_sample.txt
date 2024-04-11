@@ -1,0 +1,11 @@
+# chatbot_command.batchinjestpdf(batch_list.txt)
+# batch_list.txt
+# pathfilename, start pdf page, end pdf page
+# must have all three col, must stick to format
+# hash and space only as first two charators for comment line
+docs/filename.pdf, 1, 10
+docs/filename.pdf, 11, 20
+docs/filename.pdf, 21, 30
+docs/filename.pdf, 31, 40
+docs/filename.pdf, 41, 50
+# done

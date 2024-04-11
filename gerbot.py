@@ -24,7 +24,7 @@ my_chunk_overlap = 37 # what should overlap % be to retain meaning and searchabi
 rag_source_clue_value = f'{docs_dir}/rag_source_clues.txt' # doc helps llm choose rag file
 # change these in fullragchat_init() or UI:
 fullragchat_history = []
-fullragchat_rag_source = f'{docs_dir}/nothing.txt'
+fullragchat_rag_source = f'{docs_dir}/nothing.txt' # no rag doc selected
 fullragchat_model = ''
 fullragchat_temp = ''
 fullragchat_stop_words = ''
@@ -374,7 +374,7 @@ def chat_query_return(model, query, fullragchat_temp, fullragchat_stop_words, fu
                 return answer
             else:
                 if meth == 'summary': # output to chat only
-                    answer = f'Summary of "{path_filename}": ' + '\n'
+                    answer += f'Summary of "{path_filename}": ' + '\n'
                     fullragchat_rag_source = path_filename
                     some_text_blob = get_rag_text(query)
                     answer += create_summary(
@@ -407,12 +407,27 @@ def chat_query_return(model, query, fullragchat_temp, fullragchat_stop_words, fu
                     else:
                         answer += f'Fail to download {path_filename}, status code: {response.status_code} '
                     return answer
-                elif meth == 'list': ### lists all X (low priority to build)
-                    fullragchat_rag_source = rag_source_clue_value
-                    # list docs dir too; faiss, txt, pdf, etc.
-                    download_stuff()
-                    answer = f'List not implemented; just use ssh or WinSCP. '
-                    # answer = f'Downloaded "{path_filename}".'
+                elif meth == 'listfiles': # lists available docs on disk
+                    extensions = (".faiss")
+                    answer += 'List of docs in {docs_dir} with {extensions} extension: '
+                    for file in os.listdir(docs_dir):
+                        if file.endswith(extensions):
+                            answer += '"' + file  + '" '
+                    answer += 'End of list. '
+                    return answer
+                elif meth == 'listclues': # lists available docs as per clues file
+                    answer += f'List of docs called out in "{rag_source_clue_value}": '
+                    with open(rag_source_clue_value, 'r') as file:
+                        clues_blob = file.read()
+                    clues = clues_blob.split('\n')
+                    for item in clues:
+                        pattern = r'"filename":\s*"([^"]+\.\w+)"'
+                        match = re.search(pattern, item)
+                        if match:
+                            filename_with_extension = match.group(1)
+                            base_filename, extension = filename_with_extension.rsplit('.', 1)
+                            if extension == 'faiss':
+                                answer += '"' + filename_with_extension  + '" '
                     return answer
                 elif meth == 'delete': ### deletes X (low priority to build)
                     # check if file to save already exists

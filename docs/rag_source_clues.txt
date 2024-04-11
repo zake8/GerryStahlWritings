@@ -29,7 +29,7 @@ Volumes_of_the_eLibrary =
         "title": "Format Example",
         "volume": "1",
         "chapter": "1",
-        "summary": "Format example; summary of some areas which should trigger return."
+        "summary": "Format example, not an actual document to return; summary of some areas which should trigger return."
         "txt_filename": "format_example.txt", 
       }
     }
