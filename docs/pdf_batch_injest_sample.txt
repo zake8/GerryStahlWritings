@@ -1,11 +1,24 @@
-# chatbot_command.batchinjestpdf(batch_list.txt)
-# batch_list.txt
-# pathfilename, start pdf page, end pdf page
-# must have all three col, must stick to format
-# hash and space only as first two charators for comment line
-docs/filename.pdf, 1, 10
-docs/filename.pdf, 11, 20
-docs/filename.pdf, 21, 30
-docs/filename.pdf, 31, 40
-docs/filename.pdf, 41, 50
-# done
+# call with: chatbot_command.batchinjestpdf(docs/pdf_batch_injest_sample.txt)
+# per line is: pathfilename, start pdf page, end pdf page
+# must have all three col, must stick to format! ###
+# hash and space only as first two charators for a comment line!
+
+docs/four_page_test.pdf, 1, 2
+BAD CODE
+docs/four_page_test.pdf, 3, 4
+
+# returns:
+# 
+# Read "docs/four_page_test.pdf". 
+# Wrote "four_page_test-1-2_loadered.txt". 
+# Wrote "four_page_test-1-2.faiss". 
+# Wrote "four_page_test-1-2.cur". 
+# Updated "docs/rag_source_clues.txt". 
+# 
+# Can not process: "BAD CODE" 
+# 
+# Read "docs/four_page_test.pdf". 
+# Wrote "four_page_test-3-4_loadered.txt". 
+# Wrote "four_page_test-3-4.faiss". 
+# Wrote "four_page_test-3-4.cur". 
+# Updated "docs/rag_source_clues.txt". 

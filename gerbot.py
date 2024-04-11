@@ -107,13 +107,14 @@ def get_rag_text(query): # loads from loader fullragchat_rag_source path/file w/
     docs = loader.load() # docs is a type 'document'...
     return docs
 
-def get_rag_text_pdf_pages(start_pdf_page, end_pdf_page): ###
+def get_rag_text_pdf_pages(start_pdf_page, end_pdf_page):
     text_string = ''
     loader = PyPDFLoader(fullragchat_rag_source) # global
     docs = loader.load()
-    for page_number in range(start_pdf_page-1, end_pdf_page-1):
-        text_string += docs[page_number].page_content
-    return text_string
+    ##### for page_number in range( int(start_pdf_page) - 1, int(end_pdf_page) - 1):
+    #####     text_string += docs[page_number].page_content
+    ##### return text_string
+    return docs
 
 def rag_text_function(query):
     # function ignores passed query value
@@ -213,8 +214,8 @@ def injest_document(model, fullragchat_embed_model, mkey, query, fullragchat_tem
         return answer
     # Get text
     if start_pdf_page and end_pdf_page: # pdf pages provided
-        rag_text = get_rag_text_pdf_pages(start_pdf_page=start_pdf_page, end_pdf_page=end_pdf_page) # returns string type
-    else: # None
+        rag_text = get_rag_text_pdf_pages(start_pdf_page=start_pdf_page, end_pdf_page=end_pdf_page) # returns 'document' type
+    else: # Do the whole document, no page number splits by batch
         rag_text = get_rag_text(query) # returns 'document' type
     answer += f'Read "{fullragchat_rag_source}". '
     # Prep summary
@@ -257,6 +258,8 @@ def injest_document(model, fullragchat_embed_model, mkey, query, fullragchat_tem
     curfile_content += f'Target document    = {fullragchat_rag_source} \n'
     if start_pdf_page and end_pdf_page:
         curfile_content += f'PDF pages          = {start_pdf_page} to {end_pdf_page} \n'
+    curfile_content += f'Chunk size         = {my_chunk_size} \n'
+    curfile_content += f'Chunk overlap      = {my_chunk_overlap} \n'
     curfile_content += f'Saved FAISS DB     = {faiss_index_fn} \n'
     curfile_content += f'# vectors in DB    = {vector.index.ntotal} \n'
     curfile_content += f'Model/temp DB      = {fullragchat_embed_model} / {fullragchat_temp} \n'
@@ -410,7 +413,7 @@ def chat_query_return(model, query, fullragchat_temp, fullragchat_stop_words, fu
                 return answer
             elif meth == 'listfiles': # lists available docs on disk
                 extensions = (".faiss")
-                answer += 'List of docs in {docs_dir} with {extensions} extension: '
+                answer += f'List of docs in "{docs_dir}" with "{extensions}" extension: '
                 for file in os.listdir(docs_dir):
                     if file.endswith(extensions):
                         answer += '"' + file  + '" '
@@ -439,16 +442,20 @@ def chat_query_return(model, query, fullragchat_temp, fullragchat_stop_words, fu
             elif meth == 'batchinjestpdf': # batch injest from list text file
                 if os.path.exists(path_filename):
                     with open(path_filename, 'r') as file:
-                        batch_list = file.read()
+                        batch_list_str = file.read()
+                    
+                    batch_list = batch_list_str.split('\n')
+                    
                     for item in batch_list:
-                        if item[0:2] != '# ': # skips comments
-                            pattern = r'^([\w.]+),\s*(\d+),\s*(\d+)$'
+                        if (item[0:2] == '# ') or (item == '') :
+                            pass # skips comments and blank lines
+                        else:
+                            pattern = r'^([\w./]+),\s*(\d+),\s*(\d+)$'
                             match = re.search(pattern, item)
-                            if match:
-                                batch_pathfilename = match.group(1)
+                            if match: # item is pfn, page, page
+                                fullragchat_rag_source = match.group(1)
                                 start_pdf_page = match.group(2)
                                 end_pdf_page = match.group(3)
-                                fullragchat_rag_source = batch_pathfilename
                                 answer += injest_document(
                                     model=model, 
                                     fullragchat_embed_model=fullragchat_embed_model, 
@@ -458,7 +465,22 @@ def chat_query_return(model, query, fullragchat_temp, fullragchat_stop_words, fu
                                     start_pdf_page=start_pdf_page,
                                     end_pdf_page=end_pdf_page )
                             else:
-                                answer += f'No file, page, page, match for {item}! '
+                                pattern = r'^([\w./]+)$'
+                                match = re.search(pattern, item)
+                                if match: # item is pfn only w/ no page numbers
+                                    fullragchat_rag_source = match.group(1)
+                                    answer += injest_document(
+                                        model=model, 
+                                        fullragchat_embed_model=fullragchat_embed_model,
+                                        mkey=mkey, 
+                                        query=query, 
+                                        fullragchat_temp=fullragchat_temp,
+                                        start_pdf_page=None,
+                                        end_pdf_page=None )
+                            else:
+                                answer += f'Can not process: "{item}" '
+                    
+                    print(answer)
                 else:
                     answer += f'Unable to batch from non-existent (local) file: "{path_filename}".'
                 return answer
