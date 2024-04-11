@@ -57,10 +57,13 @@
 
 	</form>
 	<a href="/reset_history">reset</a><br>
-	chatbot_command.summary() # output to chat only<br>
-	chatbot_command.injest() # from web or local<br>
-	chatbot_command.download() # just save from web to local<br>
-	chatbot_command.batchinjestpdf() # txt file list<br>
+	chatbot_command.summary(pfn)        # Summarize one file from web or local, output to chat only<br>
+	chatbot_command.injest(pfn)         # Injest one file from web or local<br>
+	chatbot_command.download(pfn)       # Save one file from web to local<br>
+	chatbot_command.listfiles()         # Lists available docs from local<br>
+	chatbot_command.listclues()         # Lists available docs as per clues file<br>
+	chatbot_command.delete(pfn)         # Not yet implemented<br>
+	chatbot_command.batchinjestpdf(pfn) # Batch injest from based on contents of pfn, see pdf_batch_injest_sample.txt<br>
 	Note: docs/rag_source_clues.txt controls rag selection<br>
 	</body>
 </html>
