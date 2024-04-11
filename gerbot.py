@@ -366,104 +366,105 @@ def chat_query_return(model, query, fullragchat_temp, fullragchat_stop_words, fu
         meth = match.group(1)
         path_filename = match.group(2)
         pattern = r'\.([a-zA-Z]{3,5})$'
-        match = re.search(pattern, path_filename)
-        if match:
-            rag_ext = match.group(1)
-            if (rag_ext != 'pdf') and (rag_ext != 'html') and (rag_ext != 'htm') and (rag_ext != 'txt') and (rag_ext != 'json'):
-                answer += f'Error: Invalid extension request, "{rag_ext}".'
+        match = re.search(pattern, path_filename) # pulls extension
+        if path_filename == 'None' or path_filename == 'none': rag_ext = 'None'
+        elif match: rag_ext = match.group(1)
+        else: rag_ext = ''
+        if (rag_ext != 'None') and (rag_ext != 'pdf') and (rag_ext != 'html') and (rag_ext != 'htm') and (rag_ext != 'txt') and (rag_ext != 'json'):
+            answer += f'Error: Invalid extension request, "{rag_ext}".'
+            return answer
+        else:
+            if meth == 'summary': # output to chat only
+                answer += f'Summary of "{path_filename}": ' + '\n'
+                fullragchat_rag_source = path_filename
+                some_text_blob = get_rag_text(query)
+                answer += create_summary(
+                    to_sum=some_text_blob, 
+                    model=model, 
+                    mkey=mkey, 
+                    fullragchat_temp=fullragchat_temp )
                 return answer
-            else:
-                if meth == 'summary': # output to chat only
-                    answer += f'Summary of "{path_filename}": ' + '\n'
-                    fullragchat_rag_source = path_filename
-                    some_text_blob = get_rag_text(query)
-                    answer += create_summary(
-                        to_sum=some_text_blob, 
-                        model=model, 
-                        mkey=mkey, 
-                        fullragchat_temp=fullragchat_temp )
+            elif meth == 'injest': # from web or local - saves X as .faiss (and .txt), w/ .cur file, and adds to rag_source_clue_value
+                fullragchat_rag_source = path_filename
+                answer = injest_document(
+                    model=model, 
+                    fullragchat_embed_model=fullragchat_embed_model, 
+                    mkey=mkey, 
+                    query=query, 
+                    fullragchat_temp=fullragchat_temp,
+                    start_pdf_page=None, 
+                    end_pdf_page=None )
+                return answer
+            elif meth == 'download': # just save from web to local
+                local_filename = docs_dir + '/' + os.path.basename(path_filename)
+                if os.path.exists(local_filename):
+                    answer += f'{local_filename} already exists; please delete and then retry. '
                     return answer
-                elif meth == 'injest': # from web or local - saves X as .faiss (and .txt), w/ .cur file, and adds to rag_source_clue_value
-                    fullragchat_rag_source = path_filename
-                    answer = injest_document(
-                        model=model, 
-                        fullragchat_embed_model=fullragchat_embed_model, 
-                        mkey=mkey, 
-                        query=query, 
-                        fullragchat_temp=fullragchat_temp,
-                        start_pdf_page=None, 
-                        end_pdf_page=None )
-                    return answer
-                elif meth == 'download': # just save from web to local
-                    local_filename = docs_dir + '/' + os.path.basename(path_filename)
-                    if os.path.exists(local_filename):
-                        answer += f'{local_filename} already exists; please delete and then retry. '
-                        return answer
-                    response = requests.get(path_filename)
-                    if response.status_code == 200:
-                        with open(local_filename, 'wb') as file:
-                            file.write(response.content)
-                        answer += f'Downloaded {path_filename} and saved as {local_filename}. '
-                    else:
-                        answer += f'Fail to download {path_filename}, status code: {response.status_code} '
-                    return answer
-                elif meth == 'listfiles': # lists available docs on disk
-                    extensions = (".faiss")
-                    answer += 'List of docs in {docs_dir} with {extensions} extension: '
-                    for file in os.listdir(docs_dir):
-                        if file.endswith(extensions):
-                            answer += '"' + file  + '" '
-                    answer += 'End of list. '
-                    return answer
-                elif meth == 'listclues': # lists available docs as per clues file
-                    answer += f'List of docs called out in "{rag_source_clue_value}": '
-                    with open(rag_source_clue_value, 'r') as file:
-                        clues_blob = file.read()
-                    clues = clues_blob.split('\n')
-                    for item in clues:
-                        pattern = r'"filename":\s*"([^"]+\.\w+)"'
-                        match = re.search(pattern, item)
-                        if match:
-                            filename_with_extension = match.group(1)
-                            base_filename, extension = filename_with_extension.rsplit('.', 1)
-                            if extension == 'faiss':
-                                answer += '"' + filename_with_extension  + '" '
-                    return answer
-                elif meth == 'delete': ### deletes X (low priority to build)
-                    # check if file to save already exists
-                    # delete file
-                    answer = f'Delete not implemented; just use ssh or WinSCP. '
-                    # answer = f'Deleted "{path_filename}".'
-                    return answer
-                elif meth == 'batchinjestpdf': # batch injest from list text file
-                    if os.path.exists(path_filename):
-                        with open(path_filename, 'r') as file:
-                            batch_list = file.read()
-                        for item in batch_list:
-                            if item[0:2] != '# ': # skips comments
-                                pattern = r'^([\w.]+),\s*(\d+),\s*(\d+)$'
-                                match = re.search(pattern, item)
-                                if match:
-                                    batch_pathfilename = match.group(1)
-                                    start_pdf_page = match.group(2)
-                                    end_pdf_page = match.group(3)
-                                    fullragchat_rag_source = batch_pathfilename
-                                    answer += injest_document(
-                                        model=model, 
-                                        fullragchat_embed_model=fullragchat_embed_model, 
-                                        mkey=mkey, 
-                                        query=query, 
-                                        fullragchat_temp=fullragchat_temp,
-                                        start_pdf_page=start_pdf_page,
-                                        end_pdf_page=end_pdf_page )
-                                else:
-                                    answer += f'No file, page, page, match for {item}! '
-                    else:
-                        answer += f'Unable to batch from non-existent (local) file: "{path_filename}".'
-                    return answer
-                else: # Invalid command
-                    answer += 'Error: Invalid command.'
-                    return answer
+                response = requests.get(path_filename)
+                if response.status_code == 200:
+                    with open(local_filename, 'wb') as file:
+                        file.write(response.content)
+                    answer += f'Downloaded {path_filename} and saved as {local_filename}. '
+                else:
+                    answer += f'Fail to download {path_filename}, status code: {response.status_code} '
+                return answer
+            elif meth == 'listfiles': # lists available docs on disk
+                extensions = (".faiss")
+                answer += 'List of docs in {docs_dir} with {extensions} extension: '
+                for file in os.listdir(docs_dir):
+                    if file.endswith(extensions):
+                        answer += '"' + file  + '" '
+                answer += 'End of list. '
+                return answer
+            elif meth == 'listclues': # lists available docs as per clues file
+                answer += f'List of docs called out in "{rag_source_clue_value}": '
+                with open(rag_source_clue_value, 'r') as file:
+                    clues_blob = file.read()
+                clues = clues_blob.split('\n')
+                for item in clues:
+                    pattern = r'"filename":\s*"([^"]+\.\w+)"'
+                    match = re.search(pattern, item)
+                    if match:
+                        filename_with_extension = match.group(1)
+                        base_filename, extension = filename_with_extension.rsplit('.', 1)
+                        if extension == 'faiss':
+                            answer += '"' + filename_with_extension  + '" '
+                return answer
+            elif meth == 'delete': ### deletes X (low priority to build)
+                # check if file to save already exists
+                # delete file
+                answer = f'Delete not implemented; just use ssh or WinSCP. '
+                # answer = f'Deleted "{path_filename}".'
+                return answer
+            elif meth == 'batchinjestpdf': # batch injest from list text file
+                if os.path.exists(path_filename):
+                    with open(path_filename, 'r') as file:
+                        batch_list = file.read()
+                    for item in batch_list:
+                        if item[0:2] != '# ': # skips comments
+                            pattern = r'^([\w.]+),\s*(\d+),\s*(\d+)$'
+                            match = re.search(pattern, item)
+                            if match:
+                                batch_pathfilename = match.group(1)
+                                start_pdf_page = match.group(2)
+                                end_pdf_page = match.group(3)
+                                fullragchat_rag_source = batch_pathfilename
+                                answer += injest_document(
+                                    model=model, 
+                                    fullragchat_embed_model=fullragchat_embed_model, 
+                                    mkey=mkey, 
+                                    query=query, 
+                                    fullragchat_temp=fullragchat_temp,
+                                    start_pdf_page=start_pdf_page,
+                                    end_pdf_page=end_pdf_page )
+                            else:
+                                answer += f'No file, page, page, match for {item}! '
+                else:
+                    answer += f'Unable to batch from non-existent (local) file: "{path_filename}".'
+                return answer
+            else: # Invalid command
+                answer += 'Error: Invalid command.'
+                return answer
     logging.info(f'===> Starting first double LLM pass')
     # Figure out which staged rag doc to use
     global rag_source_clues
