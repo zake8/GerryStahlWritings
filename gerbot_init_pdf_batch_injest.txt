@@ -1,0 +1,34 @@
+# GerBot Volumes of the Gerry Stahl eLibrary batch injestion!
+# tweak chunking first!!!
+
+# okay as single doc
+# docs/four_page_test.pdf
+
+# split into multiple
+# docs/four_page_test.pdf, 1, 2
+
+# todo
+docs/analysis.pdf
+docs/cscl.pdf
+docs/cscltheories.pdf
+docs/dynamic.pdf
+docs/euclid.pdf
+docs/form.pdf
+docs/four_page_test.pdf
+docs/game.pdf
+docs/gc.pdf
+docs/global.pdf
+docs/ijcscl.pdf
+docs/investigations.pdf
+docs/marx.pdf
+docs/math.pdf
+docs/overview.pdf
+docs/philosophy.pdf
+docs/practices.pdf
+docs/proposals.pdf
+docs/science.pdf
+docs/software.pdf
+docs/svmt.pdf
+docs/tacit.pdf
+docs/theory.pdf
+docs/topics.pdf

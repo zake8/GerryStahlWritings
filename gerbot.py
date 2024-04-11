@@ -14,9 +14,8 @@
 # Built on Linux, Python, Apache, WSGI, Flask, LangChain, Ollama, Mistral, more
 
 # initialize global variables
-# you can change this:
+# you can change these:
 user_username_in_chat = "User"
-# you can change these...:
 docs_dir = 'docs' # ex: 'docs' or '/home/leet/GerryStahlWritings/docs' but not 'docs/'
 chatbot = f'GerBot'
 my_chunk_size = 250 # chunk_size= and chunk_overlap, what should they be, how do they relate to file size, word/token/letter count?
