@@ -111,7 +111,9 @@ only a brief hint to lead the reader to the full text to read and search that di
 In a few sentences, summarize the main idea or argument of the text, 
 then include the most important supporting crucial details, all while keeping the summary surprisingly concise.
 Do not "write another book", ie. don't write a summary as long as the text it's summarizing. 
-Use terse (but coherent) language and don't repeat anything.
+Use terse (but coherent) language and don't repeat anything; 
+sentences fragments and dropping words like the document, the author, is prefered. 
+Please make summary as short as possible. 
 (Stick to the presented, and accurately represent the author's intent.)
 Keep the summary focused on the most essential elements of the text; 
 aim for brevity while capturing all key points. 
@@ -240,6 +242,7 @@ def injest_document(model, fullragchat_embed_model, mkey, query, fullragchat_tem
             file.write(text_string)
         logging.info(f'===> Saved new .txt file, "{txtfile_fn}"')
         answer += f'Wrote "{txtfile_fn}". '
+    else: txtfile_fn = 'None'
     # Write FAISS to disk
     # Split text into chunks
     # chunk_size= and chunk_overlap, what should they be, how do they relate to file size, word/token/letter count?
@@ -281,7 +284,6 @@ def injest_document(model, fullragchat_embed_model, mkey, query, fullragchat_tem
     clue_file_text += '  { \n'
     clue_file_text += '    "rag_item": { \n'
     clue_file_text += '      "filename": "' + faiss_index_fn + '", \n'
-    clue_file_text += '      "title": "", \n'
     if start_pdf_page and end_pdf_page:
         clue_file_text += '      "pages": "' + start_pdf_page + '" to "' + end_pdf_page + '", \n'
     clue_file_text += '      "summary": "' + summary_text_for_cur + '", \n'
