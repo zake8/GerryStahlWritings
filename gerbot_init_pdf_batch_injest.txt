@@ -1,24 +1,27 @@
 # chatbot_command.batchinjestpdf(gerbot_init_pdf_batch_injest.txt)
 # GerBot Volumes of the Gerry Stahl eLibrary batch injestion!
 
-# gerbot/marx.pdf
-# gerbot/tacit.pdf
-# gerbot/gc.pdf, 1, 194
-# gerbot/gc.pdf, 195, 276
-# gerbot/gc.pdf, 277, 499
-# gerbot/svmt.pdf, 1, 102
-# gerbot/svmt.pdf, 103, 215
-# gerbot/svmt.pdf, 216, 320
-# gerbot/svmt.pdf, 321, 404
-# gerbot/svmt.pdf, 405, 563
-# gerbot/svmt.pdf, 564, 649
-# gerbot/svmt.pdf, 650, 705
-# gerbot/euclid.pdf
-# gerbot/analysis.pdf
-# gerbot/philosophy.pdf
-# gerbot/software.pdf
-# gerbot/cscl.pdf
-# gerbot/science.pdf
+gerbot/marx.pdf, 1, 123
+gerbot/marx.pdf, 124, 202
+gerbot/tacit.pdf, 1, 145
+gerbot/tacit.pdf, 146, 234
+gerbot/tacit.pdf, 235, 366
+gerbot/gc.pdf, 1, 194
+gerbot/gc.pdf, 195, 276
+gerbot/gc.pdf, 277, 499
+gerbot/svmt.pdf, 1, 102
+gerbot/svmt.pdf, 103, 215
+gerbot/svmt.pdf, 216, 320
+gerbot/svmt.pdf, 321, 404
+gerbot/svmt.pdf, 405, 563
+gerbot/svmt.pdf, 564, 649
+gerbot/svmt.pdf, 650, 705
+gerbot/euclid.pdf
+gerbot/analysis.pdf
+gerbot/philosophy.pdf
+gerbot/software.pdf
+gerbot/cscl.pdf
+gerbot/science.pdf
 # gerbot/theory.pdf, 1, 211
 # gerbot/theory.pdf, 212, 396
 # gerbot/math.pdf

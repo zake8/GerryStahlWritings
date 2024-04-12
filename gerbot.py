@@ -140,7 +140,7 @@ def convo_mem_function(query):
     history += f'</chat_history>\n'
     return history
 
-def get_rag_text(query): # loads from loader fullragchat_rag_source path/file w/ .txt .html .pdf or .json 
+def get_rag_text(query, start_pdf_page, end_pdf_page): # loads from loader fullragchat_rag_source path/file w/ .txt .html .pdf or .json 
     # function ignores passed query value
     pattern = r'\.([a-zA-Z]{3,5})$'
     match = re.search(pattern, fullragchat_rag_source) # global
@@ -161,6 +161,8 @@ def get_rag_text(query): # loads from loader fullragchat_rag_source path/file w/
         return answer
     # from https://docs.mistral.ai/guides/basic-RAG/
     docs = loader.load() # docs is a type 'document'...
+    if start_pdf_page and end_pdf_page:
+        pass ### Need to reduce docs to just the desired pages
     return docs
 
 def rag_text_function(query):
@@ -195,6 +197,7 @@ def create_summary(to_sum, model, mkey, fullragchat_temp):
             temperature=fullragchat_temp )
     chain = ( prompt | llm | StrOutputParser() )
     summary = chain.invoke(to_sum)
+    # returns 'Request size limit exceeded' in the form of "KeyError: 'choices'" in chat_models.py
     return summary
 
 
@@ -220,7 +223,7 @@ def injest_document(model, fullragchat_embed_model, mkey, query, fullragchat_tem
         answer += f'{faiss_index_fn} already exists; please delete and then retry. '
         return answer
     # Get text
-    rag_text = get_rag_text(query) # same for pdf pages and whole pdf # returns 'document' type
+    rag_text = get_rag_text(query=query, start_pdf_page=start_pdf_page, end_pdf_page=end_pdf_page) # same for pdf pages and whole pdf # returns 'document' type
     answer += f'Read "{fullragchat_rag_source}". '
     # Prep summary
     summary_text_for_cur = create_summary(
@@ -387,7 +390,7 @@ def chat_query_return(model, query, fullragchat_temp, fullragchat_stop_words, fu
             if meth == 'summary': # output to chat only
                 answer += f'Summary of "{path_filename}": ' + '\n'
                 fullragchat_rag_source = path_filename
-                some_text_blob = get_rag_text(query)
+                some_text_blob = get_rag_text(query=query, start_pdf_page=None, end_pdf_page=None)
                 answer += create_summary(
                     to_sum=some_text_blob, 
                     model=model, 
@@ -450,9 +453,7 @@ def chat_query_return(model, query, fullragchat_temp, fullragchat_stop_words, fu
                 if os.path.exists(path_filename):
                     with open(path_filename, 'r') as file:
                         batch_list_str = file.read()
-                    
                     batch_list = batch_list_str.split('\n')
-                    
                     for item in batch_list:
                         if (item[0:2] == '# ') or (item == '') :
                             pass # skips comments and blank lines
