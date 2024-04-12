@@ -219,7 +219,7 @@ def injest_document(model, fullragchat_embed_model, mkey, query, fullragchat_tem
         base_fn = f'{base_fn}-{start_page}-{end_page}'
     faiss_index_fn = f'{base_fn}.faiss'
     # Check if file to save already exists...
-    if os.path.exists(faiss_index_fn):
+    if os.path.exists(faiss_index_fn): ### This doesn't seem to work, maybe 'cause .faiss is a directory?
         answer += f'{faiss_index_fn} already exists; please delete and then retry. '
         return answer
     # Get text
@@ -239,7 +239,7 @@ def injest_document(model, fullragchat_embed_model, mkey, query, fullragchat_tem
         txtfile_fn = f'{base_fn}_loadered.txt'
         text_string = ''
         for page_number in range(0, len(rag_text) ):
-            text_string += rag_text[page_number].page_content
+            text_string += rag_text[page_number].page_content + '\n'
             # LangChain document object is a list, each list item is a dictionary with two keys, 
             # page_content and metadata
         with open(docs_dir + '/' + txtfile_fn, 'a') as file: # 'a' = append, create new if none
@@ -454,7 +454,7 @@ def chat_query_return(model, query, fullragchat_temp, fullragchat_stop_words, fu
                 answer = f'Delete not implemented; just use ssh or WinSCP. '
                 # answer = f'Deleted "{path_filename}".'
                 return answer
-            elif meth == 'batchinjestpdf': # batch injest from list text file
+            elif meth == 'batchinjest': # batch injest from list text file
                 if os.path.exists(path_filename):
                     with open(path_filename, 'r') as file:
                         batch_list_str = file.read()
