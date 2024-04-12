@@ -196,13 +196,33 @@ def create_summary(to_sum, model, mkey, fullragchat_temp):
             mistral_api_key=mkey, 
             temperature=fullragchat_temp )
     chain = ( prompt | llm | StrOutputParser() )
-    summary = chain.invoke(to_sum)
-    # returns 'Request size limit exceeded' in the form of "KeyError: 'choices'" in chat_models.py
+    try:
+        summary = chain.invoke(to_sum)
+    except Exception as err_mess:
+        # returns 'Request size limit exceeded' in the form of "KeyError: 'choices'" in chat_models.py
+        logging.info(f'===> Got error: {err_mess} when invoking summary chain')
+        summary = f'Got error: {err_mess}'
     return summary
 
+def create_map_reduce_summary(to_sum, map_red_chunk_size, model, mkey, fullragchat_temp):
+    # Map
+    piece_summaries = ''
+    pieces = None ### split to_sum evenly into pieces such that all are smaller than map_red_chunk_size
+    for piece in pieces:
+        piece_summaries.append('\n\n<INDIVIDUAL SUMMARY START>\n')
+        individual_summary = create_summary(
+            to_sum=piece, 
+            model=model, mkey=mkey, fullragchat_temp=fullragchat_temp )
+        piece_summaries.append(individual_summary) 
+        piece_summaries.append('\n<INDIVIDUAL SUMMARY END>\n\n')
+    # Reduce
+    summary = create_summary(
+        to_sum=piece_summaries, 
+        model=model, mkey=mkey, fullragchat_temp=fullragchat_temp )
+    return summary
 
 def injest_document(model, fullragchat_embed_model, mkey, query, fullragchat_temp, start_page, end_page):
-    logging.info(f'===> Attempting injestion on "{fullragchat_rag_source}"')
+    logging.info(f'===> Attempting injestion on "{fullragchat_rag_source}", with page range "{start_page}" to "{end_page}". (All pages if Nones.)')
     answer = ''
     if not os.path.exists(fullragchat_rag_source):
         answer += f'Source document "{fullragchat_rag_source}" not found locally. '
