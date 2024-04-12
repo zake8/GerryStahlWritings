@@ -140,7 +140,7 @@ def convo_mem_function(query):
     history += f'</chat_history>\n'
     return history
 
-def get_rag_text(query, start_pdf_page, end_pdf_page): # loads from loader fullragchat_rag_source path/file w/ .txt .html .pdf or .json 
+def get_rag_text(query, start_page, end_page): # loads from loader fullragchat_rag_source path/file w/ .txt .html .pdf or .json 
     # function ignores passed query value
     pattern = r'\.([a-zA-Z]{3,5})$'
     match = re.search(pattern, fullragchat_rag_source) # global
@@ -157,12 +157,12 @@ def get_rag_text(query, start_pdf_page, end_pdf_page): # loads from loader fullr
             jq_schema='.',
             text_content=False)
     else:
-        answer = "Unable to make loader for " + fullragchat_rag_source
-        return answer
+        return f'Unable to make loader for "{fullragchat_rag_source}"!\n '
     # from https://docs.mistral.ai/guides/basic-RAG/
     docs = loader.load() # docs is a type 'document'...
-    if start_pdf_page and end_pdf_page:
-        pass ### Need to reduce docs to just the desired pages
+    if start_page and end_page:
+        # Reduce docs to just the desired pages
+        docs = docs[ int(start_page) - 1 : int(end_page) ]
     return docs
 
 def rag_text_function(query):
@@ -201,7 +201,7 @@ def create_summary(to_sum, model, mkey, fullragchat_temp):
     return summary
 
 
-def injest_document(model, fullragchat_embed_model, mkey, query, fullragchat_temp, start_pdf_page, end_pdf_page):
+def injest_document(model, fullragchat_embed_model, mkey, query, fullragchat_temp, start_page, end_page):
     logging.info(f'===> Attempting injestion on "{fullragchat_rag_source}"')
     answer = ''
     if not os.path.exists(fullragchat_rag_source):
@@ -215,15 +215,18 @@ def injest_document(model, fullragchat_embed_model, mkey, query, fullragchat_tem
     rag_ext = match.group(1)
     base_fn = os.path.basename(fullragchat_rag_source) # strip path
     base_fn = base_fn[:-(len(rag_ext)+1)] # strip extension
-    if start_pdf_page and end_pdf_page: # tweak filename to save with pdf page numbers
-        base_fn = f'{base_fn}-{start_pdf_page}-{end_pdf_page}'
+    if start_page and end_page: # tweak filename to save with pdf page numbers
+        base_fn = f'{base_fn}-{start_page}-{end_page}'
     faiss_index_fn = f'{base_fn}.faiss'
     # Check if file to save already exists...
     if os.path.exists(faiss_index_fn):
         answer += f'{faiss_index_fn} already exists; please delete and then retry. '
         return answer
     # Get text
-    rag_text = get_rag_text(query=query, start_pdf_page=start_pdf_page, end_pdf_page=end_pdf_page) # same for pdf pages and whole pdf # returns 'document' type
+    rag_text = get_rag_text(
+        query=query, 
+        start_page=start_page, 
+        end_page=end_page )
     answer += f'Read "{fullragchat_rag_source}". '
     # Prep summary
     summary_text_for_cur = create_summary(
@@ -240,8 +243,8 @@ def injest_document(model, fullragchat_embed_model, mkey, query, fullragchat_tem
             # LangChain document object is a list, each list item is a dictionary with two keys, 
             # page_content and metadata
         with open(docs_dir + '/' + txtfile_fn, 'a') as file: # 'a' = append, create new if none
-            if start_pdf_page and end_pdf_page:
-                file.write(f'Specifically PDF pages {start_pdf_page} to {end_pdf_page} \n')
+            if start_page and end_page:
+                file.write(f'Specifically PDF pages {start_page} to {end_page} \n')
             file.write(text_string)
         logging.info(f'===> Saved new .txt file, "{txtfile_fn}"')
         answer += f'Wrote "{txtfile_fn}". '
@@ -267,8 +270,8 @@ def injest_document(model, fullragchat_embed_model, mkey, query, fullragchat_tem
     curfile_content  = f'\nCuration content for HITL use. \n\n'
     curfile_content += f'Date and time      = {date_time.strftime("%Y-%m-%d %H:%M:%S")} \n'
     curfile_content += f'Target document    = {fullragchat_rag_source} \n'
-    if start_pdf_page and end_pdf_page:
-        curfile_content += f'PDF pages          = {start_pdf_page} to {end_pdf_page} \n'
+    if start_page and end_page:
+        curfile_content += f'PDF pages          = {start_page} to {end_page} \n'
     curfile_content += f'Chunk size         = {my_chunk_size} \n'
     curfile_content += f'Chunk overlap      = {my_chunk_overlap} \n'
     curfile_content += f'Saved FAISS DB     = {faiss_index_fn} \n'
@@ -282,13 +285,12 @@ def injest_document(model, fullragchat_embed_model, mkey, query, fullragchat_tem
     answer += f'Wrote "{curfile_fn}". '
     # Add name and summary to rag source clue file for LLM to use!
     strip = len(f'{docs_dir}/')
-    ##### faiss_index_fn = faiss_index_fn[strip:] # strip off leading 'docs/' so as not to double it up later
     clue_file_text  = '\n'
     clue_file_text += '  { \n'
     clue_file_text += '    "rag_item": { \n'
     clue_file_text += '      "filename": "' + faiss_index_fn + '", \n'
-    if start_pdf_page and end_pdf_page:
-        clue_file_text += '      "pages": "' + start_pdf_page + '" to "' + end_pdf_page + '", \n'
+    if start_page and end_page:
+        clue_file_text += '      "pages": "' + start_page + '" to "' + end_page + '", \n'
     clue_file_text += '      "summary": "' + summary_text_for_cur + '", \n'
     clue_file_text += '      "txt_filename": "' + txtfile_fn + '", \n'
     clue_file_text += '    } \n'
@@ -390,7 +392,10 @@ def chat_query_return(model, query, fullragchat_temp, fullragchat_stop_words, fu
             if meth == 'summary': # output to chat only
                 answer += f'Summary of "{path_filename}": ' + '\n'
                 fullragchat_rag_source = path_filename
-                some_text_blob = get_rag_text(query=query, start_pdf_page=None, end_pdf_page=None)
+                some_text_blob = get_rag_text(
+                    query=query, 
+                    start_page=None, 
+                    end_page=None )
                 answer += create_summary(
                     to_sum=some_text_blob, 
                     model=model, 
@@ -405,8 +410,8 @@ def chat_query_return(model, query, fullragchat_temp, fullragchat_stop_words, fu
                     mkey=mkey, 
                     query=query, 
                     fullragchat_temp=fullragchat_temp,
-                    start_pdf_page=None, 
-                    end_pdf_page=None )
+                    start_page=None, 
+                    end_page=None )
                 return answer
             elif meth == 'download': # just save from web to local
                 local_filename = docs_dir + '/' + os.path.basename(path_filename)
@@ -462,16 +467,16 @@ def chat_query_return(model, query, fullragchat_temp, fullragchat_stop_words, fu
                             match = re.search(pattern, item)
                             if match: # item is pfn, page, page
                                 fullragchat_rag_source = match.group(1)
-                                start_pdf_page = match.group(2)
-                                end_pdf_page = match.group(3)
+                                start_page = match.group(2)
+                                end_page = match.group(3)
                                 answer += injest_document(
                                     model=model, 
                                     fullragchat_embed_model=fullragchat_embed_model, 
                                     mkey=mkey, 
                                     query=query, 
                                     fullragchat_temp=fullragchat_temp,
-                                    start_pdf_page=start_pdf_page,
-                                    end_pdf_page=end_pdf_page )
+                                    start_page=start_page,
+                                    end_page=end_page )
                             else:
                                 pattern = r'^([\w./]+)$'
                                 match = re.search(pattern, item)
@@ -483,8 +488,8 @@ def chat_query_return(model, query, fullragchat_temp, fullragchat_stop_words, fu
                                         mkey=mkey, 
                                         query=query, 
                                         fullragchat_temp=fullragchat_temp,
-                                        start_pdf_page=None,
-                                        end_pdf_page=None )
+                                        start_page=None,
+                                        end_page=None )
                                 else:
                                     answer += f'Can not process: "{item}" '
                 else:

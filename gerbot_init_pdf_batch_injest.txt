@@ -1,4 +1,4 @@
-# chatbot_command.batchinjestpdf(gerbot_init_pdf_batch_injest.txt)
+# chatbot_command.batchinjest(gerbot_init_pdf_batch_injest.txt)
 # GerBot Volumes of the Gerry Stahl eLibrary batch injestion!
 
 gerbot/marx.pdf, 1, 123

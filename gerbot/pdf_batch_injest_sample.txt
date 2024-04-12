@@ -1,11 +1,13 @@
 # per line is: pathfilename
 # per line is: pathfilename, start pdf page, end pdf page (integers only)
 # hash and space only as first two charators for a comment line, blank line okay
+# "./docs/" used in this example - should match your "docs_dir" value
 
-docs/four_page_test.pdf, 1, 2
-docs/four_page_test.pdf
+# docs/four_page_test.pdf, 1, 2
+# docs/four_page_test.pdf
+gerbot/four_page_test.pdf, 1, 2
 
-# chatbot_command.batchinjestpdf(docs/pdf_batch_injest_sample.txt)
+# chatbot_command.batchinjest(docs/pdf_batch_injest_sample.txt)
 # should return:
 # 
 # Read "docs/four_page_test.pdf". 
