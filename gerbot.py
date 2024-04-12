@@ -106,14 +106,14 @@ def get_rag_text(query): # loads from loader fullragchat_rag_source path/file w/
     docs = loader.load() # docs is a type 'document'...
     return docs
 
-def get_rag_text_pdf_pages(start_pdf_page, end_pdf_page):
-    text_string = ''
-    loader = PyPDFLoader(fullragchat_rag_source) # global
-    docs = loader.load()
-    ##### for page_number in range( int(start_pdf_page) - 1, int(end_pdf_page) - 1):
-    #####     text_string += docs[page_number].page_content
-    ##### return text_string
-    return docs
+##### def get_rag_text_pdf_pages(start_pdf_page, end_pdf_page):
+#####     ##### text_string = ''
+#####     loader = PyPDFLoader(fullragchat_rag_source) # global
+#####     docs = loader.load()
+#####     ##### for page_number in range( int(start_pdf_page) - 1, int(end_pdf_page) - 1):
+#####     #####     text_string += docs[page_number].page_content
+#####     ##### return text_string
+#####     return docs
 
 def rag_text_function(query):
     # function ignores passed query value
@@ -212,10 +212,7 @@ def injest_document(model, fullragchat_embed_model, mkey, query, fullragchat_tem
         answer += f'{faiss_index_fn} already exists; please delete and then retry. '
         return answer
     # Get text
-    if start_pdf_page and end_pdf_page: # pdf pages provided
-        rag_text = get_rag_text_pdf_pages(start_pdf_page=start_pdf_page, end_pdf_page=end_pdf_page) # returns 'document' type
-    else: # Do the whole document, no page number splits by batch
-        rag_text = get_rag_text(query) # returns 'document' type
+    rag_text = get_rag_text(query) # same for pdf pages and whole pdf # returns 'document' type
     answer += f'Read "{fullragchat_rag_source}". '
     # Prep summary
     summary_text_for_cur = create_summary(
