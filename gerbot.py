@@ -18,8 +18,9 @@
 user_username_in_chat = "User"
 docs_dir = 'docs' # ex: 'docs' or '/home/leet/GerryStahlWritings/docs' but not 'docs/'
 chatbot = f'GerBot'
-my_chunk_size = 250 # chunk_size= and chunk_overlap, what should they be, how do they relate to file size, word/token/letter count?
-my_chunk_overlap = 37 # what should overlap % be to retain meaning and searchability?
+my_chunk_size = 300 # chunk_size= and chunk_overlap, what should they be, how do they relate to file size, word/token/letter count?
+my_chunk_overlap = 100 # what should overlap % be to retain meaning and searchability?
+# https://chunkviz.up.railway.app/
 rag_source_clue_value = f'{docs_dir}/rag_source_clues.txt' # doc helps llm choose rag file
 # change these in fullragchat_init() or UI:
 fullragchat_history = []

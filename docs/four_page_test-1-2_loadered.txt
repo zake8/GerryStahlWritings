@@ -1,8 +1,0 @@
-Specifically PDF pages 1 to 2 
-Top of page 1
-Middle of page 1
-Bottom of page 1Top of page 2
-Middle of page 2
-Bottom of page 2Top of page 3
-Middle of page 3
-Bottom of page 3
