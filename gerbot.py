@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 ### TODO:
-### break pdf txt into chapters w/ book and chapter summaries
 ### Q: what are max token in sizes per model? A: Mixtral-8x7b = 32k token context 
 ### Ability to load a (small) text file as a rag doc and hit LLM w/ whole thing, no vector query 
 
@@ -14,13 +13,11 @@
 # Built on Linux, Python, Apache, WSGI, Flask, LangChain, Ollama, Mistral, more
 
 # initialize global variables
-# you can change these:
 user_username_in_chat = "User"
 docs_dir = 'docs' # ex: 'docs' or '/home/leet/GerryStahlWritings/docs' but not 'docs/'
 chatbot = f'GerBot'
-my_chunk_size = 300 # chunk_size= and chunk_overlap, what should they be, how do they relate to file size, word/token/letter count?
-my_chunk_overlap = 100 # what should overlap % be to retain meaning and searchability?
-# https://chunkviz.up.railway.app/
+my_chunk_size = 300
+my_chunk_overlap = 100
 rag_source_clue_value = f'{docs_dir}/rag_source_clues.txt' # doc helps llm choose rag file
 # change these in fullragchat_init() or UI:
 fullragchat_history = []
@@ -164,15 +161,6 @@ def get_rag_text(query): # loads from loader fullragchat_rag_source path/file w/
     docs = loader.load() # docs is a type 'document'...
     return docs
 
-##### def get_rag_text_pdf_pages(start_pdf_page, end_pdf_page):
-#####     ##### text_string = ''
-#####     loader = PyPDFLoader(fullragchat_rag_source) # global
-#####     docs = loader.load()
-#####     ##### for page_number in range( int(start_pdf_page) - 1, int(end_pdf_page) - 1):
-#####     #####     text_string += docs[page_number].page_content
-#####     ##### return text_string
-#####     return docs
-
 def rag_text_function(query):
     # function ignores passed query value
     # rag_source_clues is global defined in chat_query_return func
@@ -254,6 +242,9 @@ def injest_document(model, fullragchat_embed_model, mkey, query, fullragchat_tem
         answer += f'Wrote "{txtfile_fn}". '
     # Write FAISS to disk
     # Split text into chunks
+    # chunk_size= and chunk_overlap, what should they be, how do they relate to file size, word/token/letter count?
+    # what should overlap % be to retain meaning and searchability?
+    # https://chunkviz.up.railway.app/
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=my_chunk_size, chunk_overlap=my_chunk_overlap)
     documents = text_splitter.split_documents(rag_text)
     embeddings = MistralAIEmbeddings(
@@ -285,7 +276,7 @@ def injest_document(model, fullragchat_embed_model, mkey, query, fullragchat_tem
     answer += f'Wrote "{curfile_fn}". '
     # Add name and summary to rag source clue file for LLM to use!
     strip = len(f'{docs_dir}/')
-    faiss_index_fn = faiss_index_fn[strip:] # strip off leading 'docs/' so as not to double it up later
+    ##### faiss_index_fn = faiss_index_fn[strip:] # strip off leading 'docs/' so as not to double it up later
     clue_file_text  = '\n'
     clue_file_text += '  { \n'
     clue_file_text += '    "rag_item": { \n'

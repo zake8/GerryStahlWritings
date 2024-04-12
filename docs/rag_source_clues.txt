@@ -345,3 +345,29 @@ Interesting terms or jargon used in the text include:
     } 
   } 
 
+
+  { 
+    "rag_item": { 
+      "filename": "heories.faiss", 
+      "title": "", 
+      "summary": "This text is a chapter from a book about Computer Supported Collaborative Learning (CSCL) theories. It discusses the importance of theory in CSCL research and practice, and categorizes existing theories into subjective, intersubjective, and inter-objective. The chapter also explores the role of technology, practice, and method in shaping CSCL theories and their development. It highlights the need for a more integrated theory of CSCL, and suggests elements for such a theory, including the history and development of CSCL technologies, practices, and methods, and the interdependence of theory and method. The chapter also discusses the challenges and opportunities in developing CSCL theories, and the importance of considering the unit of collaboration and the level of analysis in selecting appropriate theories and methods. The text concludes by emphasizing the need for a more comprehensive and integrated theory of CSCL that can guide technological and pedagogical support for collaborative learning.", 
+      "txt_filename": "cscltheories_loadered.txt", 
+    } 
+  } 
+
+
+  { 
+    "rag_item": { 
+      "filename": "ices.faiss", 
+      "title": "", 
+      "summary": "The document is a journal article titled "Group practices: a new way of viewing CSCL" by Gerry Stahl, published in the International Journal of Computer-Supported Collaborative Learning. The article discusses the importance of analyzing group practices in Computer-Supported Collaborative Learning (CSCL) to make visible the work of novices learning inquiry in science or mathematics. The author argues that traditional pre/post comparisons miss sequential interactional processes or reduce group phenomena to individual or social factors. The article also emphasizes the need to re-conceptualize CSCL as the design of technology to foster the adoption of group practices by student teams.
+
+The document also discusses the methodological tension in CSCL research, which has been informally described as an opposition of quantitative versus qualitative approaches. The author argues for the need to analyze the group processes that bring about changes and establish group practices in CSCL to guide iterative design-based research.
+
+The document also includes four case studies that analyze group practices in CSCL, including pointing practices, problem decomposition, turn-taking, software usage, and geometric construction. The analysis of these group practices can suggest the design of technologies, curriculum, and pedagogy to support the adoption of key group skills.
+
+Overall, the document argues for the importance of analyzing group practices in CSCL to inform the design, testing, and refinement of collaborative-learning software, curriculum, pedagogy, and theory. The author suggests that CSCL should be viewed as the design, analysis, and orchestration of technology, curriculum, and pedagogy to foster the adoption of productive group practices by student teams.", 
+      "txt_filename": "practices_loadered.txt", 
+    } 
+  } 
+
