@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 ### TODO:
-### Q: what are max token in sizes per model? A: Mixtral-8x7b = 32k token context 
 ### Ability to load a (small) text file as a rag doc and hit LLM w/ whole thing, no vector query 
 
 # GerBot project is an LLM RAG chat intended to make http://gerrystahl.net/pub/index.html even more accessible
@@ -16,8 +15,10 @@
 user_username_in_chat = "User"
 docs_dir = 'gerbot' # ex: 'docs' or '/home/leet/GerryStahlWritings/docs' but not 'docs/'
 chatbot = f'GerBot'
-my_chunk_size = 300
-my_chunk_overlap = 100
+my_chunk_size = 300 # chunk_size= and chunk_overlap, what should they be, how do they relate to file size, word/token/letter count?
+my_chunk_overlap = 100 # what should overlap % be to retain meaning and searchability? # https://chunkviz.up.railway.app/
+my_map_red_chunk_size = 25000 # This is for map reduce summary, the largest text by charator length to try to send
+# Mixtral-8x7b is a max context size of 32k tokens
 rag_source_clue_value = f'{docs_dir}/rag_source_clues.txt' # doc helps llm choose rag file
 # change these in fullragchat_init() or UI:
 fullragchat_history = []
@@ -50,6 +51,7 @@ import requests
 from datetime import datetime
 from langchain_community.document_loaders import PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_text_splitters import CharacterTextSplitter
 from langchain_community.document_loaders import JSONLoader
 from langchain_community.document_loaders import TextLoader
 from langchain_community.document_loaders import WebBaseLoader
@@ -200,23 +202,33 @@ def create_summary(to_sum, model, mkey, fullragchat_temp):
         summary = chain.invoke(to_sum)
     except Exception as err_mess:
         # returns 'Request size limit exceeded' in the form of "KeyError: 'choices'" in chat_models.py
-        logging.info(f'===> Got error: {err_mess} when invoking summary chain')
+        logging.error(f'===> Got error: {err_mess} when invoking summary chain')
         summary = f'Got error: {err_mess}'
     return summary
 
 def create_map_reduce_summary(to_sum, map_red_chunk_size, model, mkey, fullragchat_temp):
     # Map
     piece_summaries = ''
-    pieces = None ### split to_sum evenly into pieces such that all are smaller than map_red_chunk_size
+    text_splitter = CharacterTextSplitter(
+        separator="\n\n",
+        chunk_size = map_red_chunk_size, 
+        chunk_overlap = max(map_red_chunk_size // 5, 500),
+        length_function=len, 
+        is_separator_regex=False )
+    pieces = text_splitter.create_documents(to_sum)
+    num_pieces = len(pieces)
+    logging.info(f'===> Mapped text down to {num_pieces} piece(s), based on chunk size "{map_red_chunk_size}". ')
     for piece in pieces:
         piece_summaries.append('\n\n<INDIVIDUAL SUMMARY START>\n')
         individual_summary = create_summary(
             to_sum=piece, 
             model=model, mkey=mkey, fullragchat_temp=fullragchat_temp )
+        logging.info(f'Individual_summary is: \n{individual_summary}') ###
         piece_summaries.append(individual_summary) 
         piece_summaries.append('\n<INDIVIDUAL SUMMARY END>\n\n')
     # Reduce
-    summary = create_summary(
+    summary = f'Map Reduce Summary with {num_pieces + 1} LLM inferences (charator chunk size of "{map_red_chunk_size}"). \n\n'
+    summary += create_summary(
         to_sum=piece_summaries, 
         model=model, mkey=mkey, fullragchat_temp=fullragchat_temp )
     return summary
@@ -249,7 +261,7 @@ def injest_document(model, fullragchat_embed_model, mkey, query, fullragchat_tem
         end_page=end_page )
     answer += f'Read "{fullragchat_rag_source}". '
     # Prep summary
-    summary_text_for_cur = create_summary(
+    summary_text_for_output = create_summary(
         to_sum=rag_text, 
         model=model, 
         mkey=mkey, 
@@ -271,9 +283,6 @@ def injest_document(model, fullragchat_embed_model, mkey, query, fullragchat_tem
     else: txtfile_fn = 'None'
     # Write FAISS to disk
     # Split text into chunks
-    # chunk_size= and chunk_overlap, what should they be, how do they relate to file size, word/token/letter count?
-    # what should overlap % be to retain meaning and searchability?
-    # https://chunkviz.up.railway.app/
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=my_chunk_size, chunk_overlap=my_chunk_overlap)
     documents = text_splitter.split_documents(rag_text)
     embeddings = MistralAIEmbeddings(
@@ -298,7 +307,7 @@ def injest_document(model, fullragchat_embed_model, mkey, query, fullragchat_tem
     curfile_content += f'# vectors in DB    = {vector.index.ntotal} \n'
     curfile_content += f'Model/temp DB      = {fullragchat_embed_model} / {fullragchat_temp} \n'
     curfile_content += f'Model/temp summary = {model} / {fullragchat_temp} \n'
-    curfile_content += f'\n<summary>\n{summary_text_for_cur}\n</summary>\n'
+    curfile_content += f'\n<summary>\n{summary_text_for_output}\n</summary>\n'
     with open(docs_dir + '/' + curfile_fn, 'a') as file: # 'a' = append, create new if none
         file.write(curfile_content)
     logging.info(f'===> saved new .cur file, "{curfile_fn}"')
@@ -311,7 +320,7 @@ def injest_document(model, fullragchat_embed_model, mkey, query, fullragchat_tem
     clue_file_text += '      "filename": "' + faiss_index_fn + '", \n'
     if start_page and end_page:
         clue_file_text += '      "pages": "' + start_page + '" to "' + end_page + '", \n'
-    clue_file_text += '      "summary": "' + summary_text_for_cur + '", \n'
+    clue_file_text += '      "summary": "' + summary_text_for_output + '", \n'
     clue_file_text += '      "txt_filename": "' + txtfile_fn + '", \n'
     clue_file_text += '    } \n'
     clue_file_text += '  } \n'
@@ -418,9 +427,16 @@ def chat_query_return(model, query, fullragchat_temp, fullragchat_stop_words, fu
                     end_page=None )
                 answer += create_summary(
                     to_sum=some_text_blob, 
-                    model=model, 
-                    mkey=mkey, 
-                    fullragchat_temp=fullragchat_temp )
+                    model=model, mkey=mkey, fullragchat_temp=fullragchat_temp )
+                return answer
+            if meth == 'mapreducesummary': # output to chat only
+                answer += f'Map reduce summary of "{path_filename}": ' + '\n'
+                fullragchat_rag_source = path_filename
+                some_text_blob = get_rag_text(query=query, start_page=None, end_page=None )
+                answer += create_map_reduce_summary(
+                    to_sum = some_text_blob, 
+                    map_red_chunk_size = my_map_red_chunk_size, 
+                    model=model, mkey=mkey, fullragchat_temp=fullragchat_temp )
                 return answer
             elif meth == 'injest': # from web or local - saves X as .faiss (and .txt), w/ .cur file, and adds to rag_source_clue_value
                 fullragchat_rag_source = path_filename

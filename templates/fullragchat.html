@@ -57,13 +57,14 @@
 
 	</form>
 	<a href="/reset_history">reset</a><br>
-	chatbot_command.summary(pfn)        # Summarize one file from web or local, output to chat only<br>
-	chatbot_command.listclues(None)     # Lists available docs as per clues file<br>
-	chatbot_command.listfiles(None)     # Lists available docs from local<br>
-	chatbot_command.delete(pfn)         # Not yet implemented (use ssh and winscp)<br>
-	chatbot_command.download(pfn)       # Save one file from web to local<br>
-	chatbot_command.injest(pfn)         # Injest one file from local<br>
-	chatbot_command.batchinjest(pfn)    # Batch injest local from based on contents of pfn, see pdf_batch_injest_sample.txt<br>
+	chatbot_command.summary(pfn)          # Summarize one file from web or local, output to chat only (smaller <15 pages)<br>
+	chatbot_command.mapreducesummary(pfn) # Map Reduce Summarize one file from web or local, output to chat only (larger)<br>
+	chatbot_command.listclues(None)       # Lists available docs as per clues file<br>
+	chatbot_command.listfiles(None)       # Lists available docs from local<br>
+	chatbot_command.delete(pfn)           # Not yet implemented (use ssh and winscp)<br>
+	chatbot_command.download(pfn)         # Save one file from web to local<br>
+	chatbot_command.injest(pfn)           # Injest one file from local<br>
+	chatbot_command.batchinjest(pfn)      # Batch injest local from based on contents of pfn, see pdf_batch_injest_sample.txt<br>
 	Note: docs/rag_source_clues.txt controls rag selection; download to server, then injest.<br>
 	</body>
 </html>
