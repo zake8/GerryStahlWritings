@@ -1,51 +1,51 @@
 # chatbot_command.batchinjestpdf(gerbot_init_pdf_batch_injest.txt)
 # GerBot Volumes of the Gerry Stahl eLibrary batch injestion!
 
-docs/marx.pdf
-docs/tacit.pdf
-docs/gc.pdf, 1, 194
-docs/gc.pdf, 195, 276
-docs/gc.pdf, 277, 499
-docs/svmt.pdf, 1, 102
-docs/svmt.pdf, 103, 215
-docs/svmt.pdf, 216, 320
-docs/svmt.pdf, 321, 404
-docs/svmt.pdf, 405, 563
-docs/svmt.pdf, 564, 649
-docs/svmt.pdf, 650, 705
-docs/euclid.pdf
-docs/analysis.pdf
-docs/philosophy.pdf
-docs/software.pdf
-docs/cscl.pdf
-docs/science.pdf
-docs/theory.pdf, 1, 211
-docs/theory.pdf, 212, 396
-docs/math.pdf
-docs/dynamic.pdf
-docs/topics.pdf, 1, 61
-docs/topics.pdf, 111, 204
-docs/topics.pdf, 205, 334
-docs/topics.pdf, 62, 110
-docs/global.pdf
-docs/ijcscl.pdf
-docs/proposals.pdf, 1, 277
-docs/proposals.pdf, 278, 382
-docs/overview.pdf, 1, 14
-docs/overview.pdf, 110, 198
-docs/overview.pdf, 15, 79
-docs/overview.pdf, 199, 252
-docs/overview.pdf, 80, 109
-docs/investigations.pdf, 1, 108
-docs/investigations.pdf, 109, 121
-docs/investigations.pdf, 122, 428
-docs/form.pdf, 1, 61
-docs/form.pdf, 154, 187
-docs/form.pdf, 188, 220
-docs/form.pdf, 221, 240
-docs/form.pdf, 241, 278
-docs/form.pdf, 279, 510
-docs/form.pdf, 62, 153
-docs/game.pdf
-docs/cscltheories.pdf
-docs/practices.pdf
+gerbot/marx.pdf
+# gerbot/tacit.pdf
+# gerbot/gc.pdf, 1, 194
+# gerbot/gc.pdf, 195, 276
+# gerbot/gc.pdf, 277, 499
+# gerbot/svmt.pdf, 1, 102
+# gerbot/svmt.pdf, 103, 215
+# gerbot/svmt.pdf, 216, 320
+# gerbot/svmt.pdf, 321, 404
+# gerbot/svmt.pdf, 405, 563
+# gerbot/svmt.pdf, 564, 649
+# gerbot/svmt.pdf, 650, 705
+# gerbot/euclid.pdf
+# gerbot/analysis.pdf
+# gerbot/philosophy.pdf
+# gerbot/software.pdf
+# gerbot/cscl.pdf
+# gerbot/science.pdf
+# gerbot/theory.pdf, 1, 211
+# gerbot/theory.pdf, 212, 396
+# gerbot/math.pdf
+# gerbot/dynamic.pdf
+# gerbot/topics.pdf, 1, 61
+# gerbot/topics.pdf, 111, 204
+# gerbot/topics.pdf, 205, 334
+# gerbot/topics.pdf, 62, 110
+# gerbot/global.pdf
+# gerbot/ijcscl.pdf
+# gerbot/proposals.pdf, 1, 277
+# gerbot/proposals.pdf, 278, 382
+# gerbot/overview.pdf, 1, 14
+# gerbot/overview.pdf, 110, 198
+# gerbot/overview.pdf, 15, 79
+# gerbot/overview.pdf, 199, 252
+# gerbot/overview.pdf, 80, 109
+# gerbot/investigations.pdf, 1, 108
+# gerbot/investigations.pdf, 109, 121
+# gerbot/investigations.pdf, 122, 428
+# gerbot/form.pdf, 1, 61
+# gerbot/form.pdf, 154, 187
+# gerbot/form.pdf, 188, 220
+# gerbot/form.pdf, 221, 240
+# gerbot/form.pdf, 241, 278
+# gerbot/form.pdf, 279, 510
+# gerbot/form.pdf, 62, 153
+# gerbot/game.pdf
+# gerbot/cscltheories.pdf
+# gerbot/practices.pdf
