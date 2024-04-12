@@ -196,6 +196,9 @@ Answer:
 def injest_document(model, fullragchat_embed_model, mkey, query, fullragchat_temp, start_pdf_page, end_pdf_page):
     logging.info(f'===> Attempting injestion on "{fullragchat_rag_source}"')
     answer = ''
+    if not os.path.exists(fullragchat_rag_source):
+        answer += f'Source document "{fullragchat_rag_source}" not found locally. '
+        return answer
     pattern = r'\.([a-zA-Z]{3,5})$'
     match = re.search(pattern, fullragchat_rag_source) # global
     if not match:
