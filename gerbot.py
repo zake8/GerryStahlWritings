@@ -67,6 +67,63 @@ from langchain_core.runnables import RunnablePassthrough
 from langchain_mistralai.chat_models import ChatMistralAI
 from langchain_mistralai.embeddings import MistralAIEmbeddings
 
+gerbot_template = """
+You are the RAG conversational chatbot "GerBot". (RAG is Retrieval Augmented GenerativeAI.)
+Your prime goal is to assist users with exploring, searching, querying, and "chatting with" 
+Gerry Stahl's published works, all available here, http://gerrystahl.net/pub/index.html.
+If you do not know the answer or know how to respond just say, 
+I don't know, or I don't know how to respond to that, or 
+you can you ask user to rephrase the question, or 
+maybe rarely occasionally share an interesting tidbit of wisdom from the writings.
+Try not to be too verbose, flowery, or chatty.
+Answer the question based primarily on this relevant retrieved context: 
+{context}
+Reference chat history for conversationality (
+    to see if there is something to circle back to, 
+    help drill down into volumes and chapters by directing a query of the same, 
+    but not to reply on by repeating your own possibly mistaken statements): 
+{history}
+Question: 
+{question}
+Answer:
+"""
+
+filename_template = """
+Your task is to return a filename from the provided list.
+Mentioning a book or even chapter title should be enough to return its filename.
+Example: If question from user is about alphabet, A B C's, and provided list has item with summary about letters in the alphabet, then answer with "alphabet.txt", assuming that is the filename for that summary.
+Example: If user is questioning about Python programming, and there is a summary including Python stuff, then return "py_coding.txt" or whatever its name is.
+Example: If question is about "The Things" by Peter Watts, then send "TheThings-PeterWatts.faiss".
+Question from user is: 
+{question}
+Lightly reference this chat history help understand what information area user is looking to explore: 
+{history}
+Here is provided list containing filenames for various content/information areas: 
+{context}
+Single filename value:
+"""
+
+summary_template = """
+In clear and concise language, summarize the text 
+    (key main points, 
+    themes or topic presented, 
+    intended audience or purpose, 
+    interesting terms or jargon if any). 
+Summary needs to include just enough to give an inkling of the source, 
+only a brief hint to lead the reader to the full text to read and search that directly. 
+In a few sentences, summarize the main idea or argument of the text, 
+then include the most important supporting crucial details, all while keeping the summary surprisingly concise.
+Do not "write another book", ie. don't write a summary as long as the text it's summarizing. 
+Use terse (but coherent) language and don't repeat anything.
+(Stick to the presented, and accurately represent the author's intent.)
+Keep the summary focused on the most essential elements of the text; 
+aim for brevity while capturing all key points. 
+<text>
+{question}
+</text>
+Summary:
+"""
+
 @app.route("/")
 def root():
     webserver_hostname = socket.gethostname()
@@ -123,21 +180,6 @@ def rag_text_function(query):
     context = loader.load()
     return context
 
-filename_template = """
-Your task is to return a filename from the provided list.
-Mentioning a book or even chapter title should be enough to return its filename.
-Example: If question from user is about alphabet, A B C's, and provided list has item with summary about letters in the alphabet, then answer with "alphabet.txt", assuming that is the filename for that summary.
-Example: If user is questioning about Python programming, and there is a summary including Python stuff, then return "py_coding.txt" or whatever its name is.
-Example: If question is about "The Things" by Peter Watts, then send "TheThings-PeterWatts.faiss".
-Question from user is: 
-{question}
-Lightly reference this chat history help understand what information area user is looking to explore: 
-{history}
-Here is provided list containing filenames for various content/information areas: 
-{context}
-Single filename value:
-"""
-
 def choose_rag(mkey, model, fullragchat_temp, query): # chain which chooses a file for you
     rag_text_runnable = RunnableLambda(rag_text_function)
     history_runnable = RunnableLambda(convo_mem_function)
@@ -155,14 +197,6 @@ def choose_rag(mkey, model, fullragchat_temp, query): # chain which chooses a fi
     selected_rag = chain.invoke(query)
     return selected_rag
 
-summary_template = """
-In clear and concise language, summarize (key points, themes presented, interesting terms or jargon (if any) ) the text. 
-<text>
-{question}
-</text>
-Summary:
-"""
-
 def create_summary(to_sum, model, mkey, fullragchat_temp):
     prompt = ChatPromptTemplate.from_template(summary_template)
     llm = ChatMistralAI(
@@ -173,26 +207,6 @@ def create_summary(to_sum, model, mkey, fullragchat_temp):
     summary = chain.invoke(to_sum)
     return summary
 
-gerbot_template = """
-You are the RAG conversational chatbot "GerBot". (RAG is Retrieval Augmented GenerativeAI.)
-Your prime goal is to assist users with exploring, searching, querying, and "chatting with" 
-Gerry Stahl's published works, all available here, http://gerrystahl.net/pub/index.html.
-If you do not know the answer or know how to respond just say, 
-I don't know, or I don't know how to respond to that, or 
-you can you ask user to rephrase the question, or 
-maybe occationally share an interesting tidbit of wisdom from the writtings.
-Try not to be too verbose, flowery, or chatty.
-Answer the question based primarily on this relevant retrieved context: 
-{context}
-Reference chat history for conversationality (
-    to see if there is something to circle back to, 
-    help drill down into volumes and chapters by directing a query of the same, 
-    but not to reply on by repeating your own possibly mistaken statments): 
-{history}
-Question: 
-{question}
-Answer:
-"""
 
 def injest_document(model, fullragchat_embed_model, mkey, query, fullragchat_temp, start_pdf_page, end_pdf_page):
     logging.info(f'===> Attempting injestion on "{fullragchat_rag_source}"')
@@ -529,8 +543,7 @@ def chat_query_return(model, query, fullragchat_temp, fullragchat_stop_words, fu
         query=query )
     return answer
 
-"""
-Reimplement:
+Reimplement = """
     if model == "fake_llm":
         answer = fake_llm(query)
     elif (model == "orca-mini") or 
