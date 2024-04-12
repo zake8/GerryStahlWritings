@@ -14,7 +14,7 @@
 
 # initialize global variables
 user_username_in_chat = "User"
-docs_dir = 'docs' # ex: 'docs' or '/home/leet/GerryStahlWritings/docs' but not 'docs/'
+docs_dir = 'gerbot' # ex: 'docs' or '/home/leet/GerryStahlWritings/docs' but not 'docs/'
 chatbot = f'GerBot'
 my_chunk_size = 300
 my_chunk_overlap = 100
@@ -526,7 +526,7 @@ def chat_query_return(model, query, fullragchat_temp, fullragchat_stop_words, fu
             fullragchat_rag_source = f'{docs_dir}/nothing.faiss'
     else:
         answer += 'Unable to parse out a filename from:\n"' + selected_rag + '"\n'
-        fullragchat_rag_source = f'docs/nothing.faiss'
+        fullragchat_rag_source = f'{docs_dir}/nothing.faiss'
     logging.info(f'===> Second/last of the double LLM pass')
     answer += mistral_convo_rag(
         fullragchat_embed_model=fullragchat_embed_model, 

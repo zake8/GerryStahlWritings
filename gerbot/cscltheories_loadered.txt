@@ -1,0 +1,716 @@
+Theories of CSCL  
+  
+Gerry Stahl1 and Kai Hakkarainen2 
+1 Chatham, Massachusetts, USA, Gerry@GerryStahl.net  
+2 University of Helsinki, Department of Educational Sciences, Helsinki, Finland, 
+Kai.Hakkarainen@helsinki.fi  
+  
+Abstract . This chapter examines collaborative learning as cognition at the small -group unit of 
+analysis, and highlights theoretical questions conce rning interrelationships among individual, 
+collective and cultural cognition. CSCL is a  theory - and research -based pedagogical vision of 
+what collaborative learning could be like, thanks to innovative computational supports and new 
+ways of thinking about l earning. Theories of CSCL are shaped by rapidly evolving digital 
+technologies, pedagogical practices and research methods. Relevant theories can be 
+categorized as: subjective (individual cognition and learning), intersubjective (interactional 
+meaning makin g) and inter -objective (networks of learners, tools, artifacts and practices). 
+Theoretical insights suggest ways of enhancing, supporting and analyzing cognition and 
+learning by individuals, groups and communities. The emerging ecology of socio -digital 
+participation —involving students’ daily use of computers, mobile devices, social media and the 
+Internet —requires extending and synthesizing CSCL theories to conceptualize connected 
+learning at multiple levels.  
+Introduction  & Scope: Theory of Theories  
+Educatio nal research and practice should be informed by theory. However, CSCL has adopted 
+and spawned a variety of competing theories. How should CSCL researchers and practitioners 
+react to the current situation and what should they expect in the future?  
+Theories of CSCL are important to define what is unique about CSCL and to counter 
+misunderstandings about the nature and aims of CSCL as an evolving research field. CSCL is a  
+theory - and research -based pedagogical vision of what collaborative learning could be like , 
+given the development of innovative computational supports and new ways of conceptualizing 
+knowledge (epistemology), thought (cognition) and (collaborative) learning —largely influenced 
+by contemporary and emerging philosophical approaches and theories. H ence, CSCL is not 
+simply the study of the use of existing technologies in conventional educational settings, as 
+analyzed by traditional methods and theories. Rather, new theories have implications for 
+designing CSCL technologies, associated pedagogic pract ices and analytic methods.  
+To examine the role of theory, we need to examine the question of just what “ CSCL ” is. Some treat it as simply a form of educational technology, where students communicate over 
+networked devices, possibly enhanced through some AI  application. From this perspective 
+CSCL can involve learning either “through” or “around” CSCL technology (Lehtinen et al., 1999). 
+The former involves CSCL environments mediating —or providing a medium for —learners’ 
+synchronous or asynchronous online inter action, whereas the latter engages learners 
+interacting face -to-face and co -creating knowledge or artifacts around digital devices , such as 
+models, drawings, art works or craft objects developed on computers or tablets . Technological 
+development is, howeve r, blurring boundaries of such activities, as all knowledge work 
+increasingly involves socio -digital technologies.  
+Others define CSCL in distinction to “cooperative” learning, where tasks are divided among 
+students in a group working on a task, whereas col laborative learning involves joint pursuit of 
+knowledge objects (Knorr -Cetina, 2001), which learners seek to understand by co -authoring 
+texts or other products incorporating evolving shared meaning and common understanding. 
+CSCL is also contrasted with  Com puter -Supported Cooperative Work  (CSCW ), where adults 
+work together on professional tasks using computer support.  
+Still others focus on the intersubjective aspects of collaboration , which involve real -time 
+interaction in small groups and associated efforts of meaning making. Post -humanist 
+approaches highlight the active role of digital and other artifacts and physical, virtual or mixed 
+environments in which enacted collaborative activity is embedded. Such an “inter -objective” 
+(Latour, 1996 ) framework guides one to examine how multiple people learn as a group, 
+community or network by building joint meaning and constructing shared artifacts within 
+technologically rich  environments . 
+This chapter will review the changing role of theory in CSCL,  the major theories that are 
+currently influential in the field, as well as their philosophical and methodological underpinnings. 
+This chapter’s discussion of theories of CSCL is anchored to an examin ation of interrelations 
+and mutual shaping among  the technologies, practices and research methods of CSCL (Figure 
+1), characterized as follows.  
+  
+*** INSERT FIGURE 1 ABOUT HERE ***   
+Figure 1. Framework for examining theories of CSCL.  
+  
+●      Technolog y: The emergence of the CSCL field was associated wit h the 
+development of information and communication technologies or groupware systems that 
+enabled synchronous and asynchronous interaction and collaboration among learners. 
+These developments  inspired environments and theories for collaborative learning. T he 
+future of CSCL will continue to be mediated by rapid development of socio -digital 
+technologies. However, t he use of generic social media apps is in tension with CSCL’s 
+traditional focus on specialized applications for collaboration. Commercially develop ed 
+social media  (like FaceBook or Twitter)  are predominantly designed for exchange of 
+personal opinions ( resulting in flaming and fake news) rather than for supporting 
+intersubjective processes of knowledge building in domains like argumentation, sciences 
+and mathematics.  
+●      Practice : Educational use of CSCL technologies is a systemic endeavor anchored 
+in social practices of students, teachers and educational institutions. The impacts of 
+CSCL technologies are mediated both by prevailing educational prac tices and enacted 
+practices of using these technologies in learning and instruction. CSCL investigators 
+have developed pedagogic frameworks and guidelines for supporting innovative CSCL 
+implementations, together with developing theories for understanding p ractices of CSCL 
+and its transformative dynamics. The socio -political agenda of CSCL to improve the 
+quality of learning, democratize knowledge and promote educational equity requires 
+CSCL researchers to work closely with educators in iterative design exper iments to 
+implement CSCL in context.  
+●      Method:  With their research methods, investigators analyze CSCL processes and 
+practices, contributing to redesign of CSCL technologies and pedagogic models, as well 
+as refining theories of CSCL. Analyses of CSCL in practice have motivated theories of 
+cognition that is socially and materially distributed, temporally and socially emergent, 
+and embodied, enactive, embedded and extended. The field has developed specific 
+methods and investigative practices for studying  collaborative learning at multiple levels: 
+from the individual and small group to classroom/community/cultural/societal units of 
+analysis.  
+What kind of theory is appropriate and useful for deepening understanding, explanation and 
+advancement of CSCL?  
+The theory of science has morphed considerably in recent decades (see e.g., Latour & Woolgar, 
+1979) , away  from former positivist conceptions of theory and of science. Today, the goal of a 
+theory of CSCL is a controversial moving target, not an established canon of universally 
+accepted principles. We will be less concerned with predictive theory typical for the natural 
+sciences, and more with theory as a tool for understanding and transforming learning and 
+education. A number of theories have been prominent in CSCL during the past 25 years due to 
+the trans -disciplinary nature of the field; researchers trained in specific fields —such as 
+education, design, psychology, computer science, anthropology or linguistics —brought with 
+them theories, methodologies and ph ilosophies of science from these quite diverse enterprises.  
+This has resulted in a confusing variety of incommensurate, competing theories influential within 
+CSCL research. For instance, the most common theories identified in recent content meta -
+analyses o f CSCL (Akkerman et al., 2007; Jeong & Hmelo -Silver, 2016; Jeong, Hmelo -Silver & 
+Yu, 2014; Kienle & Wessner, 2006; Lonchamp, 2012; Wise & Schwarz, 2017; Tang, Tsai & Lin, 
+2014) were constructivist, socio -cultural, social -psychological and information -proce ssing 
+frameworks. It is not clear what specific theories correspond to these vague classifications, 
+which are often grouped based on loose author self -identification rather than  by looking at the 
+approaches actually applied in the reported research. Diffic ulties in comprehensively 
+characterizing CSCL theories reflect the complexity of the evolving field, where different 
+research questions require distinct kinds of investigation.  
+To clarify the range of traditional and emerging theories, we have categorized them under these 
+headings: subjective  (foregrounding individual cognition and learning), intersubjective  (centered 
+on interactional meaning making) and inter-objective  (emphasis on building of heterogeneous 
+networks of learners, tools, artifacts and practi ces). These overlapping  categories of  theories 
+have been crucial for understanding the field of CSCL, its developmental history and its 
+envisioned future.  In the following sections, we will suggest elements of a more integrated theory of CSCL. W e first 
+review the history of CSCL technologies, practices and methods, as tied to the subjective, 
+intersubjective and inter -objective theories that seem critical for advancement of the field.  
+History & Development  
+Interdependence of Theory and Method  
+Histor ical s hifts in theory both influenced and responded to changes in research practices, 
+analysis methods and focal concerns of CSCL research. The t heories influence how 
+researchers define their object of study, how they investigate it and how they interpret their 
+findings.  
+Much theory in CSCL c ame from the subjective theories of empirical approaches in 
+psychology —cognitive, educational and social  psychology —and contribute d assumptions and 
+research methods for CSCL. Although the pioneering contributions of ps ychologists like Brown 
+(1992) highlighted the importance of pursuing field case -studies in actual classrooms, the 
+psychological sciences generally prioritize d controlled laboratory experiments and statistical 
+measures of collected data.  
+Because implementat ion of CSCL in education calls for systemic change in social practices that 
+individualistic psychological theories are unable to account for, subjective approaches have 
+been critiqued, complemented, expanded and partially replaced by approaches that emphas ize 
+materially and socially distributed aspects of thinking and learning, rather than mental models or 
+symbolic representations. Such development has been critical for the development of CSCL, 
+given its technological and social mediation of learning. One w ay to understand the history of 
+psychological theories is as a sequence from positivism and behaviorism to cognitivism, and 
+then to socio -cultural theory —or from individual cognition to situated, distributed, group and 
+social cognition. Controlled experime nts to measure individual learning gains have been either 
+complemented or replaced with in -depth case studies or longitudinal ethnographies, without 
+which emerging CSCL practices could not have been fully understood, adequately explained or 
+deliberately fo stered.  
+The recognition of the complexity of learning in CSCL settings necessitate s extending the theory 
+and bringing in conceptualizations and methods from related fields. Hence, CSCL theories 
+increasingly invoke and adapt methods from other social scienc es, including linguistics and 
+anthropology. The resulting contextualized approaches to analyzing cognition address thinking 
+and learning as involving people situated in dialog with others, within a world of language, 
+artifacts and culture. Such CSCL studie s often use interaction analysis or design -based 
+research to understand and explore how groups of students interact using technological artifacts 
+and systems. Especially in CSCL, the primary actor, cognitive agent or collaborative learner 
+may be seen as th e small group itself (Stahl, 2006). Collaborative learning can be studied at 
+various interdependent units of analysis —such as linguistic moves and embodied actions (e.g., 
+gesturing, sketching and prototyping) —and at different levels of social organization —such as an 
+individual person, team, classroom, community or culture.  Surveys of methodological practices of CSCL often reflect on how theoretical frameworks affect 
+the analysis methods of investigators. However, available technologies and methods can 
+provide access to specific kinds of empirical phenomena and data, in turn inspiring the 
+refinement of CSCL theory. In human sciences, methods and tools can create the very 
+phenomena (research objects) of investigation, so that theories, methods or technolo gies are 
+interdependent (Gigerenzer, 1994). In the development of the field of CSCL, interventions with 
+discussion forums gave rise to theories of computer -mediated communication; the use of video 
+games resulted in micro -analytic studies of small -group cog nition; and studies of collaborative 
+environments, such as Knowledge Forum  (Scardamalia, this volume) , shaped knowledge -
+building theories. The recent emergence of digital fabrication technology and educational maker 
+spaces expand the scope of CSCL epistemo logically, theoretically and methodologically, to 
+centrally involve the role of materially embodied artifacts in collaboration.  
+CSCL studies rely on complementary bodies of thick, thin and rich big data (Hillman & Säljö, 
+2016). They collect thick data  though ethnographic and participant observations, interviews and 
+document ation of design experiments. Such data is needed for understanding, examining and 
+further refining learners’ and teachers’ socio -digital knowledge practices. CSCL studies may 
+also utilize  thin data , i.e., self -report response data that enable tracing learning, motivation and 
+socio -digital activity. Self-report data may be needed for showing the perceived  impact of 
+interventions. Moreover, CSCL i nvestigators have developed novel instruments  and methods for 
+tracing and analyzing the “big” data of contextual , digitally mediated learning activities and 
+processes . Such big data can be interpreted along with thick process data and thin self -report 
+data. CSCL research addresses complex and often m essy efforts of implementing collaborative 
+practices in education and, therefore, often uses mixed methods for reaching robust 
+understanding of CSCL processes. Although design -based and interventionist approaches 
+appear to dominate CSCL, it is also importa nt to continue pursuing controlled experiments for 
+testing the impact of well understood practices of using technology, possibly within the cycles of 
+design -based research.  
+There is growing recognition that human cognition takes place on multiple, interdep endent 
+levels, and that research methods should include approaches at the individual, small group, 
+community and network units of analysis. One could use different methods at each unit of 
+analysis and then identify links between them. A central open questi on involves how the levels 
+interact. This must become a vital concern of further development of theories of CSCL.  
+Diversity of Theories & Traditional Oppositions  
+An important distinction between different theoretical frameworks depends on the focal unit of  
+collaboration.  
+Subjective theories focus on the individual mind —admitting that student learning is influenced 
+by the social context but measuring the effects of participation in the group on the individual 
+members as psychological subjects.  
+Inter-object ive theories are more oriented to social, community and cultural levels of analysis —
+emphasizing linguistic interactions or embeddedness of learning on networks of people and artifacts. They are concerned with analyzing and cultivating the social practices in which 
+learning is embedded and the social institutions that structure learning activities. The 
+collaborative group then stands in the middle, between the individuals who participate in the 
+group, tools and artifacts used, and the community or larger net work whose practices the group 
+adopts and adapts as it learns collaboratively.  
+Intersubjective  theories  focus on the group itself as the unit of analysis. Collaborative learning, 
+which takes place in CSCL primarily at th e group  unit, can have consequences  at the other 
+levels, leading to learning outcomes for the individuals or transformation of community social 
+practices (Lave & Wenger, 1991).  
+The array of theories has evolved through a series of historical developments. The history of 
+Western philosophy f rom the early Greeks to the present provides many of our now 
+commonsensical assumptions about scientific method (Stahl, 2020, Investigation 15). 
+Empiricism, for instance, culminated in positivism and its view of objective knowledge. 
+Rationalism assumed tha t all cognition took place in individual minds, which used propositions 
+in the head to represent facts in the world and to deduce knowledge. In psychology, 
+behaviorism limited science to empirical study of a subject’s externally observable behavior. 
+That w as challenged by cognitivism, which argued that learning and knowledge required 
+mediation by the mind, for instance using language and logical reasoning (Chomsky, 1959). 
+Cognitive science’s computational theory of mind assumed encapsulated mind with intern al 
+representations, memory storage and information processing analogous with those of early 
+computers (Gardner, 1985).  
+Constructivism and social constructivism followed (Packer & Goicoechea, 2000). They accepted 
+Kant’s (1787) philosophical insight that the  human mind structures all knowledge of the world. 
+Educationally, this implies that students should be guided to make sense of new information in 
+terms of their own understandings (past knowledge, personal perspective, existing 
+conceptualizations, motivati ons). While this had radical consequences for educational theory, it 
+still focused on the individual as learner. The resulting “constructivist” theories tended to be 
+uninformative (everything is in some vague sense constructed).  
+Alternative socio -historica lly motivated theories then developed based on the dynamic 
+philosophy of Hegel (1807) and Marx (1867), which shaped Vygotsky’s, Bakhtin’s and other 
+investigators’ theories of the social mind and mediated cognition. From the perspective of the 
+emerging soci o-cultural framework, cognitive development and learning were results of 
+dialectics between personal tool -mediated activities, group interactions, social practices and 
+“cognitive -cultural macro -structures” (Donald, 1991). This can be viewed as a watershed 
+transformation from individualism to recognition of the group and social community as pivotal to 
+learning, opening the way for CSCL as an educational approach.  
+“Mediation” is a concept developed in Hegel’s dialectical philosophy and central for CSCL. 
+Notic e that the word has connotations of media and middle. It can refer to a variety of processes 
+that take place in the middle of two related phenomena. For cognitivism, the human mind plays 
+a mediating role in transforming perceptions of the world into mental  knowledge. In CSCL, 
+technologies provide the tools and media through which interactions between people, groups 
+and artifacts take place; they mediate both interaction and materially embodied activity. In CSCL contexts, interaction is not directly between minds, but is mediated by language, gesture, 
+symbol, technology and context (including school practices, background knowledge, previous 
+interactions).  
+Vygotsky’s theory of “mediated cognition” provides an historical cornerstone of CSCL theory.  
+Development and Learning in Vygotsky  
+Vygotsky (1930) developed an approach to educational psychology appropriate to the 
+philosophical methods of Hegel and Marx. His writings point beyond individual psychology to a 
+recognition of mediated, group, social cognition. Thereby, they offer an important starting point 
+for CSCL theory.  
+Collaborative learning, as the source of cognitive development, may be considered a basis of all 
+human learning, not just an optional and rare mode of instruction. That is, group c ognition is a 
+foundation of human cognition (planning, problem solving, deduction, storytelling, etc.) at all 
+levels. Vygotsky’s experiments illustrate ways in which group cognition forms a base for 
+individual cognition. By incorporating language, external  symbols and other cultural artifacts, 
+this process connects the cultural and community level to the small -group and individual levels.  
+The gap between cultural development and individual learning is what Vygotsky calls the “zone 
+of proximal development” ( ZpD). This includes what a child will next be able to learn. It is a 
+prime arena for CSCL intervention, because students in this zone can learn collaboratively what 
+they cannot yet learn by themselves. In Vygotsky’s (1930, pp. 86f) well known discussion of  the 
+ZpD, he cites a study in which children “could do only under guidance, in collaboration and in 
+groups at the age of three -to-five years what they could do independently when they reached 
+the age of five -to-seven years.” CSCL can be seen precisely as s uch an effort to stimulate 
+students within their ZpD —on tasks they cannot yet master individually but are close to being 
+ready to learn —under guidance, in collaboration and in groups.  
+In his “Problems of Method,” Vygotsky (1930, pp. 58 -75) called for a new  paradigm of 
+educational research almost a century ago. Arguing that one cannot simply look at post -test 
+results of an experiment, he proposed a method of “double stimulation” where a child is 
+confronted by a learning challenge and a potential artifact to mediate that work. Instead of 
+proposing an experimental study for comparing learning outcomes with and without some 
+furnished artifact, Vygotsky suggests that “the experimenter waits until they spontaneously 
+apply some new auxiliary method or symbol that t hey then incorporate into their operations.” 
+Taking this inter -objective research approach on collaboration requires attention to the 
+children’s interaction, the object -related activity and the sense -making that is involved in 
+creative, unanticipated colla borative accomplishments.  
+The essence of Vygotsky’s method of double stimulation is the CSCL practice of engaging 
+learners themselves in extended processes of co -creating artifacts for transforming problem 
+situations and re -mediating their learning process es (Ritella & Hakkarainen, 2012); see also 
+(Paavola & Hakkarainen, this volume). Such investigation involves tracing the unique 
+trajectories of distinct groups’  object -related activities , which could not be understood if sorted 
+into statistically aggregate d or standardized categories.  Furthermore, the key role of mediation of group cognition by artifacts —as stimulants to working 
+on a primary learning object —points to the importance of computer support in CSCL. CSCL 
+environments can be designed with a wide v ariety of artifacts (scripts, models, manipulatives, 
+graphics, prompts, etc.) to stimulate collaborative learning. Vygotsky’s brief career began in the 
+context of stimulus/response behaviorism. Through critiquing with a dynamic lens the theories of 
+learnin g that were popular in his time, Vygotsky sketched a vision of the ties between individual, 
+group and community (social, cultural) cognition that CSCL researchers can now elaborate . 
+State of the Art  
+Recent Theories Influential in  CSCL  
+CSCL is distinguished by its pedagogic, analytic and technological focus on collaboration. 
+Popular socio -cultural  theories in CSCL build on Vygotsky’s initiative. Most traditional and socio -
+cognitive  theories of learning, by contrast, focus on the individu al mind as the learner and the 
+repository of learned knowledge. The theories presented in this section consider how learning 
+(cognition) and knowledge (epistemology) can be considered at larger units of analysis than the 
+individual human, such as the small  group and various social or cultural levels, including 
+artifacts and other contextual referents.  
+Socio -cognitive Research on CSCL  
+Socio -cognitive theories of CSCL, which build on conceptions of individual learning, cognition 
+and motivation, typically aim at examining (a) how collaborative group learning affects 
+advancement of individual learning and (b) how manipulations of controlled  independent 
+variables affect the success of students’ collaborative learning. Investigators may focus on 
+cognitive and moti vational gains of personal and collaborative learning or measure the impact of 
+various scripting strategies on collaborative -learning processes and individual -learning 
+outcomes (e.g., Weinberger et al., 2005). Studies of regulation in CSCL have expanded fr om 
+self-regulation to peer assisted co -regulation and group regulation (e.g., Panadero & Järvelä, 
+2015). Although socio -cognitive studies often rely on laboratory experiments and quasi -
+experimental designs, many use mixed methods and collect data from fiel d studies. Each 
+approach has appropriate rigorous standards of evidence that it can follow (Methods section, 
+this volume).  
+Ethnomethodology  
+Ethnomethodology contrasts with socio -cognitive approaches in that it does not seek to analyze 
+psychological process es in the minds of individuals, but studies social, interactional and 
+linguistic practices that can be observed directly, for instance in detailed transcripts of 
+conversation. Garfinkel (1967) argued that human behavior is based on the adoption of social 
+practices or “member methods” shared through participation in a given culture. It is because 
+everyone is familiar with these practices that people can make sense of each other’s behavior. 
+Furthermore, people display in their embodied activity how their acti ons should be understood. Sacks studied this in transcripts of ordinary conversation, founding Conversation Analysis 
+(Garfinkel & Sacks, 1970; Sacks, 1965). Investigations showed how people design their speech 
+to open and close new topics, to respond to ea ch other and to repair misunderstandings 
+(Schegloff, 2007). As a sociological approach, ethnomethodology shifts the view of learning to 
+the community, social or cultural level.  
+Dialogism  
+Bakhtin’s (1981) theory has affected CSCL research by guiding investigators in analyzing 
+dialogic interaction processes. The dialogic approach guides students in sustained interaction 
+that enables them to explore and build on their own and peers’ ideas (Wegerif, 2007) . From the 
+dialogic nature of thinking and meaning, it follows that a person’s utterance in conversation, 
+writing or thinking should not necessarily be interpreted as an expression of private mental 
+representations or beliefs, but as an interac tive response to on -going communication, designed 
+to evoke future responses. Furthermore, speech incorporates countless standard elocutions that 
+are part of shared literary genre s and language. Often, specific words that someone else used 
+are repeated and taken up in subsequent  utterance s. Accordingly, utterances should be 
+analyzed and understood as dialogical moves within a social setting, not just as personal 
+expressions.  
+Knowledge  Building  
+Pioneering CSCL work of Scardamalia and Bereiter (1996)  created a  knowledge -building 
+framework that engages young students in the collaborative pursuit of knowledge advancement. 
+Their groupware system for mediating knowledge -building processes evolved into Knowledge 
+Forum  (see Scardamalia, this volume) . They consider kn owledge building to be a collaborative 
+effort of advancing communal knowledge, as distinguished from individual learning. They 
+propose that schools can be developed into “knowledge -building” communities that engage 
+students in expert -like creative work wit h knowledge, appropriating disciplinary methods of 
+advancing knowledge. Toward that end, students are engaged in “design mode”  activities of 
+creating, improving, sharing and advancing ideas, understood as improvable conceptual 
+artifacts (i.e., results of k nowledge building, such as texts, reports, designs, theories, symbols, 
+tools, usable objects). Knowledge building is an emergent, nonlinear process that cannot be 
+rigidly scripted or pre -determined. The knowledge -building framework has been developed in 
+close collaboration with teachers committed to implementing Scardamalia’s (2002) knowledge -
+building principles in practice (e.g., anchoring learning on real issues and authentic problems, 
+promoting idea diversity and engaging in efforts of reflecting upon ea rlier investigations or 
+proposals).  
+Knowledge -Creating Learning  
+Paavola and Hakkarainen (2014)  expanded the conceptually oriented knowledge -building 
+theory by also taking into consideration materially embodied aspects of artifacts (see Paavola & 
+Hakkaraine n, this volume). Their knowledge -creating learning approach is distinguished both 
+from the knowledge -acquisition metaphor and the participation metaphor (Sfard, 1998). While 
+the acquisition view represents a “mono -logical” (subjective, mental) view on huma n learning and the participation view represents a “dia -logical” (intersubjective) view, the knowledge -
+creation perspective may be understood as “tri -logical” in nature because of its foregrounding 
+interaction between individuals, communities and shared ep istemic objects being developed . 
+Knowledge creation is anchored by deliberately cultivated knowledge practices, i.e., social 
+practices of working with knowledge artifacts and media (Hakkarainen, 2009).  
+Cultural -Historical  Activity Theory  
+Relying on Cultura l Historical Activity Theory (CHAT) developed by Vygotsky’s colleagues, 
+Engeström (1987) investigated CSCL from the perspective of expansive learning. CHAT guides 
+researchers to examine CSCL as an integral part of the contradiction -laden historical 
+develop ment of educational activity, calling for profound transformation of social practices 
+prevailing at school s. Social practices are anchored in dynamic activity systems, which must be 
+transformed to allow significant changes to happen. Expansive learning sta rts by criticizing, 
+questioning and analyzing contradictions arising within the system or in its external relations. 
+CHAT studies often promote community development by engaging students and teachers in 
+solving vital real -world problems in collaboration wi th networks of local stakeholders, such as 
+community organizations and workplaces (Engeström, Engeström & Suntio, 2002; Roth  & Lee , 
+2007) . 
+Actor -Network  Theory  
+Actor -Network Theory (ANT) (Latour, 2007) builds on science -and-technology studies showing 
+how c omplex human activity relies on networks of people, artifacts and practices. Such 
+networks diverge from CHAT activity systems in terms of having diverse kinds of actors exerting 
+causal influences : including non -human agents such as tools, technology -rich e nvironments or 
+knowledge objects. This framework is characterized by “inter -objectivity” (Latour, 1996) in terms 
+of treating humans and artifacts symmetrically and highlighting the active roles of the various 
+actors. ANT has been applied more often in CSCW  and workplace situations than in educational 
+or CSCL contexts but appears to have potential here as well (Fenwick & Edwards, 2011). 
+Learning takes place in increasingly complex socio -material environments, which intertwine 
+enacted local practices with vir tual and distributed activities. Technological artifacts have a 
+dynamic dual role as agents that oscillate between structuring and constraining as well as 
+directing and expanding activity. ANT examines social engineering involved in negotiating 
+conflicting  interests of stakeholders —such as researchers, technology developers, educational 
+administrators, teachers and students —that successful CSCL projects must align.  
+Group Cognition  and Adopting Group Practices  
+The theory of group cognition (Stahl, 2006; 2020, Investigation 16) is primarily concerned with 
+building knowledge and epistemic artifacts through artifact -mediated processes of group 
+interaction. It focuses on the small -group unit of analysis, as the leve l at which social and 
+cultural phenomena and artifacts influence the interaction, which, in turn, may produce group, 
+individual and community learning. The theory elaborates concepts of cognition, knowledge, 
+interaction, sequentiality, intersubjectivity, s hared understanding, artifact mediation, practice, 
+agency and joint attention appropriate to the small -group level of description. The interpenetration of the social, group and individual cognitive levels can be observed, analyzed 
+and studied in processes involving the adoption of group practices, for instance, in the context 
+of learning geometry (Stahl, 2013; 2016); see (Medina & Stahl, this volume). One can refine 
+CSCL curriculum and pedagogy  to promote the adoption of key group practices. CSCL 
+technology  can support the presentation, exploration and adoption of identified group practices. 
+Analysis  of group interaction in CSCL settings can reveal successes and barriers to adoption of 
+such practices and point to needed improvements as well as documenting su ccessful learning 
+at group and individual levels.  
+Dealing with Diversity  
+It is appropriate that a field like CSCL, which is still an exploratory vision, allows a diversity of 
+theories, from subjective to intersubjective and inter -objective. This inspires i nnovative research 
+agendas. However, because theory has consequences for methodology, a researcher should 
+be explicit about what theoretical framework guides a specific research project or analysis. 
+One’s research question should determine the unit of anal ysis and associated methods. While 
+all established theories capture some truth,  when combining approaches,  their corresponding 
+methodologies may be both limiting and mutually incompatible. For instance, validated self -
+report questionnaires are useful tools , but participants’ individual responses are not likely to 
+adequately reveal contextual factors and intersubjective learning processes. The current 
+situation of the theory of CSCL affords flexibility to the researcher but requires careful respect 
+for the d iverse approaches.  
+The Future  
+Toward an Integrated Theory of CSCL  
+CSCL theory during recent decades has increasingly broadened the phenomena of interest —
+from learning impacts on individual students to forms of interaction within small groups and 
+communitie s, involving various forms of artifacts and interactions among levels. Central 
+theoretical concepts have been reconceptualized. Investigation of the phenomena related to 
+these concepts will continue to stimulate theory building and may allow a  more  integra ted 
+framework to emerge for understanding collaborative learning and for guiding technological and 
+pedagogical support.  
+In this section, we review themes and concepts that seem central to continuing to develop 
+CSCL theory —from a collection of concerns from  related fields to a framework specific to what 
+is unique to CSCL (see Figure 2). Finally, we turn from theory to practice and consider the 
+implications of this chapter’s discussion for pursuing CSCL in the classroom.  
+  
+*** INSERT FIGURE 2 ABOUT HERE ***  
+Figure 2. Framework for integrated CSCL theory.  
+Elements of an Integrated Theory of CSCL  
+Discourse and Interaction  
+Collaborative learning proceeds through knowledge -creating discussion within a group of 
+learners. The group learns by building and shar ing knowledge and by interacting in non -verbal 
+ways within the CSCL environment (e.g., highlighting, sketching, modeling, prototyping, 
+gesturing, producing knowledge artifacts). Analysis of collaborative interaction usually involves 
+investigating transcrip ts of the discourse and multimodal interaction. It may consist of 
+understanding the flow of conversational moves and embodied actions and the meaning making 
+that took place by the group, perhaps adapting Conversation Analysis (Schegloff, 2007) or 
+Interacti on Analysis (Jordan & Henderson, 1995) . 
+Interactional Mediation by CSCL Environments  
+CSCL provides multi -faceted socio -technical environments that mediate collaborative interaction 
+and learning in diverse  ways. The rapidly evolving ecology of socio -digital  technologies is 
+distributed across formal and informal spaces of learning, so that technology mediation is 
+increasingly mashed up to take place through and “around” socio -digital tools. Theory should 
+account for such mediation and inform the design of med ia to support specific, identified 
+aspects of collaborative learning, as well as interconnecting informal and formal technology -
+mediated learning.  
+Epistemic Mediation  by Knowledge Artifacts  
+CSCL environments offer learning communities shared spaces and sca ffolding for creating, 
+building, visualizing, sharing, organizing and advancing knowledge artifacts. Socio -digital 
+technologies enable cognitive augmentation that CSCL builds on: By technologically extending 
+the mind, digital devices foster new forms of co llaborative working and engagement in 
+successive refinement of complex ideas (Donald, 1991). The “epistemic mediation” involved in 
+such extended thinking processes refers to a deliberate process of deepening inquiry by 
+creating external epistemic artifacts  (e.g., shared written notes, visual representations, material 
+artifacts, simulations and discourse media) that crystallize and promote evolving understanding 
+and collective inquiry. Problems and solutions in CSCL processes can be understood as 
+epistemic o bjects; such objects represent what the participants are seeking to understand and 
+create but do not yet know or understand. These objects are defined by their openness, 
+incompleteness and capacity to unfold indefinitely through successive thought - and aff ect-laden 
+instantiations as textual or other artifacts (Knorr -Cetina, 2001) . 
+Temporality and Sequentiality  
+CSCL takes place over time and through language use embedded in technology -mediated 
+activity. Interaction takes place through the sequential ordering  of actions, utterances and 
+gestures. A given oral or written utterance typically responds to previous activity and discourse, 
+generally designed to provoke a response and to propel the discourse and inquiry  forward . The 
+analysis of collaborative learning as a group meaning -making process may need to interpret the 
+temporality and sequentiality of captured discourse and related activity (Medina & Stahl, this 
+volume). Although utterances may be analyzed statistically t o answer specific research 
+questions, the enacted collaboration itself is an inherently sequential process, which cannot be 
+fragmented without losing its meaning. Further, temporality and sequentiality also structure the 
+non-linguistic activity. CSCL activity is embedded in unfolding social (group work) and material 
+(technological) processes, which are entangled in temporal emergent assemblages, analysis of 
+which may reveal development of key epistemic, group and social practices.  For instance, 
+analysis at multiple time  scales can reveal processes at the micro level (e.g., utterances), meso 
+level (establishment of group practices) and macro level (evolution of community cultural 
+norms).  Intersubjectivity  and Shared Understanding  
+A fundamental theoretical que stion for CSCL is that of intersubjectivity (Stahl, 2020, 
+Investigation 18) : How is it possible (both in the abstract and in practical terms) for participants 
+in a group to understand each other? This is a problem for cognitivism: If one person’s mind 
+expresses a thought in a spoken utterance, how can another person’s mind know what that 
+utterance meant to the speaker? Socio -cultural theory answers this by noting that people share 
+language, activity context and cultures laden with mutually understood meanin gs. Of course, in 
+a situation of collaborative learning there are ample opportunities for misunderstanding each 
+other. Fortunately, our languages and embodied activity include shared practices for repairing 
+misunderstandings. Intersubjectivity is the resul t of specific aspects of human interaction, 
+beginning in prehistory (Tomasello, 2014) and continuing in successful CSCL sessions today 
+(Schneider & Pea, 2013). The need to constantly maintain intersubjective shared understanding 
+is a major reason that CSCL  requires special supports, training and effort in order to be 
+successful.  
+Personal, Distributed  and Group Agency and Units of Analysis  
+Theories based on individual minds locate the agency that causes events like expressing 
+opinions or learning at the indi vidual unit of analysis, looking to personal motivations and beliefs. 
+Theories of distributed cognition (Hutchins, 1996)  or group cognition locate collaborative agency 
+at the group unit. Activity Theory ( Engeström , 1987 ) looks as well at tensions or contra dictions 
+among social factors in the setting and Actor Network Theory (Latour , 2007 ) goes even further 
+to bestow agency on an open -ended universe of (past and present) human and artifact actors, 
+bringing in a cultural -historical unit of analysis. CSCL theo ry should account for agency and 
+other phenomena at multiple units of analysis.  
+Orchestrating and Scaffolding the CSCL Culture  
+An early finding of CSCL research was that collaborative learning cannot succeed in classrooms 
+without preparing teachers and stu dents with an understanding of the theory and pedagogy of 
+CSCL. A classroom culture of collaboration must replace the culture of individual rote learning 
+and competition. CSCL aims at cultivating “nonlinear ” pedagogy, characterized by open -ended, 
+emergent and inventive educational practices (Ng, 1995). Although nonlinear knowledge -
+creation processes cannot be rigidly scripted (Scardamalia & Bereiter, 2014), it is necessary to 
+guide and scaffold student learning for productive collaborative learning, interac tion and 
+knowledge creation. Flexible teacher orchestration and CSCL structuring is required to cultivate 
+local practices of working with knowledge and media (Zhang,  et al.,  2018). A delicate balance is 
+needed for guiding, scaffolding, orchestrating, struc turing and facilitating collaborative 
+knowledge creation.   
+CSCL theory must  recognize these implementational requirements and point the way to the 
+desired  vision. The theories just enumerated offer insight s into what learning and knowledge 
+building might  be like in effective CSCL contexts. They supply  concepts and frameworks for 
+thinking about such collaborative processes. They also provide guidance for CSCL research 
+into the design and trial of technology and pedagogy for supporting CSCL.  Theoretical Perspectives on Implementing CSCL  
+Implementing the Vision of CSCL in Classrooms  
+CSCL has been criticized for having failed to transform education (e.g., Wise & Schwarz, 2017). 
+Critics assume that once students had computers and became accustome d to networking with 
+other students, the incorporation of collaborative learning and CSCL in classrooms should have 
+spread rapidly. We all seriously underestimated the challenges of transforming technological 
+infrastructure, cultivating CSCL practices and changing associated educational accountability 
+regimes. The preceding theoretical perspectives indicate why implementation of CSCL will take 
+longer:  
+●      CSCL is a vision  of a future involving technologies, practices and research methods 
+that guide inves tigators’ theory -building and intervention efforts. CSCL is an incomplete 
+epistemic object (Knorr -Cetina, 2001) , which constantly raises new questions and 
+becomes more complex as technologies, practices and methods develop unpredictably.  
+●      CSCL is emb edded in rapidly expanded ecologies of socio -digital participation  that 
+involve young people using technology intensively. Many young people use digital 
+technologies for pursuing their interests together with their peers, experimenting with 
+digital tools a nd making personal media productions. The challenge of CSCL is to 
+promote connected learning in terms of also engaging students at school in creative and 
+academic collaborative use of technology  for knowledge building  (Ito et al., 2013) . 
+A theoretical and practical challenge is to determine what processes, methods and practices are 
+needed for CSCL to penetrate deeply into educational systems. A handful of systematic efforts 
+have produced promising results (e.g., Chan, 2011; Looi  et al. , 2011), but they have  been rare. 
+Although there have been isolated CSCL classrooms sustained by committed teachers, the 
+establishment and dissemination of rich collaboration cultures in schools remain elusive and 
+prone to failure (Hakkarainen, 2009; Ritella & Hakkarainen, 2012 ). Advancement of the CSCL 
+field requires a more comprehensive theoretical and practical understanding of the complex and 
+dynamic relations between digital technologies, social practices and educational -transformation 
+processes.  
+Despite transformative CSCL  visions, new digital tools tend to be initially used to promote 
+traditional practices of teaching or learning; radical innovative possibilities emerge only through 
+sustained transformation of social practices (Hakkarainen, 2009). Successful implementation s 
+of CSCL practices rely on systematic participatory transformations taking place through 
+intensive research -practice partnerships. To effectively utilize CSCL practices, teachers and 
+students must undergo “instrumental genesis” (Rabardel & Bourmaud, 2003) , integrating the 
+CSCL tools into learning/teaching activities. This involves shaping, adapting and tailoring the 
+CSCL tools and practices according to local needs and requirements by participants, as well as 
+cultivating novel personal and group practices.  The process iteratively evolves the design of the 
+tools to better facilitate intended practices and the creation of novel practices, tool usages and 
+understandings by the participants.  
+As students increasingly rely on technology in their everyday interaction, cognition and learning 
+practices, approaches explored in CSCL research and theory may promote connected learning practices and, thereby, overcome the limitations of simplistic socia l-media apps. The result may 
+be quite different from the experimental prototypes of classic CSCL research projects. Despite 
+the complexity of the challenges, that is what it means to understand the CSCL vision as an 
+epistemic object of global inquiry, rath er than as a summative evaluation of a well -defined object 
+of study. Theories of CSCL should comprehend, envision and guide the targeted 
+transformations and emergent technologies, practices and methods for achieving the CSCL 
+vision . 
+Additional Readings  
+• Koschmann, T. (Ed.). (1996). CSCL: Theory and practice of an emerging paradigm . 
+Hillsdale, NJ: Lawrence Erlbaum Associates.  – This edited volume defined the beginnings of 
+CSCL theory. It includes Koschmann’s discussion of the CSCL paradigm, Roschelle’s model 
+of CSCL interaction analysis and Scardamalia & Bereiter’s argument for supporting 
+collaborative learning, among other seminal papers.  
+• Vygotsky, L. (1930). Mind in society . Cambridge, MA: Harvard University Press.  – 
+Vygotsky’s most important writings and no tes collected here present a vision of the theory of 
+learning most influential in CSCL.  
+• Donald, M. (1991). Origins of the modern mind: Three stages in the evolution of 
+culture and cognitio n. Cambridge, MA: Harvard University Press; Donald, M. (2001). A 
+mind so rare: The evolution of human consciousness . New York, NY: W. W. Norton. – 
+In these books, Donald presents culture as a rapid form of human evolution and extends the 
+theory of learning to include external memories provided by digital technology.  
+• Stahl,  G. (2020). Theoretical investigations: Philosophical foundations of group 
+cognition . New York, NY: Springer.  –This edited volume brings together many of the past 
+articles in the International Journal of CSCL  and recent essays by the journal’s editor that 
+are most relevant to this chapter. Together, they point in the direction of CSCL theory 
+indicated here for the future. See also (Medina & Stahl, this volume) and essays available 
+at: http://gerrystahl.net/eli brary.  
+• Hakkarainen, K. (2009). A knowledge -practice perspective on technology -mediated 
+learning . International Journal of Computer -Supported Collaborative Learning. 4 (2), 213 -
+231. – This article generalizes research experiences implementing CSCL in educati onal 
+practices, expands knowledge building toward the trialogic approach to knowledge -creating 
+learning and works out the notion of knowledge practices. See also (Paavola & 
+Hakkarainen, this volume).  
+References  
+Akkerman, S., Bossche, P. V. d., Admiraal, W. , Gijselaers, W., Segers, M., Simons, R. -J. et al. 
+(2007). Reconsidering group cognition: From conceptual confusion to a boundary area 
+between cognitive and socio -cultural perspectives? Educational Research Review. 2 , 39–
+63. Bakhtin, M. (1981). The dialogi c imagination: Four essays . Austin, TX: University of Texas 
+Press.  
+Brown, A. (1992). Design experiments: Theoretical and methodological challenges in creating 
+complex interventions in classroom settings. The Journal of the Learning Sciences. 2 (2), 
+141-178. 
+Chan, C. K. K. (2011). Bridging research and practice: Implementing and sustaining knowledge 
+building in Hong Kong classrooms. International Journal of Computer -Supported 
+Collaborative Learning. 6 (2), 147 -186. 
+Chomsky, N. (1959). Review of verbal behavior , by B. F. Skinner. Language. 35 (1), 26 -57. 
+Donald, M. (1991). Origins of the modern mind: Three stages in the evolution of culture and 
+cognition . Cambridge, MA: Harvard University Press.  
+Donald, M. (2001). A mind so rare: The evolution of human consciousn ess. New York, NY: W. 
+W. Norton.  
+Engeström, Y. (1987). Learning by expanding: An activity -theoretical approach to 
+developmental research . Helsinki, Finland: Orienta -Kosultit Oy.  
+Engeström, Y., Engeström, R.  & Suntio, A. (2002). Can a school community learn  to master its 
+own future? In G. W. G. Claxton (Ed.), Learning for life in the 21st century.  (pp. 211 -224). 
+Cambridge, MA: Blackwell.  
+Fenwick, T.  & Edwards, R. (2011). Introduction: Reclaiming and renewing actor network theory 
+for educational research. Educational Philosophy and Theory 43 , 1-14. 
+Gardner, H. (1985). The mind's new science: A history of the cognitive revolution . New York, 
+NY: Basic Books.  
+Garfinkel, H. (1967). Studies in ethnomethodology . Englewood Cliffs, NJ: Prentice -Hall. 
+Garfinkel, H.  & Sacks, H. (1970). On formal structures of practical actions. In J. Mckinney & E. 
+Tiryakian (Eds.), Theoretical sociology: Perspectives and developments.  (pp. 337 -366). 
+New York, NY: Appleton -Century -Crofts.  
+Gigerenzer, G. (1994). Where do n ew ideas come from? In M. Boden (Ed.), Dimensions of 
+creativity.  (pp. 53 -74). Cambridge, MA: The MIT Press.  
+Hakkarainen, K. (2009). A knowledge -practice perspective on technology -mediated learning. 
+International Journal of Computer -Supported Collaborative Learning. 4 (2), 213 -231. 
+Hegel, G. W. F. (1807). Phenomenology of spirit  (J. B. Baillie, Trans.). New York, NY: Harper & 
+Row.  
+Hillman, T.  & Säljö, R. (2016). Learning, knowing and opportunities for participation: 
+Technologies and communicative practices. Learning, Media, and Technology. 41 , 306 -
+309. 
+Hutchins, E. (1996). Cognition in the wild . Cambridge, MA: MIT Press.  Ito, M., Gutiérrez, K., Livingstone, S., Penuel, W., Rhodes, J., Salen , K., Schor, J., Sefton -
+Green, J., Watkins, S. (2013). Connected Learning: An Agenda for Research and Design . 
+Irvine, CA: Digital Media . 
+Jeong, H.  & Hmelo -Silver, C. E. (2016). Seven affordances of computer -supported collaborative 
+learning: How to support collaborative learning? How can technologies help? Educational 
+Psychologist. 51 (2), 247 -265. 
+Jeong, H., Hmelo -Silver, C. E.  & Yu, Y. (2014). An examination of CSCL methodological 
+practices and the influence of theoretical frameworks 2005 -2009. Internationa l Journal of 
+Computer -Supported Collaborative Learning. 9 (3), 305 -334. 
+Jordan, B.  & Henderson, A. (1995). Interaction analysis: Foundations and practice. Journal of 
+the Learning Sciences. 4 (1), 39 -103. 
+Kant, I. (1787). Critique of pure reason . Cambridge, U K: Cambridge University Press.  
+Kienle, A.  & Wessner, M. (2006). The CSCL community in its first decade: Development, 
+continuity, connectivity. International Journal of Computer -Supported Collaborative 
+Learning. 1 (1), 9 -33. 
+Knorr -Cetina, K. (2001). Objectua l practices. In K. -C. T. Schatzki, K.  & Von Savigny, E. (Ed.), 
+The practice turn in contemporary theory (pp. 175 -188). London, UK: Routledge.  
+Koschmann, T. (Ed.). (1996). CSCL: Theory and practice of an emerging paradigm . Hillsdale, 
+NJ: Lawrence Erlbaum As sociates.  
+Latour, B. (1996). On interobjectivity. Mind, Culture and Activity. 3 (4), 228 -245. 
+Latour, B. (2007). Reassembling the social: An introduction to actor -network -theory . Cambridge, 
+UK: Cambridge University Press.  
+Latour, B.  & Woolgar, S. (1979). Laboratory life . Thousand Oaks, CA: Sage Publications.  
+Lave, J.  & Wenger, E. (1991). Situated learning: Legitimate peripheral participation . Cambridge, 
+UK: Cambridge University Press.  
+Lehtinen, E., Hakkarainen, K., Lipponen, L., Rahikainen, M.  & Muukkonen, H. (1999). Computer 
+supported collaborative learning: A review of research and development. Cl -net project . The 
+J. H. G. I. Giesbers Reports on Education (vol 10): Department of Educational Sciences, 
+University of Nijmegen.  
+Lonchamp, J. (2012). Computational analysis and mapping of ijCSCL content. International 
+Journal of Computer -Supported Collaborative Learning. 7 (4), 475 -497. 
+Looi, C. -K., So, H. -J., Toh, Y.  & Chen, W. (2011). The Singapore experience: Synergy of 
+national policy, classroom prac tice and design research. International Journal of Computer -
+Supported Collaborative Learning. 6 (1), 9 -37. 
+Marx, K. (1867). Capital  (B. Fowkes, Trans. Vol. I). New York, NY: Vintage.  
+Ng, E.  & Bereiter, C. (1995). Three levels of goal orientation in learning . In A. R. D. B. Leake 
+(Ed.), Goal -driven learning.  (pp. 355 – 380). Cambridge, MA: The MIT Press.  Paavola, S.  & Hakkarainen, K. (2014). Trialogical approach for knowledge creation. In J. Tan S -
+C., H. -J. & Yoe, J. (Ed.), Knowledge creation in education.  (pp. 53 -72). New York, NY: 
+Springer.  
+Packer, M.  & Goicoechea, J. (2000). Sociocultural and constructivist theories of learning: 
+Ontology, not just epistemology. Educational Psychologist. 35 (4), 227 -241. 
+Panadero, E.  & Järvelä, S. (2015). Socially shared regu lation of learning: A review. European 
+Psychologist. 20 , 190 -203. 
+Rabardel, P.  & Bourmaud, G. (2003). From computer to instrument system: A developmental 
+perspective. Interacting with Computers. 15 , 665 –691. 
+Ritella, G.  & Hakkarainen, K. (2012). Instrument al genesis in technology -mediated learning: 
+From double stimulation to expansive knowledge practices. International Journal of 
+Computer -Supported Collaborative Learning. 7 (2), 239 -258. 
+Roth, W. M.  & Lee, Y. J. (2007). “Vygotsky’s neglected legacy”: Cultura l-historical activity 
+theory. Review of educational research. 77 (2), 186 -232. 
+Sacks, H. (1965). Lectures on conversation . Oxford, UK: Blackwell.  
+Scardamalia, M. (2002). Collective cognitive responsibility for the advancement of knowledge. In 
+B. Smith (Ed.) , Liberal education in a knowledge society.  Chicago, IL: Open Court.  
+Scardamalia, M.  & Bereiter, C. (1996). Computer support for knowledge -building communities. 
+In T. Koschmann (Ed.), CSCL: Theory and practice of an emerging paradigm.  (pp. 249 -
+268). Hillsd ale, NJ: Lawrence Erlbaum Associates.  
+Scardamalia, M.  & Bereiter, C. (2014). Knowledge building and knowledge creation: Theory, 
+pedagogy and technology. In K. Sawyer (Ed.), Cambridge handbook of the learning 
+sciences.  (2nd ed.). Cambridge, UK: Cambridge University Press.  
+Schegloff, E. A. (2007). Sequence organization in interaction: A primer in conversation analysis . 
+Cambridge, UK: Cambridge University Press.  
+Schneider, B.  & Pea, R. (2013). Real -time mutual gaze perception enhances collaborative 
+learning and collaboration quality. International Journal of Computer -Supported 
+Collaborative Learning. 8 (4), 375 -397. 
+Sfard, A. (1998). On two metaphors for learning and the dangers of choosing just one. 
+Educational Researcher. 27 (2), 4 -13. 
+Stahl, G. (2006). Group cognition: Computer support for building collaborative knowledge . 
+Cambridge, MA: MIT Press.  
+Stahl, G. (2013). Translating Euclid: Designing a human -centered mathematics . San  Rafael, 
+CA: Morgan & Claypool Publishers.  
+Stahl, G. (2016). Constructing dynamic triangles together: The development of mathematical 
+group cognition . Cambridge, UK: Cambridge University Press.  
+Stahl, G. (2020). Theoretical investigations: Philosophical fo undations of group cognition . New 
+York, NY: Springer.  Tang, K. -Y., Tsai, C. -C. & Lin, T. -C. (2014). Contemporary intellectual structure of CSCL 
+research (2006 -2013): A co -citation network analysis with an education focus. International 
+Journal of Computer -Supported Collaborative Learning. 9 (3), 335 -363. 
+Tomasello, M. (2014). A natural history of human thinking . Cambridge: MA: Harvard University 
+Press.  
+Vygotsky, L. (1930). Mind in society . Cambridge, MA: Harvard University Press.  
+Wegerif, R. (2007). Dialogic , education and technology: Expanding the space of learning . New 
+York, NY: Kluwer -Springer.  
+Weinberger, A., Reiserer, M., Ertl, B., Fischer, F. & Mandl, H. (2005). Facilitating collaborative 
+knowledge construction in computer -mediated learning environments  with cooperation 
+scripts. In R. Bromme, F. Hesse & H. Spada (Eds.), Barriers and biases in computer -
+mediated knowledge communication --and how they may be overcome.  Dordrecht, 
+Netherlands: Kluwer Academic Publisher.  
+Wise, A. & Schwarz, B. (2017). Visions o f CSCL: Eight provocations for the future of the field. 
+International Journal of Computer -Supported Collaborative Learning. 12 (4), 423 –467. 
+Zhang, J., Tao, D., Chen, M. -H., Sun, Y., Judson, D. & Nagvi, S. (2018). Co -organizing the 
+collective journey of inq uiry with idea thread mapper. The Journal of the Learning Sciences. 
+27, 390 -430. 
+  

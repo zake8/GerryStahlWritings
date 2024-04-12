@@ -298,3 +298,14 @@ Volumes_of_the_eLibrary =
       }
     }
 }
+
+  { 
+    "rag_item": { 
+      "filename": "cscltheories.faiss", 
+      "summary": "The text is a chapter on the theories of Computer Supported Collaborative Learning (CSCL). It discusses the importance of theory in shaping CSCL as a pedagogical vision and its role in defining what is unique about CSCL. The authors categorize theories of CSCL into subjective, intersubjective, and inter-objective theories, and discuss their philosophical and methodological underpinnings. The chapter also examines the changing role of theory in CSCL and the major theories that are currently influential in the field. The authors propose a framework for examining theories of CSCL that involves the interrelations and mutual shaping among technologies, practices, and research methods. They also discuss the importance of considering the ecology of socio-digital participation in extending and synthesizing CSCL theories. The chapter is intended for researchers and practitioners in the field of CSCL.
+
+Key terms and jargon include: CSCL, computer-supported collaborative learning, theory, pedagogical vision, individual cognition, collective cognition, cultural cognition, networks of learners, tools, artifacts, and practices, socio-digital participation, ecology, subjective theories, intersubjective theories, inter-objective theories.", 
+      "txt_filename": "cscltheories_loadered.txt", 
+    } 
+  } 
+
