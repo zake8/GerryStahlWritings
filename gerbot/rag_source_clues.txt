@@ -638,18 +638,6 @@ Key themes: Virtual Math Teams (VMT), collaborative dynamic geometry, Communitie
 
   { 
     "rag_item": { 
-      "filename": "topics-1-61.faiss", 
-      "pages": "1" to "61", 
-      "Title": "", 
-      "Volume": "", 
-      "summary": "Gerry Stahl's "Adventures in Dynamic Geometry" is a collection of dynamic geometry activities and topics, using", 
-      "txt_filename": "topics-1-61_loadered.txt", 
-    } 
-  } 
-
-
-  { 
-    "rag_item": { 
       "filename": "topics-111-204.faiss", 
       "pages": "111" to "204", 
       "Title": "", 
@@ -804,6 +792,78 @@ Stahl's research focuses on the theory and practice of CSCL, emphasizing communi
       "Volume": "", 
       "summary": "The text is a table of contents for an autobiographical work, highlighting the author's life through a timeline of major events, homes they've lived in, travels abroad, academic conferences and presentations, and education. The timeline includes personal and ancestral milestones and migrations, while the homes and travels sections provide a geographical context to the author's life. The academic conferences and presentations and education sections detail the author's professional development and academic background. The work is designed for readers interested in the author's life and background.", 
       "txt_filename": "overview-80-109_loadered.txt", 
+    } 
+  } 
+
+
+  { 
+    "rag_item": { 
+      "filename": "game.faiss", 
+      "Title": "", 
+      "Volume": "", 
+      "summary": "The text presents a dynamic geometry game for online learning, either in small groups or for individual home-schooling, utilizing the free app GeoGebra. The game consists of 50 challenges that progressively build on each other and cover various levels of difficulty, with a focus on traditional Euclidean geometry. The game aims to provide a hands-on experience with geometry and help students understand geometric dependencies and relationships. It includes an academic article discussing the game as a model for blended learning.
+
+The game is designed for students who have already completed Part C of the game and covers topics such as transformational geometry and working with quadrilaterals. It encourages players to collaborate, share ideas, and ask questions. The text uses precise mathematical language and includes terms such as "quadrilateral," "regular polygon," "inscribed," "translation," "reflection," and "rotation."
+
+The game explores the use of taxicab geometry, a non-Euclidean form of geometry, to enhance the game and provide a more challenging and interesting learning experience. The text emphasizes the importance of understanding dependencies in dynamic geometry and the role of technology in facilitating collaborative learning.", 
+      "txt_filename": "game_loadered.txt", 
+    } 
+  } 
+
+
+  { 
+    "rag_item": { 
+      "filename": "investigations-1-108.faiss", 
+      "pages": "1" to "108", 
+      "Title": "", 
+      "Volume": "", 
+      "summary": "Gerry Stahl's book "Theoretical Investigations" explores the philosophical foundations of group cognition in computer-supported collaborative learning (CSCL), covering topics like CSCL, group cognition, virtual math teams, and collaborative knowledge building. The text highlights the importance of socio-cultural aspects in learning and the role of technology in supporting collaboration. CSCL, a key concept, involves groups building knowledge through shared discourse, often facilitated by technology.
+
+The text discusses two major sources of CSCL theory: Vygotsky and Lave & Wenger, who proposed that cognition is mediated by artifacts and social practices. A prototypical CSCL example shows how three 13-year-old girls achieved impressive geometry accomplishments and increased individual skills using Virtual Math Teams. The text suggests CSCL skills may be critical for addressing societal problems.
+
+The text also emphasizes the temporal nature of the learning process, critiquing the dominant quantitative method in learning research. It proposes a process-analysis approach focusing on temporality and sequentiality, suggesting temporal-event analysis as a methodological link between descriptive, interpretive accounts of group interactions and experimental, quantitative research.
+
+The text highlights the importance of intersubjectivity, or shared understanding, in effective collaboration and introduces the concept of learning-to-learn-together. It also explores the role of artifacts and technological infrastructures in mediating human cognition and group cognition, introducing the theory of instrumental genesis. The text emphasizes the importance of considering the cultural, historical, and political dimensions of socio-technical systems.", 
+      "txt_filename": "investigations-1-108_loadered.txt", 
+    } 
+  } 
+
+
+  { 
+    "rag_item": { 
+      "filename": "investigations-109-121.faiss", 
+      "pages": "109" to "121", 
+      "Title": "", 
+      "Volume": "", 
+      "summary": "The text compiles investigations on Computer Supported Collaborative Learning (CSCL) from the International Journal of Computer-Supported Collaborative Learning. Key points include:
+
+* Jones et al. (2006) propose a relational, indirect, meso-level approach to CSCL design.
+* Suthers (2006) suggests a research agenda focusing on technology's role in intersubjective meaning-making.
+* Zemel and Koschmann (2013) explore recalibrating reference in a dual-space interaction environment.
+* Overdijk et al. (2014) present a micro-developmental perspective on introducing technical artifacts.
+* Ritella and Hakkarainen (2012) discuss instrumental genesis in technology-mediated learning.
+* Stahl (2008) examines thinking as communicating in human development.
+* Öner (2016) traces discourse change in a collaborative dynamic geometry environment.
+* Reimann (2009) discusses variable- and event-centered approaches to process analysis in CSCL.
+* Damsa (2014) explores small-group learning's multi-layered nature in object-oriented collaboration.
+* Çakir et al. (2009) examine joint interaction organization within a multimodal CSCL medium.
+* Looi et al. (2011) discuss the synergy of national policy, classroom practice, and design research in the Singapore Experience.
+* Chan (2011) explores bridging research and practice in implementing and sustaining knowledge building in Hong Kong classrooms.
+
+The text aims to provide insights into CSCL research and practice. Interesting terms include "micro-developmental perspective," "instrumental genesis," and "dual-space interaction environment."", 
+      "txt_filename": "investigations-109-121_loadered.txt", 
+    } 
+  } 
+
+
+  { 
+    "rag_item": { 
+      "filename": "investigations-122-428.faiss", 
+      "pages": "122" to "428", 
+      "Title": "", 
+      "Volume": "", 
+      "summary": "The texts summarized here explore various aspects of Computer Supported Collaborative Learning (CSCL), with a focus on group cognition and the importance of studying CSCL at the group level. Gerry Stahl's essay proposes a "post-cognitive" educational paradigm that focuses on group interaction as the unit of analysis, while the Virtual Math Team (VMT) project highlights the importance of group cognition as the foundation for all learning. Other texts discuss the concept of shared understanding, intersubjectivity, and the role of language in group cognition. The texts emphasize the need for new methods to analyze group processes and the small-group unit of analysis in CSCL research, and provide examples of CSCL studies and research projects. The intended audience is researchers, educators, and students in the field of CSCL, as well as anyone interested in the design and implementation of collaborative learning environments. Key terms and concepts include group cognition, intersubjectivity, shared understanding, and design-based research.", 
+      "txt_filename": "investigations-122-428_loadered.txt", 
     } 
   } 
 
