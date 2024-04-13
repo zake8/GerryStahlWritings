@@ -587,3 +587,223 @@ Interesting terms:
     } 
   } 
 
+
+  { 
+    "rag_item": { 
+      "filename": "theory-1-211.faiss", 
+      "pages": "1" to "211", 
+      "Title": "", 
+      "Volume": "", 
+      "summary": "Gerry Stahl's "Essays in Philosophy of Group Cognition" explores the concept of group cognition in Computer Supported Collaborative Learning (CSCL). CSCL is a field that investigates how computers can facilitate collaborative learning in small groups and communities, with four stages: computer-aided instruction, intelligent tutoring systems, Logo programming, and CSCL. CSCL focuses on learning through collaboration, with the computer acting as a communication medium. A key concept is group cognition, analyzed through discourse and interaction, interactional mediation, epistemic mediation, and uptake. CSCL theories include the Knowledge-Creating Approach, Cultural-Historical Activity Theory, and Actor-Network Theory. Challenges include implementing CSCL in classrooms and redesigning curriculum for online and blended learning. The Virtual Math Teams (VMT) project is a significant CSCL research initiative.", 
+      "txt_filename": "theory-1-211_loadered.txt", 
+    } 
+  } 
+
+
+  { 
+    "rag_item": { 
+      "filename": "theory-212-396.faiss", 
+      "pages": "212" to "396", 
+      "Title": "", 
+      "Volume": "", 
+      "summary": "The texts discuss various aspects of Computer Supported Collaborative Learning (CSCL) research, with a focus on group cognition and interaction. One text proposes a "post-cognitive" educational paradigm centered on group interaction, while another describes the Virtual Math Team (VMT) Project, which uses software to facilitate online math problem-solving by middle and high school students. The VMT Project emphasizes the study of group processes and interactions, and has led to theoretical insights and methodological innovations in CSCL research. Another text discusses the importance of studying CSCL at the small-group unit of analysis and the need for new methods to analyze group processes. The concept of intersubjectivity, or shared understanding within a group, is also explored in the context of online collaborative learning and computer-supported cooperative work. Overall, the texts emphasize the importance of studying group practices and interaction in CSCL research and the potential for CSCL to facilitate new paradigms of research and knowledge creation.", 
+      "txt_filename": "theory-212-396_loadered.txt", 
+    } 
+  } 
+
+
+  { 
+    "rag_item": { 
+      "filename": "math.faiss", 
+      "Title": "", 
+      "Volume": "", 
+      "summary": "Gerry Stahl's "Essays in Online Mathematics Interaction" explores online math education through the Virtual Math Teams (VMT) project, emphasizing group cognition and sequential analysis. Various studies analyze VMT sessions, highlighting the importance of group discourse organization, multimodalities, and referential practices for co-constructing mathematical meaning. The text also discusses the role of indexicality in online math teams' chat communication and the challenges of establishing common ground. Sfard's math discourse theory, emphasizing social construction of math concepts, is also explored in the context of CSCL research. Overall, the text is intended for CSCL and math education researchers and practitioners, contributing to the understanding of online math learning and group cognition.", 
+      "txt_filename": "math_loadered.txt", 
+    } 
+  } 
+
+
+  { 
+    "rag_item": { 
+      "filename": "dynamic.faiss", 
+      "Title": "", 
+      "Volume": "", 
+      "summary": "The texts discuss various aspects of the Virtual Math Teams (VMT) project, which utilizes a multi-user version of GeoGebra to support collaborative dynamic geometry. The project aims to design effective online learning environments for math discourse, foster communities of math practice, and refine technology and pedagogy for collaborative learning. A case study of an eighth-grade team, "Cereal Team," is analyzed, highlighting their shift from visual to formal mathematical discourse while solving a geometry construction problem. The project uses Communities of Practice (CoP) and boundary objects, with the VMT team guiding less experienced members and producing outputs like revised assignments and curricula. Boundary objects, such as sociotechnical ensembles of tools and interfaces, are designed for students to understand dynamic geometry. The project follows a design-research process and ethnographic action-research approach to evaluation, focusing on students' responses to boundary objects. Another text analyzes a group chat during a collaborative dynamic geometry activity, focusing on indexical references and technical terms used to describe observations and develop conjectures.
+
+Key themes: Virtual Math Teams (VMT), collaborative dynamic geometry, Communities of Practice (CoP), boundary objects, design-based research, math discourse, geometry construction, dragging actions, sociotechnical ensembles.", 
+      "txt_filename": "dynamic_loadered.txt", 
+    } 
+  } 
+
+
+  { 
+    "rag_item": { 
+      "filename": "topics-1-61.faiss", 
+      "pages": "1" to "61", 
+      "Title": "", 
+      "Volume": "", 
+      "summary": "Gerry Stahl's "Adventures in Dynamic Geometry" is a collection of dynamic geometry activities and topics, using", 
+      "txt_filename": "topics-1-61_loadered.txt", 
+    } 
+  } 
+
+
+  { 
+    "rag_item": { 
+      "filename": "topics-111-204.faiss", 
+      "pages": "111" to "204", 
+      "Title": "", 
+      "Volume": "", 
+      "summary": ""Adventures in Dynamic Geometry" is a guide for using Virtual Math Teams with GeoGebra software to explore dynamic geometry in online, collaborative sessions. The guide covers 13 core topics, including triangles, quadrilaterals, and transformations, with a focus on collaboration and communication. A separate section demonstrates how to create custom tools in GeoGebra for discovering geometric properties, such as the centroid, circumcenter, orthocenter, and incenter of a triangle, and the Euler segment and nine-point circle. The text also introduces rigid transformations and their composition, with potential applications in designing a factory and exploring non-Euclidean taxicab geometry. Target audience includes students and teachers using GeoGebra for geometry studies.", 
+      "txt_filename": "topics-111-204_loadered.txt", 
+    } 
+  } 
+
+
+  { 
+    "rag_item": { 
+      "filename": "topics-205-334.faiss", 
+      "pages": "205" to "334", 
+      "Title": "", 
+      "Volume": "", 
+      "summary": "The text consists of guides for using dynamic geometry software, GeoGebra, in virtual math teams (VMT) for collaborative learning and for constructing geometric figures. The VMT guide includes activities on triangles, symmetry, rigid transformations, and algebraic integration, and instructions for creating and sharing GeoGebra tabs in VMT chat rooms. The intended audience is math educators and students.
+
+The construction guides cover constructing an equilateral triangle, exploring triangles and circles, and proving geometric theorems. The activities encourage readers to consider the properties of geometric figures and to use GeoGebra to construct them. The texts use terms such as "dynamic geometry," "virtual math teams," "GeoGebra," and "VMT chat rooms."
+
+The main ideas of the texts are to provide a guide for using GeoGebra in VMT and to construct geometric figures using GeoGebra. The crucial details include using the compass tool to create circles with equal radii, intersecting them to create the vertices of the triangle, proving that the overlap of two congruent squares is always 1/4 of the first square's area, and introducing the concept of an "hourglass polygon." The texts emphasize the importance of considering the properties of geometric figures and how the constructions depend on these properties.", 
+      "txt_filename": "topics-205-334_loadered.txt", 
+    } 
+  } 
+
+
+  { 
+    "rag_item": { 
+      "filename": "topics-62-110.faiss", 
+      "pages": "62" to "110", 
+      "Title": "", 
+      "Volume": "", 
+      "summary": ""Adventures in Dynamic Geometry" is a guide for learning and using dynamic geometry software to explore mathematical concepts, particularly in the field of geometry. The text covers the basics of dynamic geometry, including constructing points, lines, and circles, and using tools to copy lengths and add segment lengths. It also delves into more complex topics such as the Euler Segment and Circle, the Nine-Point Circle, and congruent triangles. The guide emphasizes the use of custom tools and collaborative exploration to discover surprising and complex relationships between different triangle centers and special points. The intended audience is students or learners who are new to dynamic geometry and want to understand its core ideas and techniques. The text is written in a clear and concise style, aiming to provide enough information to spark interest without giving everything away, encouraging the reader to explore further.", 
+      "txt_filename": "topics-62-110_loadered.txt", 
+    } 
+  } 
+
+
+  { 
+    "rag_item": { 
+      "filename": "global.faiss", 
+      "Title": "", 
+      "Volume": "", 
+      "summary": "Computer Supported Collaborative Learning (CSCL) is a field that explores how people learn together with computer support, involving technology, theory, methodology, pedagogy, and practice. CSCL promotes collaborative knowledge building, dialogic interaction, intersubjective meaning making, and group cognition, aiming to transform education through collaboration and networking. It distinguishes itself from cooperative learning by the nature of interaction between group members, emphasizing negotiation and sharing of meanings. CSCL research includes analytic and design components, and is influenced by various disciplines to understand how small groups construct shared meaning. The field has a long history, with early projects exploring the use of technology to improve literacy skills, and has evolved to incorporate insights from fields such as artificial intelligence, cognitive science, and sociology. Researchers in CSCL face challenges in defining and studying the field due to its interdisciplinary nature and the influence of cultural and linguistic differences. The analysis of collaborative learning is crucial for the design of technology that opens new possibilities for collaborative learning.", 
+      "txt_filename": "global_loadered.txt", 
+    } 
+  } 
+
+
+  { 
+    "rag_item": { 
+      "filename": "ijcscl.faiss", 
+      "Title": "", 
+      "Volume": "", 
+      "summary": "The International Journal of Computer-Supported Collaborative Learning (ijCSCL) is a journal dedicated to the field of CSCL, publishing research on the use of technology to facilitate collaborative learning. The journal was launched in 2005 and features articles on theoretical frameworks, technological developments, pedagogical practices, and research methodologies. The journal is committed to serving as a communication vehicle for the growing CSCL community and aims to contribute to the development of the field by sharing seminal innovations and proposals from around the world. The journal has published articles on various topics, including dialogic practices, inquiry practices, group dynamics, consistent practices, scripting, methods for evaluating CSCL, graphical support for CSCL, and flash themes such as "Learning in Communities," "Collaborative learning in mobile and ubiquitous environments," and "Paradigms for learning in communities." The journal is a valuable resource for researchers and practitioners in the field of CSCL, providing a platform for the exchange of high-quality analyses and ideas on the use of technology to support collaborative learning.", 
+      "txt_filename": "ijcscl_loadered.txt", 
+    } 
+  } 
+
+
+  { 
+    "rag_item": { 
+      "filename": "proposals-1-277.faiss", 
+      "pages": "1" to "277", 
+      "Title": "", 
+      "Volume": "", 
+      "summary": "The summarized texts cover various topics related to environmental conservation, research proposals, and computer-supported collaborative learning (CSCL). 
+
+1. The Chatham Conservation Foundation (CCF) is undertaking land and water restoration projects, including the removal of invasive species, restoration of vegetation, and creation of walking trails in Chatham, MA. The success of these projects will be measured by the viability of planted vegetation and the number of visitors to the site.
+2. Gerry Stahl's book "Proposals for Research" is a collection of research proposals he has written for various projects, primarily focused on CSCL, group cognition, and mathematics education. The book covers topics such as computer-supported math discourse, theories and models of group cognition, dynamic support for virtual math teams, and collaborative knowledge construction in digital library communities.
+3. Researchers are using text classification technology for analyzing collaborative learning processes, aiming to improve water quality, provide expanded recreational opportunities, and address the impacts of climate change in Frost Fish Creek, MA.
+4. Gerry Stahl and other researchers are working on the Virtual Math Teams (VMT) project, which aims to enhance math learning through peer collaboration in small student teams using an innovative, open-source virtual learning environment.
+5. Carol Rosé is a prominent researcher in the field of CSCL, known for her work on the TagHelper tools package for text mining and her contributions to the analysis of collaborative learning discussions.
+
+(Note: The above summary is a brief consolidation of multiple individual summaries provided.)", 
+      "txt_filename": "proposals-1-277_loadered.txt", 
+    } 
+  } 
+
+
+  { 
+    "rag_item": { 
+      "filename": "proposals-278-382.faiss", 
+      "pages": "278" to "382", 
+      "Title": "", 
+      "Volume": "", 
+      "summary": "The texts present various research projects and proposals related to learning, technology, and collaboration. The first text discusses a University of Colorado project, WEBGUIDE, which aims to develop a knowledge-building environment within an interdisciplinary seminar, investigating the role of computational cognitive artifacts in collaborative learning. The second and third texts focus on organizational memory and learning, emphasizing the importance of communities of practice and computational tools to support information delivery. They propose a project to design and prototype software systems for specific domains, working closely with practitioners. The fourth text discusses using Latent Semantic Analysis (LSA) in K-12 classrooms to improve information retrieval and enhance learning. The fifth text outlines a project to enhance the understanding of the relationship between external and internal memory in learning, developing the WebQuest software system. The final text proposes a project to create a guidebook on supporting distributed learning, research a Java server for collaboration software, and hold workshops, emphasizing Colorado's potential in educational and groupware research.", 
+      "txt_filename": "proposals-278-382_loadered.txt", 
+    } 
+  } 
+
+
+  { 
+    "rag_item": { 
+      "filename": "overview-1-14.faiss", 
+      "pages": "1" to "14", 
+      "Title": "", 
+      "Volume": "", 
+      "summary": "Gerry Stahl's "Overview and Autobiographical Essays" compiles his wide-ranging work in various disciplines, emphasizing Computer-Supported Collaborative Learning (CSCL). Influenced by philosophers like Marx and Heidegger, Stahl's career transitioned from computer science to educational research, focusing on software for learning and collaboration. His notable VMT Project explored small-group CSCL interactions, leading to his group cognition theory, detailed in five books. Parallel to his academic pursuits, Stahl has been engaged in wood sculpture and ceramic work, emphasizing historical sources and expressive forms.", 
+      "txt_filename": "overview-1-14_loadered.txt", 
+    } 
+  } 
+
+
+  { 
+    "rag_item": { 
+      "filename": "overview-110-198.faiss", 
+      "pages": "110" to "198", 
+      "Title": "", 
+      "Volume": "", 
+      "summary": "Gerry Stahl's eLibrary compiles 18 volumes of essays, research papers, and dissertations on CSCL, group cognition, and related topics. The collection includes over 300 papers, some unpublished, spanning 1967-2021. Key themes are Marx and Heidegger's influence, tacit/explicit understanding, virtual math teams, dynamic geometry, and CSCL theories. Stahl emphasizes group-level learning and technology's role in collaborative learning. The eLibrary also includes the author's autobiographical reflections on personalizable software and collaborative learning. The VMT project, a significant contribution, involves using dynamic geometry software for collaborative learning among teachers and students. Stahl served as founding Editor-in-Chief for ijCSCL for ten years. The intended audience includes researchers, educators, and students in philosophy, computer science, education, and cognitive science.", 
+      "txt_filename": "overview-110-198_loadered.txt", 
+    } 
+  } 
+
+
+  { 
+    "rag_item": { 
+      "filename": "overview-15-79.faiss", 
+      "pages": "15" to "79", 
+      "Title": "", 
+      "Volume": "", 
+      "summary": "Gerry Stahl's autobiographical essay traces his life from his immigrant grandparents to his retirement, highlighting the experiences that shaped his career in informatics. Raised in a politically active family, Stahl developed an early interest in computers and philosophy, studying math and physics at MIT before switching to philosophy. He then worked as a systems programmer, became involved in personal computers, and completed his philosophy studies in Germany. Stahl's career includes community organizing, work on educational software, and research on computer-supported collaborative learning. He emphasizes the importance of lifelong learning and has held faculty positions at several universities.
+
+In a separate summary, the discovery of four coins on the Nickerson homestead in Cape Cod offers insights into the property's economic history and colonial commerce. The coins, dating from 1644 to 1682, include a Massachusetts silver sixpence, an English half-groat, an Irish copper halfpenny, and an English Charles II bronze farthing. The sixpence, minted in Boston, is notable as the only silver coinage struck in the American colonies before Independence. The coins' presence suggests limited access to British Isles coinage in seventeenth-century Cape Cod, with no evidence yet of Spanish New World coins.", 
+      "txt_filename": "overview-15-79_loadered.txt", 
+    } 
+  } 
+
+
+  { 
+    "rag_item": { 
+      "filename": "overview-199-252.faiss", 
+      "pages": "199" to "252", 
+      "Title": "", 
+      "Volume": "", 
+      "summary": "Gerry Stahl, a prominent figure in Computer Supported Collaborative Learning (CSCL), has an extensive background in academic research and software development. He has served as principal investigator or co-PI for numerous NSF, ONR, and McDonnell Foundation-funded projects, many of which focus on CSCL and educational technology. Some notable projects include "Collaborative Web-Based Tools for Learning," "Conceptual Frameworks and Computational Support for Organizational Memories," and "CSS: Perspectives on Collaboration."
+
+Stahl has also contributed to the development of software systems such as Virtual Math Teams (VMT), VMT-with-GeoGebra, and the Basic System for Collaborative Learning (BSCL). His prolific writing includes books, journal articles, and conference papers on CSCL, group cognition, and educational technology. He served as editor of the International Journal of Computer-Supported Collaborative Learning from 2006 to 2015.
+
+Stahl's research focuses on the theory and practice of CSCL, emphasizing communication, design of CSCL environments, and analysis of CSCL interactions. His Virtual Math Teams project explores the use of CSCL in mathematics education, with a focus on the social and interactive nature of learning. Stahl's work has been presented at various international conferences and published in numerous papers, technical reports, and unpublished manuscripts. His research interests include the design and assessment of knowledge-building environments, complexity of collaborative interactions, and use of CSCL in mathematics education.", 
+      "txt_filename": "overview-199-252_loadered.txt", 
+    } 
+  } 
+
+
+  { 
+    "rag_item": { 
+      "filename": "overview-80-109.faiss", 
+      "pages": "80" to "109", 
+      "Title": "", 
+      "Volume": "", 
+      "summary": "The text is a table of contents for an autobiographical work, highlighting the author's life through a timeline of major events, homes they've lived in, travels abroad, academic conferences and presentations, and education. The timeline includes personal and ancestral milestones and migrations, while the homes and travels sections provide a geographical context to the author's life. The academic conferences and presentations and education sections detail the author's professional development and academic background. The work is designed for readers interested in the author's life and background.", 
+      "txt_filename": "overview-80-109_loadered.txt", 
+    } 
+  } 
+
