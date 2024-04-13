@@ -4,3 +4,9 @@
 __pycache__/
 Pipfile
 Pipfile.lock
+*.faiss
+*.pdf
+index.faiss
+index.pkl
+*.cur
+*_loadered.txt
