@@ -1,16 +1,6 @@
 # chatbot_command.batchingest(gerbot_init_pdf_batch_ingest.txt)
 # GerBot Volumes of the Gerry Stahl eLibrary batch injestion!
 
-gerbot/form.pdf, 1, 61
-gerbot/form.pdf, 154, 187
-gerbot/form.pdf, 188, 220
-gerbot/form.pdf, 221, 240
-gerbot/form.pdf, 241, 278
-gerbot/form.pdf, 279, 510
-gerbot/form.pdf, 62, 153
-gerbot/topics.pdf, 1, 61
-
-# DONE
 # gerbot/cscltheories.pdf
 # gerbot/practices.pdf
 # gerbot/marx.pdf, 1, 123
@@ -38,6 +28,7 @@ gerbot/topics.pdf, 1, 61
 # gerbot/theory.pdf, 212, 396
 # gerbot/math.pdf
 # gerbot/dynamic.pdf
+# gerbot/topics.pdf, 1, 61
 # gerbot/topics.pdf, 111, 204
 # gerbot/topics.pdf, 205, 334
 # gerbot/topics.pdf, 62, 110
@@ -54,3 +45,10 @@ gerbot/topics.pdf, 1, 61
 # gerbot/investigations.pdf, 1, 108
 # gerbot/investigations.pdf, 109, 121
 # gerbot/investigations.pdf, 122, 428
+# gerbot/form.pdf, 1, 61
+# gerbot/form.pdf, 154, 187
+# gerbot/form.pdf, 188, 220
+# gerbot/form.pdf, 221, 240
+# gerbot/form.pdf, 241, 278
+# gerbot/form.pdf, 279, 510
+# gerbot/form.pdf, 62, 153

@@ -289,7 +289,7 @@ def ingest_document(model, fullragchat_embed_model, mkey, query, fullragchat_tem
             file.write(text_string)
         logging.info(f'===> Saved new .txt file, "{txtfile_fn}"')
         answer += f'Wrote "{txtfile_fn}". '
-    else: txtfile_fn = 'None'
+    else: txtfile_fn = f'{base_fn}.txt' # still notes in clue_file_text
     # Write FAISS to disk
     # Split text into chunks
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=my_chunk_size, chunk_overlap=my_chunk_overlap)
