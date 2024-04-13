@@ -17,7 +17,7 @@ docs_dir = 'gerbot' # ex: 'docs' or '/home/leet/GerryStahlWritings/docs' but not
 chatbot = f'GerBot'
 my_chunk_size = 300 # chunk_size= and chunk_overlap, what should they be, how do they relate to file size, word/token/letter count?
 my_chunk_overlap = 100 # what should overlap % be to retain meaning and searchability? # https://chunkviz.up.railway.app/
-my_map_red_chunk_size = 25000 # This is for map reduce summary, the largest text by charator length to try to send
+my_map_red_chunk_size = 50000 # This is for map reduce summary, the largest text by charator length to try to send
 # Mixtral-8x7b is a max context size of 32k tokens
 rag_source_clue_value = f'{docs_dir}/rag_source_clues.txt' # doc helps llm choose rag file
 # change these in fullragchat_init() or UI:
@@ -121,7 +121,7 @@ Keep the summary focused on the most essential elements of the text;
 aim for brevity while capturing all key points. 
 If you encounter <INDIVIDUAL SUMMARY> START and END tags, 
 then this is the reduce pass of a larger map/reduce sequence, 
-so consolidate all the individual summary into one massive summary.
+so gently consolidate all the individual summary into one massive summary.
 <text>
 {question}
 </text>
@@ -206,7 +206,7 @@ def create_summary(to_sum, model, mkey, fullragchat_temp):
     except Exception as err_mess:
         # returns 'Request size limit exceeded' in the form of "KeyError: 'choices'" in chat_models.py
         logging.error(f'===> Got error: {err_mess} when invoking summary chain')
-        summary = f'Got error: {err_mess}'
+        summary = f'Got error: "{err_mess}". Likely this is "Request size limit exceeded" in the form of "KeyError: choices" in chat_models.py. Maybe try smaller "map_red_chunk_size".'
     return summary
 
 def create_map_reduce_summary(to_sum, map_red_chunk_size, model, mkey, fullragchat_temp):
@@ -225,17 +225,17 @@ def create_map_reduce_summary(to_sum, map_red_chunk_size, model, mkey, fullragch
     num_pieces = len(pieces)
     logging.info(f'===> Mapped text down to {num_pieces} piece(s), based on chunk size "{map_red_chunk_size}". ')
     for piece in pieces:
-        piece_summaries.append('\n\n<INDIVIDUAL SUMMARY START>\n')
+        piece_summaries += f'\n\n<INDIVIDUAL SUMMARY START>\n'
         individual_summary = create_summary(
-            to_sum=piece, 
+            to_sum = piece, 
             model=model, mkey=mkey, fullragchat_temp=fullragchat_temp )
-        logging.info(f'Individual_summary is: \n{individual_summary}') ###
-        piece_summaries.append(individual_summary) 
-        piece_summaries.append('\n<INDIVIDUAL SUMMARY END>\n\n')
+        logging.info(f'Individual_summary is: \n{individual_summary}')
+        piece_summaries += (individual_summary + '\n')
+        piece_summaries += f'\n<INDIVIDUAL SUMMARY END>\n\n'
     # Reduce
-    summary = f'Map Reduce Summary with {num_pieces + 1} LLM inferences (charator chunk size of "{map_red_chunk_size}"). \n\n'
+    summary = f'Map Reduce Summary with {num_pieces + 1} LLM inferences (charater chunk size of "{map_red_chunk_size}"). \n\n'
     summary += create_summary(
-        to_sum=piece_summaries, 
+        to_sum = piece_summaries, 
         model=model, mkey=mkey, fullragchat_temp=fullragchat_temp )
     return summary
 

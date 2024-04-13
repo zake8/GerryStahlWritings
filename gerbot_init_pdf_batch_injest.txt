@@ -3,6 +3,7 @@
 
 # gerbot/four_page_test.pdf, 2, 3
 gerbot/marx.pdf, 1, 123
+gerbot/practices.pdf
 # gerbot/marx.pdf, 124, 202
 # gerbot/tacit.pdf, 1, 145
 # gerbot/tacit.pdf, 146, 234
@@ -51,7 +52,6 @@ gerbot/marx.pdf, 1, 123
 # gerbot/form.pdf, 279, 510
 # gerbot/form.pdf, 62, 153
 # gerbot/game.pdf
-# gerbot/practices.pdf
 
 # DONE
 # gerbot/cscltheories.pdf
