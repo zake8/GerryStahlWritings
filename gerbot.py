@@ -16,8 +16,8 @@ user_username_in_chat = "User"
 docs_dir = 'gerbot' # ex: 'docs' or '/home/leet/GerryStahlWritings/docs' but not 'docs/'
 chatbot = f'GerBot'
 my_chunk_size = 300 # chunk_size= and chunk_overlap, what should they be, how do they relate to file size, word/token/letter count?
-my_chunk_overlap = 100 # what should overlap % be to retain meaning and searchability? # https://chunkviz.up.railway.app/
-my_map_red_chunk_size = 50000 # This is for map reduce summary, the largest text by charator length to try to send
+my_chunk_overlap = 100 # what should overlap % be to retain meaning and search-ability? # https://chunkviz.up.railway.app/
+my_map_red_chunk_size = 50000 # This is for map reduce summary, the largest text by character length to try to send
 # Mixtral-8x7b is a max context size of 32k tokens
 rag_source_clue_value = f'{docs_dir}/rag_source_clues.txt' # doc helps llm choose rag file
 # change these in fullragchat_init() or UI:
@@ -31,7 +31,7 @@ query = ''
 
 import logging
 logging.basicConfig(
-    filename = 'convo_rag_agent_retreival_chatbot.log', 
+    filename = 'convo_rag_agent_retrieval_chatbot.log', 
     level = logging.INFO, 
     filemode = 'a', 
     format = '%(asctime)s -%(levelname)s - %(message)s')
@@ -114,7 +114,7 @@ In a few sentences, summarize the main idea or argument of the text,
 then include the most important supporting crucial details, all while keeping the summary surprisingly concise.
 Do not "write another book", ie. don't write a summary as long as the text it's summarizing. 
 Use terse (but coherent) language and don't repeat anything; 
-sentences fragments and dropping words like the document, the author, is prefered. 
+sentences fragments and dropping words like the document, the author, is preferred. 
 Please make summary as short as possible. 
 (Stick to the presented, and accurately represent the author's intent.)
 Keep the summary focused on the most essential elements of the text; 
@@ -210,7 +210,9 @@ def create_summary(to_sum, model, mkey, fullragchat_temp):
     return summary
 
 def create_map_reduce_summary(to_sum, map_red_chunk_size, model, mkey, fullragchat_temp):
+    logging.info(f'===> Starting Map Reduce')
     # Map
+    summary = ''
     piece_summaries = ''
     text_splitter = CharacterTextSplitter(
         separator="\n", # should be something else?
@@ -223,7 +225,6 @@ def create_map_reduce_summary(to_sum, map_red_chunk_size, model, mkey, fullragch
         to_sum_str += to_sum[index].page_content + '\n'
     pieces = text_splitter.create_documents([to_sum_str])
     num_pieces = len(pieces)
-    logging.info(f'===> Mapped text down to {num_pieces} piece(s), based on chunk size "{map_red_chunk_size}". ')
     for piece in pieces:
         piece_summaries += f'\n\n<INDIVIDUAL SUMMARY START>\n'
         individual_summary = create_summary(
@@ -233,14 +234,14 @@ def create_map_reduce_summary(to_sum, map_red_chunk_size, model, mkey, fullragch
         piece_summaries += (individual_summary + '\n')
         piece_summaries += f'\n<INDIVIDUAL SUMMARY END>\n\n'
     # Reduce
-    summary = f'Map Reduce Summary with {num_pieces + 1} LLM inferences (charater chunk size of "{map_red_chunk_size}"). \n\n'
+    logging.info(f'===> Map Reduce Summary with {num_pieces + 1} LLM inferences (character chunk size of "{map_red_chunk_size}"). ')
     summary += create_summary(
         to_sum = piece_summaries, 
         model=model, mkey=mkey, fullragchat_temp=fullragchat_temp )
     return summary
 
-def injest_document(model, fullragchat_embed_model, mkey, query, fullragchat_temp, start_page, end_page):
-    logging.info(f'===> Attempting injestion on "{fullragchat_rag_source}", with page range "{start_page}" to "{end_page}". (All pages if Nones.)')
+def ingest_document(model, fullragchat_embed_model, mkey, query, fullragchat_temp, start_page, end_page):
+    logging.info(f'===> Attempting ingestion on "{fullragchat_rag_source}", with page range "{start_page}" to "{end_page}". (All pages if Nones.)')
     answer = ''
     if not os.path.exists(fullragchat_rag_source):
         answer += f'Source document "{fullragchat_rag_source}" not found locally. '
@@ -341,7 +342,7 @@ def injest_document(model, fullragchat_embed_model, mkey, query, fullragchat_tem
 
 def mistral_convo_rag(fullragchat_embed_model, mkey, model, fullragchat_temp, query):
     # load existing faiss, and use as retriever
-    # Potentially dangerious - load only local known safe files
+    # Potentially dangerous - load only local known safe files
     ### need to implement this safety check!
     ### if fullragchat_rag_source contains http or double wack "//" then set answer = 'illegal faiss source' and return
     embeddings = MistralAIEmbeddings(
@@ -446,9 +447,9 @@ def chat_query_return(model, query, fullragchat_temp, fullragchat_stop_words, fu
                     map_red_chunk_size = my_map_red_chunk_size, 
                     model=model, mkey=mkey, fullragchat_temp=fullragchat_temp )
                 return answer
-            elif meth == 'injest': # from web or local - saves X as .faiss (and .txt), w/ .cur file, and adds to rag_source_clue_value
+            elif meth == 'ingest': # from web or local - saves X as .faiss (and .txt), w/ .cur file, and adds to rag_source_clue_value
                 fullragchat_rag_source = path_filename
-                answer = injest_document(
+                answer = ingest_document(
                     model=model, 
                     fullragchat_embed_model=fullragchat_embed_model, 
                     mkey=mkey, 
@@ -498,7 +499,7 @@ def chat_query_return(model, query, fullragchat_temp, fullragchat_stop_words, fu
                 answer = f'Delete not implemented; just use ssh or WinSCP. '
                 # answer = f'Deleted "{path_filename}".'
                 return answer
-            elif meth == 'batchinjest': # batch injest from list text file
+            elif meth == 'batchingest': # batch ingest from list text file
                 if os.path.exists(path_filename):
                     with open(path_filename, 'r') as file:
                         batch_list_str = file.read()
@@ -513,7 +514,7 @@ def chat_query_return(model, query, fullragchat_temp, fullragchat_stop_words, fu
                                 fullragchat_rag_source = match.group(1)
                                 start_page = match.group(2)
                                 end_page = match.group(3)
-                                answer += injest_document(
+                                answer += ingest_document(
                                     model=model, 
                                     fullragchat_embed_model=fullragchat_embed_model, 
                                     mkey=mkey, 
@@ -526,7 +527,7 @@ def chat_query_return(model, query, fullragchat_temp, fullragchat_stop_words, fu
                                 match = re.search(pattern, item)
                                 if match: # item is pfn only w/ no page numbers
                                     fullragchat_rag_source = match.group(1)
-                                    answer += injest_document(
+                                    answer += ingest_document(
                                         model=model, 
                                         fullragchat_embed_model=fullragchat_embed_model,
                                         mkey=mkey, 

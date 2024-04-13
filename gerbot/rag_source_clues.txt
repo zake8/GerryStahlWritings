@@ -292,3 +292,33 @@ In summary, the text argues for the importance of analyzing group practices in C
     } 
   } 
 
+
+  { 
+    "rag_item": { 
+      "filename": "marx-1-123.faiss", 
+      "pages": "1" to "123", 
+      "summary": "Map Reduce Summary with 10 LLM inferences (charater chunk size of "50000"). 
+
+Gerry Stahl's book explores the philosophies of Karl Marx and Martin Heidegger, arguing for their relevance in interpreting and transforming the world. Stahl contends that both Marx and Heidegger are essential for understanding the world, as interpretation precedes transformation. The text discusses the similarities between the philosophies of Marx and Heidegger, and the potential for a combined approach to interpret the development of society and uncover potentials for the future. Key terms include hermeneutics, commodity fetishism, technological Being, essence and appearance, ideology critique, and destructive hermeneutics. The text is aimed at a philosophical audience interested in critical theory, hermeneutics, and social theory.
+
+The text also analyzes Heidegger's comments on Marx in his essay "Letter on Humanism" and argues that Heidegger fails to recognize the unity and originality of Marx's thought. The text emphasizes the importance of the theoretical approach and the claim that the true structure of reality has been obscured in both Marx and Heidegger's work. The text is an analysis of Marx's critique of political economy, focusing on his methodology and conceptualizations, and highlights Marx's concept of "free labor" as a historical precondition for wage labor and capital.
+
+The text also discusses Marx's concept of alienated labor in a capitalist society and its consequences, with private property being both a result and a necessary consequence of externalized labor. The ultimate goal of Marx's analysis is to reveal the true nature of capitalist society and to provide a framework for understanding and transforming it. The text is aimed at scholars, students, and researchers of Marxist theory, political economy, and social philosophy.", 
+      "txt_filename": "marx-1-123_loadered.txt", 
+    } 
+  } 
+
+
+  { 
+    "rag_item": { 
+      "filename": "marx-124-202.faiss", 
+      "pages": "124" to "202", 
+      "summary": "Map Reduce Summary with 6 LLM inferences (charater chunk size of "50000"). 
+
+The text compares the philosophies of Marx and Heidegger, examining how each relates to historical context (industrial capitalism for Marx, technological advances for Heidegger). It explores the relevance of Marx's critique of capitalism and Heidegger's analysis of technological rationality in today's world. Heidegger's concept of "thinging" is introduced, where things gather the Four (earth, heaven, holy, mortal) to allow a world to come into being. The text also discusses Heidegger's concept of technology as "Gestell," and the problematic of the history of Being. It touches on the Marxist critique of Heidegger's concept of technology and compares various works of philosophy and critical theory from German philosophers and critical theorists.
+
+In addition, the text discusses the impact of electronic music on the history of music, its differences from traditional music, and Heidegger's views on sculpture as revealing spatial being. Jargon used includes "Gestell," "Ereignis," "Dasein," and "e-music." The intended audience includes students and scholars of philosophy and critical theory, particularly those interested in Heidegger's work.", 
+      "txt_filename": "marx-124-202_loadered.txt", 
+    } 
+  } 
+

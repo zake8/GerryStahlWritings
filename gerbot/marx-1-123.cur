@@ -1,0 +1,22 @@
+
+Curation content for HITL use. 
+
+Date and time      = 2024-04-12 18:19:43 
+Target document    = gerbot/marx.pdf 
+PDF pages          = 1 to 123 
+Chunk size         = 300 
+Chunk overlap      = 100 
+Saved FAISS DB     = marx-1-123.faiss 
+# vectors in DB    = 1768 
+Model/temp DB      = mistral-embed / 0.25 
+Model/temp summary = open-mixtral-8x7b / 0.25 
+
+<summary>
+Map Reduce Summary with 10 LLM inferences (charater chunk size of "50000"). 
+
+Gerry Stahl's book explores the philosophies of Karl Marx and Martin Heidegger, arguing for their relevance in interpreting and transforming the world. Stahl contends that both Marx and Heidegger are essential for understanding the world, as interpretation precedes transformation. The text discusses the similarities between the philosophies of Marx and Heidegger, and the potential for a combined approach to interpret the development of society and uncover potentials for the future. Key terms include hermeneutics, commodity fetishism, technological Being, essence and appearance, ideology critique, and destructive hermeneutics. The text is aimed at a philosophical audience interested in critical theory, hermeneutics, and social theory.
+
+The text also analyzes Heidegger's comments on Marx in his essay "Letter on Humanism" and argues that Heidegger fails to recognize the unity and originality of Marx's thought. The text emphasizes the importance of the theoretical approach and the claim that the true structure of reality has been obscured in both Marx and Heidegger's work. The text is an analysis of Marx's critique of political economy, focusing on his methodology and conceptualizations, and highlights Marx's concept of "free labor" as a historical precondition for wage labor and capital.
+
+The text also discusses Marx's concept of alienated labor in a capitalist society and its consequences, with private property being both a result and a necessary consequence of externalized labor. The ultimate goal of Marx's analysis is to reveal the true nature of capitalist society and to provide a framework for understanding and transforming it. The text is aimed at scholars, students, and researchers of Marxist theory, political economy, and social philosophy.
+</summary>

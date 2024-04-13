@@ -1,0 +1,20 @@
+
+Curation content for HITL use. 
+
+Date and time      = 2024-04-12 18:20:37 
+Target document    = gerbot/marx.pdf 
+PDF pages          = 124 to 202 
+Chunk size         = 300 
+Chunk overlap      = 100 
+Saved FAISS DB     = marx-124-202.faiss 
+# vectors in DB    = 1019 
+Model/temp DB      = mistral-embed / 0.25 
+Model/temp summary = open-mixtral-8x7b / 0.25 
+
+<summary>
+Map Reduce Summary with 6 LLM inferences (charater chunk size of "50000"). 
+
+The text compares the philosophies of Marx and Heidegger, examining how each relates to historical context (industrial capitalism for Marx, technological advances for Heidegger). It explores the relevance of Marx's critique of capitalism and Heidegger's analysis of technological rationality in today's world. Heidegger's concept of "thinging" is introduced, where things gather the Four (earth, heaven, holy, mortal) to allow a world to come into being. The text also discusses Heidegger's concept of technology as "Gestell," and the problematic of the history of Being. It touches on the Marxist critique of Heidegger's concept of technology and compares various works of philosophy and critical theory from German philosophers and critical theorists.
+
+In addition, the text discusses the impact of electronic music on the history of music, its differences from traditional music, and Heidegger's views on sculpture as revealing spatial being. Jargon used includes "Gestell," "Ereignis," "Dasein," and "e-music." The intended audience includes students and scholars of philosophy and critical theory, particularly those interested in Heidegger's work.
+</summary>
