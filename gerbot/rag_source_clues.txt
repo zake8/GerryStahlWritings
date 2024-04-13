@@ -867,3 +867,101 @@ The text aims to provide insights into CSCL research and practice. Interesting t
     } 
   } 
 
+
+  { 
+    "rag_item": { 
+      "filename": "form-1-61.faiss", 
+      "pages": "1" to "61", 
+      "Title": "", 
+      "Volume": "", 
+      "summary": "Gerry Stahl's book showcases his artwork, primarily sculptures made from wood and clay, created between 1970 and 2024. The sculptures are known for their organic forms inspired by human and animal shapes, natural objects, and philosophical ideas from Heidegger, Hegel, and Brancusi. The book consists of chapters dedicated to wood sculptures, clay sculptures, houses designed, and reflections on nature-inspired forms. It includes a chronological catalog with images, descriptions, types of wood used, and inspirations behind each piece, many of which were gifts for friends and family. This volume is a unique focus on Stahl's artistic endeavors, distinct from his academic career.", 
+      "txt_filename": "form-1-61_loadered.txt", 
+    } 
+  } 
+
+
+  { 
+    "rag_item": { 
+      "filename": "form-154-187.faiss", 
+      "pages": "154" to "187", 
+      "Title": "", 
+      "Volume": "", 
+      "summary": "This text features 3D design projects by the author, with images and descriptions of four houses and related furniture/fixtures. The author highlights the use of natural materials, construction process, and provides external links for further information. Intended for those interested in 3D design, architecture, and woodworking, the author aims to exhibit their design expertise, using terms like "3-D model," "floor plan," and "elevation."", 
+      "txt_filename": "form-154-187_loadered.txt", 
+    } 
+  } 
+
+
+  { 
+    "rag_item": { 
+      "filename": "form-188-220.faiss", 
+      "pages": "188" to "220", 
+      "Title": "", 
+      "Volume": "", 
+      "summary": "The text consists of two excerpts from books about the philosophy and process of creating 3-D art forms. The first part focuses on the author's reflections on the evolution of organic sculptural form, discussing the transition from realistic representation to abstract studies of 3-D forms. The author expresses a preference for the period before the use of metal constructions, high-tech materials, and environmental happenings. The second part discusses the author's experiences and thoughts on creating sculptures inspired by ancient art, specifically Valdivian stone carvings from Ecuador and ancient Greek Cycladic sculptures. The author emphasizes the importance of negative space, topology, and the use of different materials in creating sculptures. Both parts highlight the author's appreciation for ancient sculptures and the impact of the environment on organic forms.
+
+Key terms and jargon: 3-D art forms, organic sculptural form, negative space, topology, ancient art, Valdivian stone carvings, Cycladic sculptures.", 
+      "txt_filename": "form-188-220_loadered.txt", 
+    } 
+  } 
+
+
+  { 
+    "rag_item": { 
+      "filename": "form-221-240.faiss", 
+      "pages": "221" to "240", 
+      "Title": "", 
+      "Volume": "", 
+      "summary": "The text emphasizes the significance of space, particularly negative space, in 3-D forms of sculptures. The author's sculpting approach involves revealing internal structures and complexities by "opening up" the material. Negative space, the area around and within the sculpture, is viewed as integral to the sculpture's form, creating continuity between exterior and interior spaces. Examples of the author's work, such as "Hermaphrodite," "Slab Sculpture 1," and the Klein Bottle, illustrate this concept. The author has progressed from non-opening sculptures like "Gelassenheit" to more open works like "Mrs. Mayo" and "Hickory Bivalve." The discussion also includes ceramic sculptures. The text is geared towards those interested in sculpture and 3-D art.", 
+      "txt_filename": "form-221-240_loadered.txt", 
+    } 
+  } 
+
+
+  { 
+    "rag_item": { 
+      "filename": "form-241-278.faiss", 
+      "pages": "241" to "278", 
+      "Title": "", 
+      "Volume": "", 
+      "summary": "The text presents the process of 3D wooden sculpture creation by an unnamed artist, who utilizes a log, large gouge, mallet, and Sureform rasp for initial shaping. Preferring rough surfaces, smaller tools and sandpaper are used for refining. Recent adoption of electric tools like chainsaws and drills, along with clay models, aid in shaping logs and understanding 3D forms. The artist's workshop combines carpentry, sculpture, and ceramics studios, and finished pieces are treated with Tung oil. Specific sculptures, such as "Bird in Flight" and "Hermaphrodite," are described, highlighting the artist's focus on organic forms, grain patterns, and negative spaces.", 
+      "txt_filename": "form-241-278_loadered.txt", 
+    } 
+  } 
+
+
+  { 
+    "rag_item": { 
+      "filename": "form-279-510.faiss", 
+      "pages": "279" to "510", 
+      "Title": "", 
+      "Volume": "", 
+      "summary": "This text is a catalog of 3-D forms by Gerry Stahl, spanning 1970 to 2024. It features 315 works, listed chronologically, with details on materials, dimensions, and influences like Henry Moore, Alberto Giacometti, Brancusi, art movements, and personal experiences. The catalog serves as a thorough record of Stahl's sculptural career.", 
+      "txt_filename": "form-279-510_loadered.txt", 
+    } 
+  } 
+
+
+  { 
+    "rag_item": { 
+      "filename": "form-62-153.faiss", 
+      "pages": "62" to "153", 
+      "Title": "", 
+      "Volume": "", 
+      "summary": "This text explores the 3-D artworks of an artist, highlighting series such as Paleolithic Figure Series, Pre-Columbian Figure Series, and Sea Forms Series. The artist draws inspiration from historical and prehistoric sculptures, recreating pieces like the Venus of Hohle Fels and Venus of Willendorf, as well as modern sculptors like Giacometti. Techniques such as wheel throwing, hand building, glazing, and mold making are described. The text is geared towards individuals interested in 3-D art, including enthusiasts, students, and practitioners.", 
+      "txt_filename": "form-62-153_loadered.txt", 
+    } 
+  } 
+
+
+  { 
+    "rag_item": { 
+      "filename": "topics-1-61.faiss", 
+      "pages": "1" to "61", 
+      "Title": "", 
+      "Volume": "", 
+      "summary": ""Adventures in Dynamic Geometry" by Gerry Stahl is a collection of dynamic geometry activities and game-based challenges for virtual math teams, designed for use with the open-source GeoGebra software. The activities cover a range of topics from Euclid to Common Core Standards for Geometry and are intended to support teacher and student use of the collaboration environment. The guide emphasizes the importance of dependencies in geometry and encourages readers to think about how dependencies are constructed. Key topics include congruent triangles, inscribed polygons, transformations, and quadrilaterals. The activities are available for download and include detailed instructions for constructing figures and challenge problems to deepen understanding. The intended audience is students or learners seeking to deepen their understanding of geometry through interactive constructions.", 
+      "txt_filename": "topics-1-61_loadered.txt", 
+    } 
+  } 
+
