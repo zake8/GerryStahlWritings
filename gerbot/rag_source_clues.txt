@@ -322,3 +322,45 @@ In addition, the text discusses the impact of electronic music on the history of
     } 
   } 
 
+
+  { 
+    "rag_item": { 
+      "filename": "tacit-1-145.faiss", 
+      "pages": "1" to "145", 
+      "summary": "Gerry Stahl's book "Tacit & Explicit Understanding in Computer Support" explores the challenges of tacit and explicit understanding in computer-supported cooperative design, with a focus on capturing design rationale. The book includes essays on computer-supported collaborative learning, group cognition, and online mathematics interaction. Another text discusses a computer-support theory for design interpretation, proposing a system called HERMES that facilitates reuse and plasticity of representations during interpretation. A human-centered approach to computer support in planning and design is emphasized, allowing for individual views, judgments, and perspectives.
+
+In design, tacit and explicit understanding play crucial roles, with designers relying on tacit knowledge and skills for interpretation. Heidegger's philosophy highlights the importance of tacit preunderstanding in all understanding, which can be explicated into explicit understanding. Hermeneutics, rooted in Greek mythology, is a philosophy of interpretation fundamental to human existence, and Heidegger's ideas are central to situated cognition.
+
+Two case studies focus on the design process of a lunar habitat, addressing privacy, light, dirt, and noise concerns. NASA's guidelines for manned-systems design consider privacy, but struggle to formulate important design concerns as generic domain knowledge. The authors suggest potential for capturing design ideas as they emerge during engaged design activities.
+
+Key themes and concepts include understanding, interpretation, preunderstanding, hermeneutics, tacit and explicit knowledge, computer support, and design. The intended audience includes researchers and practitioners in computer-supported collaborative learning, human-computer interaction, and design research.", 
+      "txt_filename": "tacit-1-145_loadered.txt", 
+    } 
+  } 
+
+
+  { 
+    "rag_item": { 
+      "filename": "tacit-146-234.faiss", 
+      "pages": "146" to "234", 
+      "summary": "This summary pertains to a series of chapters from various sources, all connected to the use of computers in supporting design interpretation. The chapters discuss the limitations of computers in comprehending and interpreting design, as they lack intentionality and tacit understanding. The fundamental problem lies in the lack of access to "semantic resources," making it difficult for computers to understand the meaning behind symbols. A theory of computer support for interpretation in design must address this issue and consider the social grounding of interpretation.
+
+Design is viewed as an interpretive process, and interpretation is described as situated, perspectival, and linguistic. The role of tacit and explicit understanding in computer support of design is also discussed. The transformation of tacit to explicit forms of knowledge is considered essential for a theory of computer support of interpretation in design.
+
+The chapters also explore the complex, open-ended, and collaborative nature of design, particularly in the context of lunar habitats. The need for computational tools to support design processes, balancing tacit and explicit understanding, is emphasized. The PHIDIAS and MIKROPLIS systems, which incorporate a query language for issue-bases, are discussed as examples of systems that implement these principles.
+
+The HERMES system, a hypermedia-based design environment for representing and interpreting design rationale, is presented as a solution for exploratory domains like lunar habitat design. The system uses a hypermedia substrate to define various media for content of nodes and includes a language for navigating links and retrieving information. The perspective mechanism of HERMES allows links between nodes to maintain lists of which perspectives can view the connected nodes.", 
+      "txt_filename": "tacit-146-234_loadered.txt", 
+    } 
+  } 
+
+
+  { 
+    "rag_item": { 
+      "filename": "tacit-235-366.faiss", 
+      "pages": "235" to "366", 
+      "summary": "The text discusses HERMES, a hypermedia design environment with a language that supports a layered architecture and a variety of data retrieval, manipulation, and display needs. The language has four levels: Beginner, Advanced, Programmer, and Designer, with increasing capabilities. HERMES uses perspectives to organize information in overlapping categories, such as hierarchies of personal and group viewpoints, technical aspects, and domain traditions. Perspectives can be implemented using methods like lazy virtual copying, and can be merged and evolved. The language is non-imperative and primarily geared towards information retrieval needs. It is used to define interpretive critics, which can analyze the state of the hypermedia database and provide messages or take actions based on the results. The overall purpose of HERMES is to support a model of human interpretation as situated, perspectival, and linguistic, and to contribute to human emancipation by extending cognitive capabilities through people-centered software.", 
+      "txt_filename": "tacit-235-366_loadered.txt", 
+    } 
+  } 
+

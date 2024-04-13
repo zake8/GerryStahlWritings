@@ -329,6 +329,8 @@ def ingest_document(model, fullragchat_embed_model, mkey, query, fullragchat_tem
     clue_file_text += '      "filename": "' + faiss_index_fn + '", \n'
     if start_page and end_page:
         clue_file_text += '      "pages": "' + start_page + '" to "' + end_page + '", \n'
+    clue_file_text += '      "Title": "", \n'
+    clue_file_text += '      "Volume": "", \n'
     clue_file_text += '      "summary": "' + summary_text_for_output + '", \n'
     clue_file_text += '      "txt_filename": "' + txtfile_fn + '", \n'
     clue_file_text += '    } \n'

@@ -1,0 +1,22 @@
+
+Curation content for HITL use. 
+
+Date and time      = 2024-04-12 18:41:27 
+Target document    = gerbot/tacit.pdf 
+PDF pages          = 146 to 234 
+Chunk size         = 300 
+Chunk overlap      = 100 
+Saved FAISS DB     = tacit-146-234.faiss 
+# vectors in DB    = 1329 
+Model/temp DB      = mistral-embed / 0.25 
+Model/temp summary = open-mixtral-8x7b / 0.25 
+
+<summary>
+This summary pertains to a series of chapters from various sources, all connected to the use of computers in supporting design interpretation. The chapters discuss the limitations of computers in comprehending and interpreting design, as they lack intentionality and tacit understanding. The fundamental problem lies in the lack of access to "semantic resources," making it difficult for computers to understand the meaning behind symbols. A theory of computer support for interpretation in design must address this issue and consider the social grounding of interpretation.
+
+Design is viewed as an interpretive process, and interpretation is described as situated, perspectival, and linguistic. The role of tacit and explicit understanding in computer support of design is also discussed. The transformation of tacit to explicit forms of knowledge is considered essential for a theory of computer support of interpretation in design.
+
+The chapters also explore the complex, open-ended, and collaborative nature of design, particularly in the context of lunar habitats. The need for computational tools to support design processes, balancing tacit and explicit understanding, is emphasized. The PHIDIAS and MIKROPLIS systems, which incorporate a query language for issue-bases, are discussed as examples of systems that implement these principles.
+
+The HERMES system, a hypermedia-based design environment for representing and interpreting design rationale, is presented as a solution for exploratory domains like lunar habitat design. The system uses a hypermedia substrate to define various media for content of nodes and includes a language for navigating links and retrieving information. The perspective mechanism of HERMES allows links between nodes to maintain lists of which perspectives can view the connected nodes.
+</summary>

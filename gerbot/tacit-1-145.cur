@@ -1,0 +1,22 @@
+
+Curation content for HITL use. 
+
+Date and time      = 2024-04-12 18:40:11 
+Target document    = gerbot/tacit.pdf 
+PDF pages          = 1 to 145 
+Chunk size         = 300 
+Chunk overlap      = 100 
+Saved FAISS DB     = tacit-1-145.faiss 
+# vectors in DB    = 2088 
+Model/temp DB      = mistral-embed / 0.25 
+Model/temp summary = open-mixtral-8x7b / 0.25 
+
+<summary>
+Gerry Stahl's book "Tacit & Explicit Understanding in Computer Support" explores the challenges of tacit and explicit understanding in computer-supported cooperative design, with a focus on capturing design rationale. The book includes essays on computer-supported collaborative learning, group cognition, and online mathematics interaction. Another text discusses a computer-support theory for design interpretation, proposing a system called HERMES that facilitates reuse and plasticity of representations during interpretation. A human-centered approach to computer support in planning and design is emphasized, allowing for individual views, judgments, and perspectives.
+
+In design, tacit and explicit understanding play crucial roles, with designers relying on tacit knowledge and skills for interpretation. Heidegger's philosophy highlights the importance of tacit preunderstanding in all understanding, which can be explicated into explicit understanding. Hermeneutics, rooted in Greek mythology, is a philosophy of interpretation fundamental to human existence, and Heidegger's ideas are central to situated cognition.
+
+Two case studies focus on the design process of a lunar habitat, addressing privacy, light, dirt, and noise concerns. NASA's guidelines for manned-systems design consider privacy, but struggle to formulate important design concerns as generic domain knowledge. The authors suggest potential for capturing design ideas as they emerge during engaged design activities.
+
+Key themes and concepts include understanding, interpretation, preunderstanding, hermeneutics, tacit and explicit knowledge, computer support, and design. The intended audience includes researchers and practitioners in computer-supported collaborative learning, human-computer interaction, and design research.
+</summary>
