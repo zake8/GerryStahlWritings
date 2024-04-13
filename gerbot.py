@@ -119,6 +119,9 @@ Please make summary as short as possible.
 (Stick to the presented, and accurately represent the author's intent.)
 Keep the summary focused on the most essential elements of the text; 
 aim for brevity while capturing all key points. 
+If you encounter <INDIVIDUAL SUMMARY> START and END tags, 
+then this is the reduce pass of a larger map/reduce sequence, 
+so consolidate all the individual summary into one massive summary.
 <text>
 {question}
 </text>
@@ -210,12 +213,15 @@ def create_map_reduce_summary(to_sum, map_red_chunk_size, model, mkey, fullragch
     # Map
     piece_summaries = ''
     text_splitter = CharacterTextSplitter(
-        separator="\n\n",
+        separator="\n", # should be something else?
         chunk_size = map_red_chunk_size, 
         chunk_overlap = max(map_red_chunk_size // 5, 500),
         length_function=len, 
         is_separator_regex=False )
-    pieces = text_splitter.create_documents(to_sum)
+    to_sum_str = ''
+    for index in range(0, len(to_sum)):
+        to_sum_str += to_sum[index].page_content + '\n'
+    pieces = text_splitter.create_documents([to_sum_str])
     num_pieces = len(pieces)
     logging.info(f'===> Mapped text down to {num_pieces} piece(s), based on chunk size "{map_red_chunk_size}". ')
     for piece in pieces:
