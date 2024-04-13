@@ -5,7 +5,7 @@ Generative AI "chat" about the gerrystahl.net writings
 Code by Zake Stahl
 March & April 2024
 Based on public/shared APIs and FOSS samples
-Built on Linux, Python, Apache, WSGI, Flask, LangChain, Ollama, Mistral, FAISS, Re, and more
+Built on Linux, Python, Apache, WSGI, Flask, LangChain, Ollama, Mistral, FAISS, and Re.
 
 Conversational Retrieval Augmented GenerativeAL chatbot 
 with agent selected RAG content - 
