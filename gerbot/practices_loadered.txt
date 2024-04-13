@@ -1,0 +1,481 @@
+123
+International Journal of Computer-
+Supported Collaborative Learning
+An Official Publication of the
+International Society of the Learning
+Sciences
+ 
+ISSN 1556-1607
+Volume 12
+Number 1
+ 
+Intern. J. Comput.-Support. Collab.
+Learn (2017) 12:113-126
+DOI 10.1007/s11412-017-9251-0Group practices: a new way of viewing
+CSCL
+Gerry Stahl
+
+123
+Your article is protected by copyright and all
+rights are held exclusively by International
+Society of the Learning Sciences, Inc.. This e-
+offprint is for personal use only and shall not
+be self-archived in electronic repositories. If
+you wish to self-archive your article, please
+use the accepted manuscript version for
+posting on your own website. You may
+further deposit the accepted manuscript
+version in any repository, provided it is only
+made publicly available 12 months after
+official publication or later and provided
+acknowledgement is given to the original
+source of publication and a link is inserted
+to the published article on Springer's
+website. The link must be accompanied by
+the following text: "The final publication is
+available at link.springer.com”.
+Group practices: a new way of viewing CSCL
+Gerry Stahl1
+Received: 10 October 2016 /Accepted: 24 February 2017 /Published online: 7 March 2017
+#International Society of the Learning Sciences, Inc. 2017
+Abstract The analysis of group practices can make visible the work of novices learning how
+to inquire in science or mathematics. These ubiquitous practices are invisibly taken for granted
+by adults, but can be observed and rigorously studied in adequate traces of online collaborativelearning. Such an approach contrasts with traditional pre/post comparisons that miss sequentialinteractional processes or that reduce group phenomena to individual or social factors. Theanalysis of the enactment of practices by small groups in CSCL contexts can systematicallyinform the design, testing, and refinement of collaborative-learning software, curriculum,pedagogy, and theory. CSCL can be re-conceptualized as the design of technology to fosterthe adoption of group practices by student teams.
+Keywords Group practices .CSCL theory .CSCL methodology .Design-based research
+ABsquib ^is a brief statement, intended to ignite thinking and discourse on topics of theoretical
+importance. Here, I summarize a conclusion about CSCL theory that emerged from writing
+about the research I directed from 1991 to 2015. While the most penetrating theoreticalinsights develop through writing books, it is not practical to expect readers to pour throughthe detailed analyses available at http://gerrystahl.net/elibrary . Hence, this squib, which for the
+first time explicitly describes a new way of viewing CSCL that surfaced in this research.
+A new method for CSCL
+As a CSCL researcher, participant in all previous CSCL conferences, and former Editor ofijCSCL , I have consistently observed that most published studies of collaborative learning
+reduce it either to individual mental representations or to cultural social practices; the small-group unit of analysis is under-researched (Stahl 2006a ). This may be partially because it is
+difficult to find data that adequately documents collaborative learning by reliably capturing allIntern. J. Comput.-Support. Collab. Learn (2017) 12:113 –126
+DOI 10.1007/s11412-017-9251-0
+*Gerry Stahl
+Gerry@GerryStahl.net
+1Drexel University, Chatham, MA, USA
+Author's personal copy
+the discourse, gestures, and artifacts that enter into group (i.e., collaborative) knowledge-
+building processes (Stahl 2013a ). Furthermore, the methods of traditional educational-
+psychology research are inadequate for investigating many core CSCL issues because they
+focus on individual cognition and assume that utterances can be categorized objectively (i.e.,
+without interpretation based on understanding the sequential meaning-making) (Stahl 2014 ).
+My conclusions are controversial within the CSCL research community because they meth-odologically eschew prevalent cognitivist and positivist assumptions (associated with meth-odological individualism) (Stahl 2016c ).
+Throughout the history of CSCL as a research community, the methodological tension of
+the field has been informally described as an opposition of Bquantitative ^versus Bqualitative ^
+approaches (Jeong et al. 2014 ; Suthers et al. 2010 ). Habermas refined this with the epistemo-
+logical distinction between calculative and sense-making orientations, which pervades modernscience (Hammond 2015 ). Sfard ( 1998 ) saw the contrast as (individual) acquisition versus
+(cultural) participation. Viewed in terms of the unit of analysis, Bsocio-cognitive ^psychology
+focuses on representations in individual minds and Bsocio-cultural ^anthropology centers on
+socially defined practices —there has been no methodological focus on the small-group unit of
+analysis, where one would expect to observe collaborative learning in CSCL (as inStahl 2009 ). Some psychologists recognize that i ndividual learning can be influenced
+by groups (Cress 2008), and some sociologists show how social practices are enacted
+and maintained in group interaction (Garfinkel 1967 ;G i d d e n s 1984). However, as
+noted by Schwarz and Baker ( 2017), even these studies rarely analyze empirical data
+of collaborative learning in ways that display processes of small groups building knowledge oracquiring practices.
+Quantitative and qualitative methods are appropriate for measuring net changes due to
+hypothesized independent variables. However, CSCL needs ways to analyze the groupprocesses that bring about such changes and that establish group practices —in order to guide
+iterative design-based research (DBR). To not only judge the statistical effectiveness of CSCL
+interventions in promoting collaborative learning, but also to identify specific problems and to
+suggest innovative functionality during DBR cycles, it is necessary to analyze temporal groupprocesses, such as the adoption and use of group practices, in their sequential unfolding(Stahl 2013b).
+Traditional methods provide evidence thatchange has taken place, without describing how
+the change took place, beyond speculation based on assumptions from folk theories ofcognition (Stahl 2016c ). For instance, groundbreaking CSCL studies (Kapur and Kinzer
+2009 ; Scardamalia and Bereiter 2014 ; Schwartz 1995 ) indicated that important learning took
+place at the group level, without being able to show how it happened. A number of researchershave proposed that unique cognitive processes take place at the small-group level (e.g., Barron2003 ; Dillenbourg et al. 1996 ;H u t c h i n s 1996 ;R o g o f f 1995 ), but they have not collected the
+required data for a systematic analysis at the group unit.
+Sfard ( 2008 ) argued that learning math is a matter of acquiring many practices that are
+passed down in the culture of mathematics. Vygotsky laid the basis for collaborative-
+learning theory by proclaiming that practices are acquired socially (e.g., in dyads orsmall
+groups) first and subsequently adopted by individuals. This notion of prac-
+tices—when applied at the group unit of analysis —provides a way of conceptualizing
+regularities of group cognitive processes. My colleagues and I set out to generate andanalyze CSCL interactions in which we coul d empirically observe such small-group
+practices emerging.114 G. Stahl
+Author's personal copy
+Studies of group practices
+In 2002, we initiated the Virtual Math Teams (VMT) research project at the Math Forum. We
+gradually developed a prototypical CSCL DBR project, which investigated mathematical
+education with small teams of students in a custom online collaboration environment. TheVMT software was instrumented to collect comprehensive interaction data and to provide it toresearchers in useful formats. Later, we developed and incorporated a multi-user version ofGeoGebra to provide computer support more specifically for dynamic-geometry math content.
+My published books draw successive lessons from the phases of this research: Group
+Cognition (Stahl 2006a ) proposes analyzing knowledge-building phenomenon at the small-
+group unit of analysis. Studying VMT (Stahl 2009 ) describes our scientific approaches to
+supporting and analyzing small-group problem solving in the VMT context. Translating Euclid
+(Stahl 2013b) discusses the many facets of DBR for supporting constructionist CSCL using VMT.
+Finally, Constructing Dynamic Triangles Together (Stahl 2016a ) follows utterance-by-
+utterance a team of students developing mathematical understanding through an eight-hourlongitudinal case study, as the group progressively masters collaborative online dynamicgeometry. It identifies about sixty Bgroup practices ^that the team explicitly, observably enacts.
+We found that these practices successively contribute to various core aspects of the group ’s
+abilities: to collaborate online; to drag, construct, and transform dynamic-geometry figures; to
+use GeoGebra tools; to identify and construct geometric dependencies; and to engage in
+mathematical discourse about their accomplishments.
+The notion of group practices , as it emerged in this research, provides a foundation for a
+new way of viewing, analyzing, theorizing, and supporting CSCL. Group practices mediatebetween individual cognition and community culture (Stahl 2006a , p. 16; Stahl 2013b ,
+Chapter 8). They can be observed and analyzed in small-group interactions. Thereby, thetheory of group practice provides a research-based solution to the obstinate issues of meaningmaking, intersubjectivity, structuration, and connecting levels of learning (Giddens 1984 ; Stahl
+2012b ,2016a ), while focusing analysis on the small-group unit as central to collaborative
+learning. Intersubjective meaning making and knowledge sharing take place via group prac-tices like turn taking, pointing, questioning and drawing. Individuals can transform the grouppractices into personal skills and mental abilities. Practices can also pass back and forthbetween small-group and classroom or cultural levels.
+The group practices identified in VMT studies are all based on captured interaction data.
+These practices arose in observable breakdowns or interactional difficulties and were eachenacted explicitly in student discourse. Ethnomethodologically speaking, the practices are
+observably issues for the participants themselves (Stahl 2012a ). They can be identified through
+close analysis of discourse and other forms of interaction, such as geometric sketching or
+pointing within the online VMT environment.
+The identification of group practices has substantial implications for the design of CSCL
+software, curriculum, pedagogy, and experimental interventions. In DBR, one develops aninitial prototype environment and tries it out with groups of students. Based on observation ofproblems, the prototype is iteratively re-designed and refined. By observing breakdowns ingroup interaction and the gradual enactment of new group practices in response to the
+breakdowns, a designer can identify problem areas and constructive processes that need
+additional support. The analysis of group practices provides a systematic analysis methodfor driving CSCL design —something that has long been lacking in CSCL (T. Koschmann, M.
+Scardamalia, personal communications).Intern. J. Comput.-Support. Collab. Learn (2017) 12:113 –126 115
+Author's personal copy
+Theory of group practices
+Our focus on group practices as foundational to collaborative learning is in keeping with the
+Bpractice turn ^in contemporary social theory and epistemology (Schatzki et al. 2001 ).
+According to Reckwitz ( 2002 ), a practice is Ba routinized type of behavior which consists of
+several elements, interconnected to one another: forms of bodily activities, forms of mental
+activities, ‘things ’, and their use, a background knowledge in the form of understanding,
+know-how, states of emotion and motivational knowledge ^(p. 249). Social practices form our
+background, tacit knowledge as proposed by twenty-first-century philosophy (see Stahl 2016c )
+as an alternative to eighteenth-century rationalist (Descartes 1633/1999) and cognitivist
+(Kant 1787/1999) philosophies.
+Practice theory was propounded by Bourdieu ( 1972 /1995). He uses the term Bhabitus ^for
+our systems of durable, transposable dispositions —or organization of conventionalized, rou-
+tinized, objectified, and embodied habits. As with other concepts, I construe practices primar-ily at the small-group unit of analysis, rather than as habits of individual bodies or culturalconventions of whole communities —in contrast to Bourdieu and his followers. Group prac-
+tices are what make collaboration possible: BThe homogeneity of habitus is what —within the
+limits of the group of agents possessing the schemes (of production and interpretation) impliedin their production —causes practices and works to be immediately intelligible and foreseeable,
+and hence taken for granted ^(Bourdieu 1972 /1995, p. 80).
+Only because group members share the ability to use the same group practices, can the
+members understand each other ’s actions and their references to those actions. The intersub-
+jectivity of the group is based on this shared meaning (Stahl 2016b ). The sharing of meaning is
+a product of the group interaction that adopts the practice: it is produced in the interaction asthe members construct the meaning together (Stahl 2015 ). Group practices are proposed —
+whether verbally or in action —and then discussed, negotiated, accepted, put into regularized
+practice, generalized across instances of practice, and incorporated into the group ’s habitus.
+Then we may say that the group —and often its members —has learned. The analysis of group
+practices provides a vital key to theorizing, supporting, analyzing, and facilitating computer-supported collaborative learning.
+Collaborative learning certainly also involves individual cognition and socio-cultural influ-
+ences. Resources from the individual and cultural levels are necessarily introduced into thegroup interaction, made sense of, negotiated, shared, and adopted through small-groupprocesses. The adoption of group practices mediates the multiple levels involved in learning
+(Stahl 2013a ,b). The analysis of group practices provides a powerful new method to study
+CSCL. By automatically capturing the complete interaction within inquiring online groups ofstudents, CSCL research has the potential to observe and analyze the subtle development anduse of group practices for the first time.
+Enacting group practices
+In analyses of VMT interactions, group practices largely account for the group ’st e a m w o r ka n d
+for its ability to construct knowledge or problem solve as a group. The enacting of cultural orcommunity practices as their own group practices —facilitated by teachers, texts, scripts,
+interactional resources, and knowledge artifacts —is how small groups acquire skills from
+their social context and how the group participants exchange and appropriate each other ’s116 G. Stahl
+Author's personal copy
+perspectives and skills as individual learning (Stahl 2013b , ch. 8). The answer to the question
+of how the group learns is that it successively adopts various practices and incorporates them
+in its on-going interaction. As Vygotsky (1930/1978) proposed, such small-group
+learning generally precedes learning by Bisolated individuals^ (still surrounded by
+texts, motivations, and objectives from family members, workplace colleagues, classroom
+friends, and other small groups).
+As observed in our studies, the adoption process often follows a general pattern
+(Stahl 2016a ):
+&First, the group encounters a Bbreakdown ^situation in which they do not know what to do.
+&Then someone makes a proposal for action. There may have been a preceding series of
+proposals, some ignored or failed (see Stahl 2006a , Chapter 21) and others rejected by the
+group.
+&The proposal may be followed by a negotiation process as group members question, refine,
+or amend the original proposal through secondary proposals.
+&Finally, there is often an explicit round of agreement.
+&Perhaps most importantly, the new practice is put to work in overcoming the breakdownsituation.
+&In the future, the practice may be simply applied without discussion. Of course, there could
+also be instances of backsliding, in which the group fails to apply a previously adopted
+practice where it could help.
+This general pattern is not a rational model of mental decision-making. Rather, it involves
+tacit behavior, where a breakdown leads to explicit knowledge, followed by negotiation andeventually a return to tacit practices (Stahl 1993 , Chapter 4). The adoption process is driven by
+interpersonal interaction engaged in the world, not by logical deductions in individual minds.
+The catalog of group practices compiled from analysis of VMT data agrees well with lists
+of social practices enumerated in the literature (Stahl 2016a ). For instance, we identified online
+analogues of group practices ( Bmember methods ^) defined by face-to-face Conversation
+Analysis: sequential organization (response structure), turn taking, repair, opening and closingtopics, indexicality, deixis, linguistic reference, and recipient design (Zemel et al. 2009 ).
+Other group practices correspond to practices CSCL has previously investigated: jointproblem spaces, shared understanding, persistent co-attention, representational prac-tices, longer sequences, and questioning (Stahl et al. 2011). Within both our work and
+other CSCL reports, practices in mathematics education include: mathematical dis-
+course and technical terminology; pivotal moments in problem solving; and the
+integration of visual/graphical reasoning, numeric/symbolic expression, and deductive
+narrative (Cakir et al. 2009).
+The idea of centering CSCL analysis on group practices emerged from study of VMT data.
+Publications that present that data discuss the theory, methodology, and implications of thefocus on group practices extensively. To ground this squib in that data, we point to four casestudies that analyze group practices:
+Study 1: A group practice of referencing
+Pointing, referencing, or deixis forms a ubiquitous class of gestures essential for maintain-
+ing collaboration, including online (Stahl 2006b ). In Log 1 from Team C in the VMTIntern. J. Comput.-Support. Collab. Learn (2017) 12:113 –126 117
+Author's personal copy
+SpringFest 2006, three students use a whiteboard integrated with VMT ’s chat tool to explore
+arrays of hexagons. In Line 709, Jason halts discussion until he can Bsee^what student 137 has
+proposed. Qwertyuiop has drawn an array of lines to check his understanding of 137 ’sp o s t
+(Fig. 1). As analyzed in (Stahl 2013b , Section 8.1), this leads to work by the group to establish
+practices for making focal geometric figures visible to each other by coloring lines that outline
+or divide up the figures.
+Line Time Student Chat post
+705 19:15:08 137 So do you want to first calculate the number of triangles in a hexagonal array?
+706 19:15:45 qwertyuiop What ’s the shape of the array? a hexagon?
+707 19:16:02 137 Ya.708 19:16:15 qwertyuiop ok...
+709 19:16:41 Jason wait-- can someone highlight the hexagonal array on the diagram? i don ’t really
+see what you mean...
+710 19:17:30 Jason hmm. Okay
+711 19:17:43 qwertyuiop oops712 19:17:44 Jason so it has at least 6 triangles?
+713 19:17:58 Jason in this, for instance
+714 19:18:53 137 How do you color lines?
+715 19:19:06 Jason there ’s a little paintbrush icon up at the top
+716 19:19:12 Jason it ’s the fifth one from the right
+717 19:19:20 137 Thanks.
+718 19:19:21 Jason there ya go: -)
+719 19:19:48 137 Er... That hexagon.
+Log 1.
+In the minute from his interruption of the mathematical talk at Line 709 to his resumption in
+Line 713, Jason demonstrates that he sees the hexagon that has been outlined by 137 in blacklines (Fig. 1, left), by making a new mathematical proposal and pointing from his chat posting
+to a small hexagon using the VMT pointing tool. Soon thereafter, the group divides the larger
+hexagon into six triangles using a practice involving colored lines (Fig. 1, right). We also see
+the sharing of tool-use practices as Jason guides 137 in coloring lines in the VMT whiteboard,
+after which 137 colors his outline blue. Later, the group makes more complicated relationshipswithin the array easily visible with colored lines, allowing the group to derive formulasworking collaboratively step-by-step.
+Fig. 1 Pointing to a small hexagon and outlined a larger hexagon (left). Dividing a hexagon into six regions (right)118 G. Stahl
+Author's personal copy
+Study 2: Group practices over time and across individuals
+In a longitudinal analysis of another VMT team —Team B in SpringFest 2006 —Medina
+et al. ( 2009 ) identify several group practices and show how they are enacted and repeatedly
+used across all four of their VMT sessions (see Fig. 2).
+In each session, a different participant initiates interaction by first producing a whiteboard
+drawing that the other two subsequently orient to through chat. In their Sessions 2
+and 3, the practice of inscribe-first-solve-second is iteratively enacted and composed
+with two additional practices —modulate-perspective and visualize-decomposition .I n
+Session 2, Quicksilver ’s use of color and perspective emerges in the joint work in
+support of both representational and problem-solving practices. In Session 3, Bwang
+appropriates color to draw out the particular decomposition previously articulated by
+Aznx. This demonstrates both shared understanding and individual adoption of theshared group practices.
+Study 3: A group practice supporting collaboration
+It is particularly informative to observe novices confronting a completely new challenge. In
+the start of WinterFest 2013, teams of middle-school students faced VMT ’s multi-faceted
+software interface and a new form of mathematics, dynamic geometry. Here is the opening
+interaction of a group of three fourteen-year-old girls we call the Cereal Team (Fig. 3;L o g2 ) ,
+analyzed in (Stahl 2016a , Session 1).
+Line Time User Message
+3 13:39.4 Cornflakes Hey
+4 13:57.0 Fruitloops Hello
+6 14:19.1 Cheerios Hey
+7 14:45.6 Cheerios Whose froot loops
+8 14:53.9 Cornflakes xxxxxxxx [name removed from log for privacy]
+9 15:10.8 Cheerios Whose takimg control
+10 15:20.1 Cheerios Taking*
+···
+21 16:18.4 Cheerios So whoses doing what
+22 16:44.4 Fruitloops Who wants to take control?
+23 17:30.6 Cheerios xxxxxxxx do you want to [name removed for privacy]
+24 17:52.2 Fruitloops No... cornflakes you take controll.....
+25 18:01.7 Fruitloops Who wants to do what steps?
+26 18:02.9 Cheerios Cornflakes take control
+27 18:03.6 Cornflakes No cheerios you can
+28 18:14.6 Cheerios Cornflakes
+29 18:25.4 Fruitloops Cornflakes
+30 18:33.6 Cornflakes NO
+31 18:40.0 Cheerios Why not
+32 18:52.3 Fruitloops I just took control. Lets takes turns
+33 19:01.9 Cheerios Alright
+34 19:03.0 Cornflakes Ok
+Log 2.
+Note that the group carries over practices of greeting and correcting typos from talking and
+texting to VMT. However, the group has no idea how to start computer-supported collabora-tion by taking control of the software and responding to the instructions. Each studentIntern. J. Comput.-Support. Collab. Learn (2017) 12:113 –126 119
+Author's personal copy
+strenuously resists leading the online group work. Finally, Fruitloops suggests, BLets
+take turns ^(Line 32). Although suggested in the instructions, this has to be stated
+explicitly and agreed upon by all to become an effective group practice; thereafter,
+each session begins by a student taking her turn, and the group work proceeds
+smoothly.
+Fig. 3 VMT instructions introducing collaborative dynamic geometry
+Fig. 2 The VMT interface in Study 2120 G. Stahl
+Author's personal copy
+Study 4: A group practice of mathematical problem solving
+We analyzed the Cereal Team ’s adoption of many group practices during their eight hour-
+long sessions. One of their most impressive mathematical accomplishments is analyzed in
+(Stahl 2016a , Session 6). The group explores a given dynamic figure of one square inscribed in
+another, and then constructs its own figure with the same geometric dependencies (Fig. 4).
+This accomplishment and the group ’s discourse about it demonstrate the team ’s effective
+adoption of many mathematical, tool-usage, and collaboration group practices. In particular,they make visible how well the team members each learned the practices enacted in previoussessions (Log 3, esp. Line 146).
+135 39:20.3 Cornflakes Olets start by cinstructing a regular square
+136 39:48.0 Fruitloops I think we should make perpendicular lines somehow
+137 39:58.8 Cheerios Use the perpindicular line tool
+138 43:21.9 Fruitloops The first line segment would be like ab
+139 43:27.7 Cornflakes Yes
+142 51:24.7 Cheerios How do u know ji is straight
+143 55:40.6 Fruitloops I dont know what to do because the points arent the same color
+144 56:38.2 Fruitloops Now after you make the perpendicular lines try to make the circles\
+145 57:48.7 Fruitloops I think you need to know use the polygon tool and make the square146 59:10.6 Fruitloops Now we need to use the compass tool lilke we did in the triangles tab
+147 59:57.5 Fruitloops Because af is equal to ec and dh and bc
+148 00:42.4 Cheerios I made a line segment which was if than i used the perpendicular line tool and
+made 2 lines on each side then used the compass tool and clicked on eachpoint and then the center vertex was i and then made a another circle except
+the center vertex is j and connected all the points
+Log 3.
+The analysis of this excerpt requires observing the shared geometric manipulations, noting
+the reuse of previously acquired group practices and carefully studying the text chat. The datafor this is comprehensively preserved by the VMT system.
+Fig. 4 The team explores, constructs, and discusses inscribed squaresIntern. J. Comput.-Support. Collab. Learn (2017) 12:113 –126 121
+Author's personal copy
+Designing for group practices
+Study 1 shows the importance of pointing practices for establishing common ground. The
+software provides tools for pointing from a chat posting to a region in the drawing area, for
+drawing lines around a region, and for coloring lines to highlight a region. The students usethese to focus each other ’s visual attention on a referenced region. In an online environment,
+creating shared focus is a precondition of productive discourse. In the study ’s data, we can see
+how students discover the reference tools and how they inform other group members aboutthem, adopting group practices of using these tools. If other groups failed to find these toolswhen they were needed or failed to use them appropriately, this could suggest to technologyand pedagogy designers to make these tools more visible and to guide students to find and use
+these tools. Analysis of the group practices in this study suggests retaining the reference tools
+in future versions and designing more activities that explore and exploit them.
+Analysis of group practices in Study 2 contributes to the theory of CSCL, group cognition,
+and group practice. For instance, it shows how abilities of one student become shared grouppractices and how these then become abilities of the other students. Each member of the groupin this study contributes a practice that may have been an individual skill or may have beenbrought in from the larger socio-cultural context. These become shared group practices, whichthen interact with other group practices, leading to innovations in collaborative mathematical
+cognition. Analysis focused on the creation, adoption, and application of group practices can
+provide detailed views of computer support, collaborative knowledge building, and theinterplay of processes at different levels of description.
+Study 3 is informative because it practically shows the creation of collaboration practices
+tabula rasa . Of course, the students are already teens with developed communication skills,
+but they are very reluctant to work together in the VMT environment (although they start toexplore it and work in it as individuals). The first thing that the screen of instructions (theirscript) says is, BCollaborate –take turns –make sure everyone agrees. ^Eventually the group
+adopts this advice and uses turn taking as a visible group practice. The students talk aboutwhose turn it is and who will take the next turn. However, the group has to go through anadoption sequence before it can enact this group practice to overcome its breakdown in action.The design of the wording of the instructions resulted from the observation of previous studies,which indicated the need for group turn-taking practices. Designers can now debate whetherthe instructions need further revision based on Study 3 and parallel studies with the same or re-worded instructions.
+Study 4 is taken from another session by the team in Study 3, but now (five sessions later),
+they are already achieving a geometry accomplishment that is challenging for most college-educated adults. The chat excerpt reflects both geometry-construction actions and mathemat-ical reflections by the team. An analysis of the group practices here reveals the importance ofthe compass tool (technology), of creating equal-length line segments (mathematics), and ofexplaining what one does so everyone can agree (collaboration). The group is successfulbecause the technology, instructions, and successive activities had been carefully designed toscaffold the adoption of the necessary group practices, based upon previous iterations of VMTtesting.
+Through analysis of the enactment of group practices while engaging in collaborative
+dynamic geometry, we determined that a central practice of dynamic geometry is the con-struction of dependencies. A dependency is a constraint on geometric objects that ensures
+invariance. For instance, in the exemplary Euclidean construction of an equilateral triangle, the122 G. Stahl
+Author's personal copy
+sides of the triangle are constrained to be dependent on the radii of circles with equal radii,
+ensuring that the three sides of the triangle are of equal length to each other. In dynamicgeometry, one can drag a vertex of a triangle to make the triangle a different size or orientation;
+however, if the triangle has been constructed with the correct dependencies, the three sides will
+stay equal to each other, all getting longer or shorter together.
+Geometric dependency is a very abstract notion, challenging for middle-school students to
+master, as can be seen in the extended analysis of the Cereal Team ’s group practices
+(Stahl 2016a ). For instance, Öner ( 2016) specifically traces the team ’s struggle in their
+third session to move from a naïve view of geometry in terms of visual appearancesto one of underlying constructed dependencies. Understanding the notion of depen-dencies in dynamic geometry can be operationalized in terms of identifying specific
+group practices of construction and discourse. This can then guide analysis and
+design.
+To learn more about effectively scaffolding group practices related to constructing and
+discussing dependencies, we designed activities and analyzed interaction data from trials. Ourfinal curriculum (technology, teacher training, embedded instructions, geometry challenges,etc.) is all oriented toward fostering and supporting group practices of constructing dependen-cies and of discussing dependency. While aligned with Common Core introductory-geometrycurriculum, the sequence of activities is designed to foster the successive adoption of group
+practices that build on each other to facilitate increasingly advanced collaboration, mathemat-
+ics, and argumentation. As designers, we configure activities to be used in ways we intend.However, we need to study how student teams structure their group practices in our designedenvironment to know how they enact our artifacts. What counts in CSCL is the actual studentinteraction —structured by group practices —which is always quite different from what the
+designers envisioned.
+Just as we can see in Study 3 the team ’s difficulty in taking collaborative action before it has
+adopted the turn-taking group practice, we can repeatedly observe breakdowns in action in
+later sessions. Especially during periods of geometric construction, the Cereal Team seems to
+flounder excessively. These are indications that additional group practices should be scaffoldedand encouraged. For instance, there are many small tricks to doing constructions in dynamicgeometry, and these could be introdu ced more explicitly for adoption as group
+practices. In addition, students tend to av oid discussing in chat what they are doing
+in the construction area. I t might, for instance, be helpful to model effective
+geometric-construction techniques and colla borative-discussion patterns in classroom
+periods before small-group sessions, depending on the educational context. These are
+new design decisions to be made now, based on analysis of recent interaction data
+suggesting which possible group practices are important to support.
+Analyzing group practices
+Group practices are often derived from social practices (of the classroom, school mathematics,culture, etc.), but must be enacted or adopted and used repeatedly by the group to become
+effective. Groups do this in different, unpredictable ways as a result of their massively over-
+determined interactions. Every instance of collaborative learning is unique —it cannot be
+replicated or generalized. However, within a domain like collaborative online dynamicgeometry, certain group practices typically recur regularly. Group practices can constituteIntern. J. Comput.-Support. Collab. Learn (2017) 12:113 –126 123
+Author's personal copy
+central structural elements of group knowledge-building interactions. They structure the
+interaction. They also structure the domain —as practices related to dependency structure
+dynamic geometry. The cataloguing of group practices identified in the analysis of a corpus
+of interaction data from CSCL interventions can contribute to research that is directly
+applicable to CSCL design to support team interactions in target domains.
+Traditional experimental methods aim to contribute incremental additions to a body of
+scientific findings. However, they tend to be summative evaluations that judge the adequacy ofsupposedly well-defined situations, rather than formative explorations of situations underdevelopment and evolution. Summative evaluation is appropriate for studying unchangingnatural phenomena. However, CSCL is a design science involving complex human interactionwithin social contexts in flux. We do not assume that the current design of technology, crafting
+of pedagogy, preparation of students, or orchestration of collaboration are finalized and
+perfect —ready for summative evaluation. Rather, we are interested in discovering whether
+we are making progress along those intermingling dimensions and how we should tweakthings for our next design iteration.
+In an insightful and comprehensive new review of theory and research in the
+domain of argumentation in education, Schwarz and Baker ( 2017)s u m m a r i z et h e
+results of published studies on a variety of aspects of their topic. Invariably, theyhave to conclude that Bmore research on argumentation in diverse learning contexts ^
+is needed in each aspect (p. 239). The research they are reviewing consists primarilyof attempts to contribute incremental additions correlating variables and effects. Whatwould this even mean in a field where the technology, education theory, and socio-cultural context are fluid and successive studies cannot really be comparable?Furthermore, the point in DBR research is not to evaluate the effectiveness of
+collaborative learning under current conditi ons, but to discover avenues to pursue in
+re-design of our tools, scripts, and theories.
+For a DBR science, case studies are generally more appropriate than summative evaluations
+(Yin 2009 ). That does not mean that quantitative pre-post studies cannot be helpful in
+generating or checking hypotheses and suggesting phenomena to look for in detailed interac-tion analysis. In the VMT project, we often used quantitative and qualitative methods to pursuespecific questions. However, we found that the deepest theoretical insights and the best designsuggestions derived from detailed interaction analysis of interesting case studies. The exam-ination of group practices can provide a methodological focus for such investigations in theCSCL research context.
+Group practices in CSCL
+The four case studies excerpted above illustrate the adoption and use of grouppractices for communicating (pointing), problem solvin g (problem decomposition),
+collaborating (turn taking), software usage (compass tool, perpendicular line tool),and geometric construction (of perpendicula rs, squares, equal-length lines). By study-
+ing the group interactions involved in these practices, we can see in detail just what
+practices are needed for collaborative mathematics, how groups adopt them, and how
+well they are supported in our successive prototypes. This is much more usefulinformation for CSCL theory and DBR desi gn than just confirming that groups get
+a certain result more frequently under certain broad conditions.124 G. Stahl
+Author's personal copy
+A methodological focus on group practices can suggest the design of technologies,
+curriculum, and pedagogy to support the adoption of key group skills. The analysis of the
+adoption and reuse of group practices in interaction data can pinpoint how concrete groups
+learn and achieve (or fail to achieve) group-cognitive accomplishments. The scaffolding of
+suggested group practices through teacher presentations before group sessions, help videosduring sessions, and classroom reflecti ons after sessions can guide and enrich the
+collaborative-learning experience.
+Perhaps CSCL should be viewed as the design, analysis, and orchestration of technology,
+curriculum, and pedagogy to foster the adoption of productive group practices by studentteams.
+Acknowledgements Thanks to everyone who participated in the VMT project and who collaborated on the
+analysis of its data. Also, to the anonymous reviewers, who prompted me to elaborate several aspects and
+implications of this view of CSCL.
+References
+Barron, B. (2003). When smart groups fail. The Journal of the Learning Sciences, 12 (3), 307 –359.
+Bourdieu, P. (1972/1995). Outline of a theory of practice . Cambridge: Cambridge University Press.
+Cakir, M. P., Zemel, A., & Stahl, G. (2009). The joint organization of interaction within a multimodal CSCL
+medium. International Journal of Computer-Supported Collaborative Learning, 4 (2), 115– 149.
+Cress, U. (2008). The need for considering multilevel analysis in CSCL research: An appeal for the use of more
+advanced statistical methods. International Journal of Computer-Supported Collaborative Learning, 3 (1),
+69–84.
+Descartes, R. (1633/1999). Discourse on method and meditations on first philosophy . New York: Hackett.
+Dillenbourg, P., Baker, M., Blaye, A., & O'Malley, C. (1996). The evolution of research on collaborative learning.
+In P. Reimann & H. Spada (Eds.), Learning in humans and machines: Towards an interdisciplinary learning
+science (pp. 189 –211). Oxford: Elsevier http://tecfa.unige.ch/tecfa/publicat/dil-papers-2/Dil.7.1.10.pdf .
+Garfinkel, H. (1967). Studies in ethnomethodology . Englewood Cliffs: Prentice-Hall.
+Giddens, A. (1984). Elements of the theory of structuration. In The constitution of society (pp. 1 –40). Oakland,
+CA: U of California Press.
+Hammond, M. (2015). A Habermasian perspective on joint meaning making online: What does it offer and what
+are the difficulties? International Journal of Computer-Supported Collaborative Learning, 10 (3), 223 –237.
+Hutchins, E. (1996). Cognition in the wild . Cambridge: MIT Press.
+Jeong, H., Hmelo-Silver, C. E., & Yu, Y . (2014). An examination of CSCL methodological practices and the
+influence of theoretical frameworks 2005-2009. International Journal of Computer-Supported Collaborative
+Learning, 9 (3), 305 –334.
+K a n t ,I .( 1 7 8 7 / 1 9 9 9 ) .C r i t i q u eo fp u r er e a s o n . Cambridge: Cambridge University Press.
+Kapur, M., & Kinzer, C. K. (2009). Productive failure in CSCL groups. International Journal of Computer-
+Supported Collaborative Learning, 4 (1), 21– 46.
+Medina, R., Suthers, D. D. & Vatrapu, R. (2009). Representational practices in VMT. In G. Stahl (Ed.), Studying
+virtual math teams (ch. 10, pp. 185 –205). New York: Springer.
+Öner, D. (2016). Tracing the change in discourse in a collaborative dynamic-geometry environment: From visual
+to more mathematical. International Journal of Computer-Supported Collaborative Learning, 11 (1), 59 –88.
+Reckwitz, A. (2002). Toward a theory of social practices: A development in culturalist theorizing. European
+J o u r n a lo fS o c i a lT h e o r y ,5 ,2 4 3–263http://est.sagepub.com/content/5/2/243 .
+Rogoff, B. (1995). Sociocultural activity on three planes. In B. Rogoff, J. Wertsch, P. del Rio, & A. Alvarez
+(Eds.), Sociocultural studies of mind (pp. 139 –164). Cambridge: Cambridge University Press.
+Scardamalia, M., & Bereiter, C. (2014). Knowledge building and knowledge creation: Theory, pedagogy and
+technology. In K. Sawyer (Ed.), Cambridge handbook of the learning sciences (2nd ed.). Cambridge:
+Cambridge University Press.
+Schatzki, T. R., Knorr Cetina, K., & Savigny, E. V . (Eds.). (2001). The practice turn in contemporary theory .
+New York: Routledge.
+Schwartz, D. (1995). The emergence of abstract representations in dyad problem solving. The Journal of the
+Le
+arning Sciences, 4 (3), 321 –354.Intern. J. Comput.-Support. Collab. Learn (2017) 12:113 –126 125
+Author's personal copy
+Schwarz, B., & Baker, M. (2017). Dialogue, argumentation and education: History, theory and practice .
+Cambridge: Cambridge University Press.
+Sfard, A. (1998). On two metaphors for learning and the dangers of choosing just one. Educational Researcher,
+27(2), 4– 13.
+Sfard, A. (2008). Thinking as communicating: Human development, the growth of discourses and
+mathematizing . Cambridge: Cambridge University Press.
+Stahl, G. (1993). Interpretation in design: The problem of tacit and explicit understanding in computer support of
+cooperative design .Unpublished Dissertation, Ph.D., Department of Computer Science, University of
+Colorado. Boulder, CO. http://GerryStahl.net/elibrary/tacit .
+Stahl, G. (2006a). Group cognition: Computer support for building collaborative knowledge .
+Cambridge: MIT Press.
+Stahl, G. (2006b). Supporting group cognition in an online math community: A cognitive tool for small-group
+referencing in text chat. Journal of Educational Computing Research (JECR) special issue on Cognitive
+tools for collaborative communities, 35 (2), 103 –122http://GerryStahl.net/pub/jecr.pdf .
+Stahl, G. (2009). Studying virtual math teams.N e wY o r k :S p r i n g e r .
+Stahl, G. (2012a). Ethnomethodologically informed. International Journal of Computer-Supported
+Collaborative Learning, 7 (1), 1 –10.
+Stahl, G. (2012b). Traversing planes of learning. International Journal of Computer-Supported Collaborative
+Learning, 7 (4), 467 –473.
+Stahl, G. (2013a). Learning across levels. International Journal of Computer-Supported Collaborative Learning,
+8(1), 1 –12.
+Stahl, G. (2013b). Translating Euclid: Designing a human-centered mathematics . San Rafael: Morgan &
+Claypool Publishers.
+Stahl, G. (2014). The constitution of group cognition. In L. Shapiro (Ed.), Handbook of embodied cognition (ch.
+32, pp. 335 –346). New York: Routledge. http://GerryStahl.net/pub/embodied.pdf .
+Stahl, G. (2015). Conceptualizing the intersubjective group. International Journal of Computer-Supported
+Collaborative Learning, 10 (3), 209 –217.
+Stahl, G. (2016a). Constructing dynamic triangles together: The development of mathematical group cognition .
+Cambridge: Cambridge University Press.
+Stahl, G. (2016b). From intersubjectivity to group cognition. Computer Supported Cooperative Work (CSCW),
+25(4), 355 –384http://GerryStahl.net/pub/intersubjectivity.pdf .
+Stahl, G. (2016c). The group as paradigmatic unit of analysis: The contested relationship of CSCL to the learning
+s c i e n c e s .I nM .A .E v a n s ,M .J .P a c k e r&R .K .S a w y e r( E d s . ) , Reflections on the learning sciences (ch. 5,
+pp. 76 –102). New York: Cambridge University Press. http://GerryStahl.net/pub/ls.pdf .
+Stahl, G., Zhou, N., Çakir, M. P. & Sarmiento-Klapper, J. W. (2011). Seeing what we mean: Co-experiencing a
+shared virtual world. In the Proceedings of CSCL 2011. Lulu: ISLS. Proceedings (pp. 534 –541).
+http://GerryStahl.net/pub/cscl2011.pdf .
+Su
+thers, D. D., Dwyer, N., Medina, R., & Vatrapu, R. (2010). A framework for conceptualizing, representing,
+and analyzing distributed interaction. International Journal of Computer-Supported Collaborative Learning,
+5(1), 5 –42.
+Vygotsky, L. (1930/1978). Mind in society . Cambridge: Harvard University Press.
+Yin, R. K. (2009). Case study research. Design and methods (4th ed.). Thousand Oaks: Sage Publications.
+Zemel, A., Çakir, M. P. & Stahl, G. (2009). Understanding and analyzing chat in CSCL as reading ’sw o r k .In the
+Proceedings of CSCL 2009 . Rhodes, Greece. http://GerryStahl.net/pub/cscl2009zemel.pdf .126 G. Stahl
+Author's personal copy

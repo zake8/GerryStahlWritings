@@ -267,11 +267,13 @@ def injest_document(model, fullragchat_embed_model, mkey, query, fullragchat_tem
         end_page=end_page )
     answer += f'Read "{fullragchat_rag_source}". '
     # Prep summary
-    summary_text_for_output = create_summary(
-        to_sum=rag_text, 
-        model=model, 
-        mkey=mkey, 
-        fullragchat_temp=fullragchat_temp)
+    summary_text_for_output = create_map_reduce_summary(
+        to_sum = rag_text, 
+        map_red_chunk_size = my_map_red_chunk_size, 
+        model=model, mkey=mkey, fullragchat_temp=fullragchat_temp )
+    ##### summary_text_for_output = create_summary(
+    #####     to_sum = rag_text, 
+    #####     model=model, mkey=mkey, fullragchat_temp=fullragchat_temp )
     # Write _loadered.txt to disk
     if rag_ext != 'txt': #don't write out a '_loadered.txt' if input was '.txt'
         txtfile_fn = f'{base_fn}_loadered.txt'
